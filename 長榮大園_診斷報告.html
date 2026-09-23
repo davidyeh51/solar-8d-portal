@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">長榮國際儲運大園場 1.96MWp｜8D 異常診斷暨投資決策平台｜內部維運版</title>
+<meta name="description" content="長榮國際儲運大園場 1,956.22kWp 太陽光電案場 8D 異常診斷與改善決策平台：D0緊急安全處置、D2量化描述、D4沿海鹽霧反潮化學性漏電根因剖析、Inv6奈米超晶體改善實證、Inv5跳脫停機排查、20年資產現金流守護。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%230C3A63%27 rx=%2712%27/%3E%3Cpath d=%27M12 48 L28 20 L38 34 L52 14%27 stroke=%27%231BB1BF%27 stroke-width=%275%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2752%27 cy=%2714%27 r=%275%27 fill=%27%23E09A2B%27/%3E%3C/svg%3E">
+
+<!-- Google Fonts, ECharts & Leaflet -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+:root {
+  --blue-dd: #0C3A63;
+  --blue: #1968AD;
+  --blue-d: #12518A;
+  --blue-soft: #E8F1F9;
+  --teal: #1BB1BF;
+  --teal-d: #12818C;
+  --teal-soft: #E2F5F7;
+  --ink: #12293D;
+  --ink-2: #3E5466;
+  --muted: #5B7285;
+  --line: #D9E3EC;
+  --line-soft: #EEF3F8;
+  --paper: #F4F7FA;
+  --card: #FFFFFF;
+  --amber: #E09A2B;
+  --amber-soft: #FCF2DE;
+  --coral: #D95F45;
+  --coral-soft: #FBEAE5;
+  --green: #2E7D32;
+  --green-soft: #E8F5E9;
+  --purple: #6B46C1;
+  --purple-soft: #F3E8FF;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Top Navigation Bar */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 54px;
+  display: flex; align-items: center; gap: 8px; padding: 0 18px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--blue);
+  box-shadow: 0 2px 10px rgba(12, 58, 99, 0.08);
+}
+.topbar .brand {
+  display: flex; align-items: center; gap: 9px; margin-right: 10px;
+  white-space: nowrap; text-decoration: none;
+}
+.topbar .brand .tx {
+  font-weight: 800; font-size: .88rem; letter-spacing: .02em;
+  color: var(--ink); line-height: 1.15;
+}
+.topbar .brand .tx small {
+  display: block; font-weight: 700; font-size: .64rem;
+  letter-spacing: .08em; color: var(--blue);
+}
+.topnav {
+  display: flex; gap: 3px; flex: 1; min-width: 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+.topnav::-webkit-scrollbar { display: none; }
+.navtab {
+  padding: 5px 9px; font-size: .76rem; font-weight: 700; border-radius: 6px;
+  color: var(--muted); border: 1px solid transparent; cursor: pointer;
+  white-space: nowrap; transition: all .15s ease; background: transparent;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.navtab:hover { color: var(--blue); background: var(--blue-soft); }
+.navtab.active {
+  color: var(--blue-dd); background: var(--blue-soft);
+  border-color: rgba(25, 104, 173, 0.25);
+}
+.topbar-actions {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+}
+.btn-toggle-view {
+  padding: 4px 10px; font-size: .74rem; font-weight: 700; border-radius: 6px;
+  cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 5px; transition: all .15s ease;
+}
+.btn-toggle-view:hover { background: var(--blue-soft); color: var(--blue-dd); border-color: var(--blue); }
+.mode-toggle-btn {
+  padding: 4px 10px; font-size: .74rem; font-weight: 800; border-radius: 20px;
+  cursor: pointer; border: 1px solid rgba(217, 95, 69, 0.4);
+  background: var(--coral-soft); color: var(--coral);
+  display: inline-flex; align-items: center; gap: 5px; transition: all .15s ease;
+}
+.mode-toggle-btn.owner {
+  background: var(--teal-soft); color: var(--teal-d); border-color: rgba(27, 177, 191, 0.4);
+}
+.btn-action-sm {
+  padding: 4px 9px; font-size: .74rem; font-weight: 700; border-radius: 6px;
+  cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 4px; transition: all .15s ease;
+}
+.btn-action-sm:hover { background: var(--paper); border-color: var(--blue); color: var(--blue); }
+
+/* Containers */
+main.deck-container {
+  padding-top: 66px; padding-bottom: 74px; max-width: 1320px;
+  margin: 0 auto; min-height: 100vh;
+}
+.slide { display: none; opacity: 0; transition: opacity .2s ease-in-out; }
+.slide.active { display: block; opacity: 1; animation: fadeIn .2s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Document View Mode */
+body.doc-view-mode main.deck-container {
+  max-width: 1240px; padding-bottom: 40px;
+}
+body.doc-view-mode .slide {
+  display: block !important; opacity: 1 !important; margin-bottom: 34px;
+}
+body.doc-view-mode .deck-controls,
+body.doc-view-mode .deck-progress-track {
+  display: none !important;
+}
+
+/* Cover Hero */
+.cover-hero {
+  background: linear-gradient(135deg, var(--blue-dd) 0%, #154e7d 100%);
+  color: #fff; border-radius: 14px; padding: 34px 38px 28px;
+  box-shadow: 0 10px 30px rgba(12, 58, 99, 0.15); margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.cover-hero::after {
+  content: ""; position: absolute; right: -40px; bottom: -40px; width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(27, 177, 191, 0.25) 0%, transparent 70%);
+  pointer-events: none; border-radius: 50%;
+}
+.cover-hero .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.badge {
+  font-family: var(--mono); font-size: .72rem; font-weight: 800;
+  padding: 3px 10px; border-radius: 4px; letter-spacing: .04em;
+  background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.badge.accent { background: var(--amber); color: #fff; border-color: var(--amber); }
+.badge.teal { background: var(--teal); color: #fff; border-color: var(--teal); }
+.cover-hero h1 {
+  font-size: 1.85rem; font-weight: 900; line-height: 1.25; margin-bottom: 12px;
+  letter-spacing: -.01em;
+}
+.cover-hero p.lede {
+  font-size: 1.05rem; font-weight: 600; line-height: 1.6; opacity: 0.95;
+  max-width: 960px; margin-bottom: 16px; color: #E8F4FC;
+}
+.cover-hero .takeaway-box {
+  background: rgba(0, 0, 0, 0.22); border-left: 4px solid var(--amber);
+  border-radius: 0 8px 8px 0; padding: 12px 18px; margin-top: 14px;
+}
+.cover-hero .takeaway-box strong { color: var(--amber); font-weight: 800; font-size: .85rem; }
+.cover-hero .takeaway-box p { font-size: .92rem; opacity: 0.95; margin: 3px 0 0; line-height: 1.55; }
+
+.factgrid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0 0; border-radius: 8px; overflow: hidden;
+}
+.factgrid div { background: rgba(12, 58, 99, 0.65); backdrop-filter: blur(4px); padding: 9px 13px; }
+.factgrid dt { font-size: 10.5px; letter-spacing: .06em; opacity: 0.8; font-weight: 700; text-transform: uppercase; }
+.factgrid dd { margin: 2px 0 0; font-size: 13.5px; font-weight: 700; font-family: var(--mono); color: #fff; }
+
+/* Section & Cards */
+.section-head { margin-bottom: 16px; }
+.section-head .part-tag {
+  display: inline-block; font-size: .72rem; font-weight: 800; color: var(--blue);
+  background: var(--blue-soft); padding: 3px 9px; border-radius: 4px;
+  margin-bottom: 5px; letter-spacing: .05em; font-family: var(--mono);
+}
+.section-head h2 { font-size: 1.45rem; font-weight: 800; color: var(--blue-dd); line-height: 1.25; }
+.section-head p.sec-purpose { font-size: .85rem; color: var(--muted); margin-top: 3px; font-style: italic; }
+
+.box-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 22px; box-shadow: 0 2px 6px rgba(12, 58, 99, 0.03); margin-bottom: 20px;
+}
+.box-card h3 {
+  font-size: 1.05rem; font-weight: 800; color: var(--blue-dd); margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px; margin-bottom: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; margin-bottom: 20px; }
+
+/* KPIs */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.kpi-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 16px 18px; box-shadow: 0 2px 5px rgba(18, 41, 61, 0.03);
+  position: relative; overflow: hidden;
+}
+.kpi-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--blue); }
+.kpi-card.bad::before { background: var(--coral); }
+.kpi-card.warn::before { background: var(--amber); }
+.kpi-card.good::before { background: var(--green); }
+.kpi-card.teal::before { background: var(--teal); }
+.kpi-label { font-size: .74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.kpi-num { font-size: 1.65rem; font-weight: 900; color: var(--ink); font-family: var(--mono); line-height: 1.2; }
+.kpi-card.bad .kpi-num { color: var(--coral); }
+.kpi-card.warn .kpi-num { color: var(--amber); }
+.kpi-card.good .kpi-num { color: var(--green); }
+.kpi-card.teal .kpi-num { color: var(--teal-d); }
+.kpi-num small { font-size: .85rem; font-weight: 700; margin-left: 3px; color: var(--muted); }
+.kpi-sub { font-size: .72rem; color: var(--muted); margin-top: 5px; }
+
+/* Tables */
+.table-wrap { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 16px; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: .82rem; text-align: left; }
+table.data-table th {
+  background: var(--blue-soft); color: var(--blue-dd); font-weight: 800;
+  padding: 9px 11px; border-bottom: 2px solid rgba(25, 104, 173, 0.25); white-space: nowrap;
+}
+table.data-table td {
+  padding: 8px 11px; border-bottom: 1px solid var(--line-soft); vertical-align: middle;
+}
+table.data-table tr:hover { background: #F8FAFC; }
+table.data-table td.num, table.data-table th.num { text-align: right; font-family: var(--mono); font-size: .8rem; }
+tr.row-highlight { background: #FFF9E6; font-weight: 700; }
+tr.row-danger { background: var(--coral-soft); }
+tr.row-success { background: var(--green-soft); }
+
+/* Badges & Tags */
+.sev { display: inline-block; font-size: .68rem; font-weight: 800; padding: 2px 7px; border-radius: 4px; font-family: var(--mono); }
+.sev.P1 { background: var(--coral); color: #fff; }
+.sev.P2 { background: var(--amber); color: #fff; }
+.sev.P3 { background: var(--blue); color: #fff; }
+.sev.P4 { background: var(--muted); color: #fff; }
+
+.callout {
+  border-left: 4px solid var(--blue); background: var(--blue-soft);
+  padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 16px; font-size: .86rem; line-height: 1.55;
+}
+.callout.danger { border-left-color: var(--coral); background: var(--coral-soft); color: #7F1D1D; }
+.callout.warn { border-left-color: var(--amber); background: var(--amber-soft); color: #78350F; }
+.callout.success { border-left-color: var(--green); background: var(--green-soft); color: #14532D; }
+
+/* Photo Gallery & Cards */
+.ev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.ev-card {
+  background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+  cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+}
+.ev-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(12, 58, 99, 0.1); border-color: var(--blue); }
+.ev-card .img-box { width: 100%; height: 160px; background: #222; overflow: hidden; position: relative; }
+.ev-card .img-box img { width: 100%; height: 100%; object-fit: cover; }
+.ev-card .ev-info { padding: 10px 12px; }
+.ev-card .ev-title { font-weight: 800; font-size: .8rem; color: var(--blue-dd); margin-bottom: 4px; }
+.ev-card .ev-meta { font-size: .7rem; color: var(--muted); }
+
+/* Sticky Deck Controls Bar */
+.deck-controls {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 56px; z-index: 1000;
+  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+.deck-btn {
+  padding: 7px 16px; border-radius: 6px; font-weight: 800; font-size: .82rem;
+  border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; transition: all .15s ease;
+}
+.deck-btn:hover { background: var(--blue-soft); border-color: var(--blue); color: var(--blue-dd); }
+.deck-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.deck-btn.primary:hover { background: var(--blue-d); }
+.deck-counter { font-size: .8rem; font-weight: 800; font-family: var(--mono); color: var(--muted); }
+.deck-progress-track { position: fixed; bottom: 56px; left: 0; right: 0; height: 3px; background: var(--line-soft); z-index: 999; }
+.deck-progress-bar { height: 100%; width: 8.33%; background: var(--blue); transition: width .2s ease; }
+
+/* Modals */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000; background: rgba(12, 41, 61, 0.65);
+  backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.active { display: flex; animation: fadeIn .15s ease-out; }
+.modal-content {
+  background: #fff; border-radius: 12px; width: 100%; max-width: 880px; max-height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+.modal-header {
+  padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between;
+  background: var(--paper);
+}
+.modal-header h4 { font-size: .95rem; font-weight: 800; color: var(--blue-dd); }
+.modal-close {
+  background: transparent; border: none; font-size: 1.3rem; color: var(--muted);
+  cursor: pointer; line-height: 1; padding: 4px;
+}
+.modal-close:hover { color: var(--coral); }
+.modal-body { padding: 18px; overflow-y: auto; }
+.modal-img-container { width: 100%; max-height: 60vh; background: #111; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.modal-img-container img { max-width: 100%; max-height: 60vh; object-fit: contain; }
+
+/* Role based display */
+body.owner-mode .internal-only { display: none !important; }
+body:not(.owner-mode) .owner-only { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Fixed Topbar -->
+<header class="topbar">
+  <a href="#slide-0" class="brand" onclick="goToSlide(0); return false;">
+    <svg width="28" height="28" viewBox="0 0 64 64">
+      <rect width="64" height="64" fill="#0C3A63" rx="12"/>
+      <path d="M12 48 L28 20 L38 34 L52 14" stroke="#1BB1BF" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="52" cy="14" r="5" fill="#E09A2B"/>
+    </svg>
+    <div class="tx">
+      長榮大園 1.96MWp
+      <small>8D 異常診斷決策平台</small>
+    </div>
+  </a>
+
+  <nav class="topnav" id="topNav">
+    <button class="navtab active" onclick="goToSlide(0)">封面 Cover</button>
+    <button class="navtab" onclick="goToSlide(1)">摘要 Summary</button>
+    <button class="navtab" onclick="goToSlide(2)">D0-D1 偵測小組</button>
+    <button class="navtab" onclick="goToSlide(3)">D2 現況量化</button>
+    <button class="navtab" onclick="goToSlide(4)">D3 圍堵應急</button>
+    <button class="navtab" onclick="goToSlide(5)">D4 根因實證</button>
+    <button class="navtab" onclick="goToSlide(6)">D4 排除假設</button>
+    <button class="navtab" onclick="goToSlide(7)">D5 永久對策</button>
+    <button class="navtab" onclick="goToSlide(8)">D6 驗證結案</button>
+    <button class="navtab" onclick="goToSlide(9)">D7 防止再發</button>
+    <button class="navtab" onclick="goToSlide(10)">D8 財務增益</button>
+    <button class="navtab" onclick="goToSlide(11)">附錄對帳</button>
+  </nav>
+
+  <div class="topbar-actions">
+    <button class="btn-toggle-view" onclick="toggleViewMode()" id="viewModeBtn" title="切換簡報模式 / 文件閱讀模式">
+      <span>📑 文件模式</span>
+    </button>
+    <button class="mode-toggle-btn" onclick="toggleAudienceMode()" id="audienceBtn" title="切換內部維運版 / 業主交付版">
+      <span>🛠️ 內部維運版</span>
+    </button>
+    <button class="btn-action-sm" onclick="openRawDataModal()" title="開啟 364 天原始數據對帳器">
+      <span>📊 原始對帳</span>
+    </button>
+    <a href="https://davidyeh51.github.io/solar-8d-portal/" target="_blank" class="btn-action-sm" style="text-decoration:none;" title="前往全台 8D 異常管理門戶">
+      <span>🌐 8D 門戶</span>
+    </a>
+  </div>
+</header>
+
+<!-- Progress Bar -->
+<div class="deck-progress-track">
+  <div class="deck-progress-bar" id="progressBar"></div>
+</div>
+
+<main class="deck-container">
+
+  <!-- SLIDE 0: COVER -->
+  <section class="slide active" id="slide-0">
+    <div class="cover-hero">
+      <div class="badge-row">
+        <span class="badge">案號：PV-2026-DY01</span>
+        <span class="badge teal">UNSW-Solar 差分分析引擎</span>
+        <span class="badge accent">國際工業 8D 規範</span>
+        <span class="badge">進金生能源 (6692)</span>
+      </div>
+      <h1>長榮國際儲運大園場 1.96MWp<br>光伏電廠發電異常 8D 診斷暨投資決策報告</h1>
+      <p class="lede">
+        【核心結論 The Lede】：Inv6 歷經長達 6 個月高濕反潮「化學性漏電」劣化，單日曾暴跌至 18% 發電量；經 2026/04/14 施作「奈米超晶體絕緣防護」後，即便遭遇連續梅雨，漏電徹底消失、送電比值躍升至 99%~102%！全場另有 Inv5 非預期跳脫 10+ 天造成 13,387 kWh 缺口，急需排查復歸。
+      </p>
+      <div class="takeaway-box">
+        <strong>最該帶走的一句話 (Takeaway)：</strong>
+        <p>「沿海鹽霧與凌晨凝露形成的微導電薄膜，是引發高壓直流化學性漏電與室內鋼構生鏽的共構環境根因。奈米材料不僅徹底解決絕緣漏電，更能降低線路阻抗創造每年 NT$ 29 萬的全場發電溢價。」</p>
+      </div>
+
+      <dl class="factgrid">
+        <div><dt>電廠全稱</dt><dd>長榮大園物流園區</dd></div>
+        <div><dt>坐標區位</dt><dd>25.0600°N, 121.2300°E</dd></div>
+        <div><dt>裝置容量</dt><dd>1,956.22 kWp</dd></div>
+        <div><dt>變流器規格</dt><dd>17 台 (110kW/125kW級)</dd></div>
+        <div><dt>數據期間</dt><dd>2025/09/22 – 2026/09/21</dd></div>
+        <div><dt>累積發電量</dt><dd>2,213,048 kWh</dd></div>
+        <div><dt>年化電費收益</dt><dd>NT$ 10,976,720</dd></div>
+        <div><dt>躉購合約費率</dt><dd>NT$ 4.9600 / kWh</dd></div>
+      </dl>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>🧭 報告導覽與雙軌檢視系統</h3>
+        <p>本平台提供進金生維運團隊、案場機電工程師與長榮儲運投資決策者一致的互動戰情環境：</p>
+        <ul style="margin: 0 0 14px 20px; font-size: .88rem; line-height: 1.7;">
+          <li><strong>簡報模式 (Deck)</strong>：適合會議投影片口頭簡報，支援鍵盤 <code>←</code> / <code>→</code> 翻頁與全螢幕。</li>
+          <li><strong>文件模式 (Doc)</strong>：一鍵切換長篇滾動閱讀，適合詳細審閱數據表格與工程依據。</li>
+          <li><strong>視角切換</strong>：隨時在「內部維運版」（含 RACI、排除假設、安全警語）與「業主交付版」（聚焦增益現金流與驗證成效）間無縫切換。</li>
+        </ul>
+        <div style="display:flex; gap:8px;">
+          <button class="deck-btn primary" onclick="nextSlide()">開始審閱執行摘要 ➡️</button>
+          <button class="deck-btn" onclick="openPhotoGallery()">📸 開啟現場圖資庫</button>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h3>📍 案場地理環境與空拍航照定位</h3>
+        <div id="coverMiniMap" style="height: 190px; width:100%; border-radius: 8px; border: 1px solid var(--line);"></div>
+        <p style="font-size: .76rem; color: var(--muted); margin-top: 8px;">
+          廠址坐落於桃園市大園區建國路 100 號，鄰近桃園國際機場與西濱台61線海風廊道，長年受強烈東北季風吹拂，為典型高鹽霧、高濕度反潮之嚴酷沿海微氣候環境。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 1: SUMMARY -->
+  <section class="slide" id="slide-1">
+    <div class="section-head">
+      <span class="part-tag">EXECUTIVE SUMMARY</span>
+      <h2>執行摘要與全場異常戰情矩陣</h2>
+      <p class="sec-purpose">364 天高精度 SCADA 遙測日誌同儕比對，快速掌握案場四大核心 KPI 與優先處理行動</p>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card good">
+        <div class="kpi-label">全場標竿台 (Benchmark)</div>
+        <div class="kpi-num">100.0<small>%</small></div>
+        <div class="kpi-sub">Inv7 (Ey = 1,161.33 h, PR 80.5%)</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-label">Inv5 跳機累積短少</div>
+        <div class="kpi-num">13,387<small>kWh</small></div>
+        <div class="kpi-sub">非預期停機10+天，年化損失 NT$ 66,397</div>
+      </div>
+      <div class="kpi-card warn">
+        <div class="kpi-label">全場 17 台年化短少度數</div>
+        <div class="kpi-num">58,770<small>kWh</small></div>
+        <div class="kpi-sub">相較標竿機台短發 2.65%，Inv6/5佔大宗</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-label">全場年化財務損失金額</div>
+        <div class="kpi-num">29.1<small>萬元</small></div>
+        <div class="kpi-sub">以合約費率 NT$ 4.96/kWh 計，20年累損580萬</div>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <h3>🚨 P1 ~ P4 異常優先處理與處置矩陣</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>等級 Priority</th>
+              <th>異常項目與機台</th>
+              <th>影響規模與年化損益量化</th>
+              <th>現階段處置狀態與指定行動方案</th>
+              <th>責任主辦</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-danger">
+              <td><span class="sev P1">P1 嚴重</span></td>
+              <td><strong>Inv5 非預期跳脫停機 (2次重大事故)</strong></td>
+              <td>短少 13,387 kWh（年損 NT$ 6.64 萬元），發電比值僅 89.9%</td>
+              <td>2025/11/20~11/26 停機 6 天、2026/08/31~09/07 停機 4+ 天。急件派工檢查併網斷路器與控制通訊</td>
+              <td>現場維運 / 監控組</td>
+            </tr>
+            <tr class="row-success">
+              <td><span class="sev P1">P1 實證</span></td>
+              <td><strong>Inv6 嚴重化學性漏電 ＆ 奈米改善驗收</strong></td>
+              <td>改善前比值崩跌至 18%~45%，改善後回升至 99%~102%</td>
+              <td>2026/04/14~04/16 施作奈米超晶體表面絕緣修復，梅雨季證實漏電完全消除！建議推展至高風險機台</td>
+              <td>奈米材料組 / 專案組</td>
+            </tr>
+            <tr class="row-highlight">
+              <td><span class="sev P2">P2 隱患</span></td>
+              <td><strong>室內死角鋼構鹽害腐蝕 ＆ C鋼積水</strong></td>
+              <td>外圍雨淋正常，內部鋼構鹽害堆積生鏽，C鋼積水浸泡</td>
+              <td>已會同廠商現場勘驗，對策：每年2次清水清洗鹽分、已鏽蝕處塗刷鐵鏽轉換劑、C鋼易積水處鑽孔排水</td>
+              <td>結構機電組</td>
+            </tr>
+            <tr>
+              <td><span class="sev P2">P2 追蹤</span></td>
+              <td><strong>Inv10 / Inv8 / Inv11 漏電天數遞增群</strong></td>
+              <td>年度短少各約 4,500 ~ 6,000 kWh（年損約 2.2 ~ 3.0 萬元）</td>
+              <td>簡報指認此 3 台每年漏電天數遞增率上升，列入 10 月東北季風來臨前奈米防護預防性清單</td>
+              <td>維運工程師</td>
+            </tr>
+            <tr>
+              <td><span class="sev P3">P3 監控</span></td>
+              <td><strong>SCADA 同儕差分動態告警規則缺口</strong></td>
+              <td>Inv5 停機連續 6 天發電歸零，傳統門檻告警未即時截斷損失</td>
+              <td>導入 UNSW 同儕中位數差分演算法，連續 3 天比值低於同儕 15% 即時推播派工</td>
+              <td>監控系統組</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: D0 EMERGENCY & D1 TEAM -->
+  <section class="slide" id="slide-2">
+    <div class="section-head">
+      <span class="part-tag">D0 EMERGENCY & D1 TEAM</span>
+      <h2>D0 緊急處置安全評估 ＆ D1 跨職能小組</h2>
+      <p class="sec-purpose">確立 1000V 直流帶電作業防弧安全、停機決策與 RACI 跨組織協同權責分配</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>⚡ D0: 異常發現路徑與現場高壓安全判定</h3>
+        <div class="callout danger">
+          <strong>高壓直流防弧與人身安全評估 (1000V DC Arc Flash Safety)：</strong><br>
+          本案場為屋頂型太陽光電系統，太陽能模組在日照下持續維持高達 600V ~ 1000V 之直流高壓，無法單靠開關切斷發電來源。
+        </div>
+        <ul style="margin: 0 0 14px 20px; font-size: .88rem; line-height: 1.7;">
+          <li><strong>立案路徑</strong>：由進金生維運大數據平台自動提取 364 天日誌比對發現，並與現場長榮儲運業主反應鋼構生鏽之調查報告會合。</li>
+          <li><strong>急停機判定</strong>：Inv6 漏電屬「清晨反潮引發的表面微電流洩漏」，日出升溫乾燥後即自癒，無立即性金屬短路火花，<strong>判定無須全場緊急跳脫</strong>。</li>
+          <li><strong>現場高危警示</strong>：沿海鹽霧沉積於 MC4 接頭若發生絕緣擊穿，可能在清晨高濕下誘發持續性直流電弧 (DC Arc)；現場檢測必須嚴格執行 <strong>LOTO (上鎖掛牌)</strong> 與勾表零電流確認，嚴禁帶載插拔接頭！</li>
+          <li><strong>鋼構積水結構安全</strong>：C 鋼長期積水將加速內部防腐鍍層穿孔，要求於 48 小時內疏通低窪積水點。</li>
+        </ul>
+      </div>
+
+      <div class="box-card">
+        <h3>👥 D1: RACI 跨職能權責矩陣表</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>職能角色 Role</th>
+                <th>擔當單位 / 主辦人員</th>
+                <th>RACI 分工與主要職掌任務</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>資料分析 (Analyst)</strong></td>
+                <td>進金生能源服務 數據分析部</td>
+                <td><span class="sev P1">Accountable</span> 每日執行 UNSW P2P 同儕比對、換算財務損益、建立改善驗證門檻。</td>
+              </tr>
+              <tr>
+                <td><strong>現場執行 (Field O&M)</strong></td>
+                <td>維運主管: 汪順發<br>工程師: 李昀璁、呂理淦</td>
+                <td><span class="sev P2">Responsible</span> 執行 Inv5 現場復歸、鋼構除鏽防蝕處理、C鋼鑽孔排水與高壓絕緣電阻量測。</td>
+              </tr>
+              <tr>
+                <td><strong>工程與材料 (Engineering)</strong></td>
+                <td>奈米超晶體團隊 / 宇軒廠商 (陳世軒總經理)</td>
+                <td><span class="sev P3">Consulted</span> 奈米絕緣塗層施工、降低線路阻抗工法諮詢與鋼構鐵鏽轉換劑工法保固。</td>
+              </tr>
+              <tr>
+                <td><strong>業主窗口 (Asset Owner)</strong></td>
+                <td>長榮國際儲運 大園物流中心代表</td>
+                <td><span class="sev P4">Informed</span> 審查 8D 異常改善對策、同意屋頂動火/檢修程序、定期收取發電增益報表。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: D2 PROBLEM DESCRIPTION -->
+  <section class="slide" id="slide-3">
+    <div class="section-head">
+      <span class="part-tag">D2 PROBLEM DESCRIPTION</span>
+      <h2>D2 問題描述 (5W2H) ＆ 17 台變流器年度效能總檢</h2>
+      <p class="sec-purpose">以真實裝置容量校核各機台，量化短少度數 (kWh) 與財務營收損益排名</p>
+    </div>
+
+    <div class="box-card">
+      <h3>🔍 5W2H 問題本質結構化量化定義</h3>
+      <dl class="factgrid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div style="background:#fff;"><dt style="color:var(--blue);">When 何時發生</dt><dd style="color:var(--ink); font-size:12.5px;">每年 10 月至隔年 5 月（秋冬東北季風與梅雨季反潮期密集爆發）</dd></div>
+        <div style="background:#fff;"><dt style="color:var(--blue);">Where 何處發生</dt><dd style="color:var(--ink); font-size:12.5px;">Inv6（化學性漏電最劇）、Inv5（連續跳機停機）、Inv10/8/11（漏電天數遞增）</dd></div>
+        <div style="background:#fff;"><dt style="color:var(--blue);">What 發生何事</dt><dd style="color:var(--ink); font-size:12.5px;">清晨高濕反潮使直流絕緣阻抗驟降，機台延遲送電；以及 Inv5 兩度長時間跳機</dd></div>
+        <div style="background:#fff;"><dt style="color:var(--blue);">Why 為何發生</dt><dd style="color:var(--ink); font-size:12.5px;">大園沿海強風將高濃度鹽霧帶入廠區，在露水凝結下形成微導電鹽液薄膜</dd></div>
+        <div style="background:#fff;"><dt style="color:var(--blue);">How Much 損失多大</dt><dd style="color:var(--coral); font-size:12.5px;">全場年度短少 58,770 kWh，累計營收短收 NT$ 291,497 / 年</dd></div>
+      </dl>
+    </div>
+
+    <div class="box-card">
+      <h3>📊 全場 17 台變流器年度發電量、等價時數 (Ey) 與短少損益清單</h3>
+      <div class="table-wrap" style="max-height: 380px; overflow-y: auto;">
+        <table class="data-table" id="inverterRankingTable">
+          <thead>
+            <tr>
+              <th>排名 Rank</th>
+              <th>逆變器編號 Inverter</th>
+              <th class="num">容量 (kWp)</th>
+              <th class="num">年度發電 (kWh)</th>
+              <th class="num">等價時數 Ey (h)</th>
+              <th class="num">相對標竿比率</th>
+              <th class="num">相對中位數比率</th>
+              <th class="num">短少度數 (kWh)</th>
+              <th class="num">年化損益 (NT$)</th>
+              <th class="num">平均 PR (%)</th>
+              <th>機台狀態備註</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <h3>📈 17 台變流器等價發電時數 (Ey: kWh/kWp) 全景長條圖</h3>
+      <div id="eyRankingChart" style="height: 320px; width: 100%;"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: D3 CONTAINMENT -->
+  <section class="slide" id="slide-4">
+    <div class="section-head">
+      <span class="part-tag">D3 INTERIM CONTAINMENT</span>
+      <h2>D3 暫時圍堵處置 ＆ 現場止血行動清冊</h2>
+      <p class="sec-purpose">在永久對策全面推展前，立即遏止發電量進一步流失與安全隱患擴大</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>🛡️ 緊急止血清冊與驗收條件</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>行動項目 Action Item</th>
+                <th>指定責任人</th>
+                <th>截止期限</th>
+                <th>處置內容與現場驗證門檻</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-danger">
+                <td><strong>1. Inv5 停機現場急件排查</strong></td>
+                <td>現場維運: 李昀璁</td>
+                <td>48 小時內</td>
+                <td>檢驗 AC 併網斷路器是否跳脫、重新啟動機台。若有故障代碼即時聯絡原廠支援更換機板。</td>
+              </tr>
+              <tr>
+                <td><strong>2. C 型鋼易積水處疏通排水</strong></td>
+                <td>現場維運: 呂理淦</td>
+                <td>3 日內</td>
+                <td>針對現場積水之 C 型鋼樑，暫時以人工汲水清除，並清理堵塞洩水孔之泥沙鹽塊。</td>
+              </tr>
+              <tr>
+                <td><strong>3. FLIR 熱像儀直流箱掃描</strong></td>
+                <td>現場機電組</td>
+                <td>7 日內</td>
+                <td>對 Inv6, Inv5, Inv10 等高風險機台直流側接頭進行紅外線掃描，排查接觸過熱熱斑。</td>
+              </tr>
+              <tr>
+                <td><strong>4. SCADA 臨時人工盯盤規則</strong></td>
+                <td>監控系統: 數據組</td>
+                <td>即刻生效</td>
+                <td>每日上午 10:00 產出全場發電快報，若有單台發電為 0 即刻透過通訊軟體通知現場工程師。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h3>📸 現場實勘實拍照片：鋼構鹽害與積水</h3>
+        <div class="grid-2" style="gap: 12px; margin-bottom: 0;">
+          <div class="ev-card" onclick="openPhotoModal('field_steel_corrosion_1.png', '內部鋼構鹽害腐蝕實拍', '現場調查報告書', '最外圍鋼構受雨水天然沖洗無鹽害，但內部死角鋼構因無雨水沖刷，鹽分與工業髒污長期沉積，導致鎂鋁鋅鋼材邊緣嚴重鏽蝕。')">
+            <div class="img-box">
+              <img src="assets/field_steel_corrosion_1.png" alt="內部鋼構鹽害腐蝕">
+            </div>
+            <div class="ev-info">
+              <div class="ev-title">內部鋼構鹽害生鏽實拍</div>
+              <div class="ev-meta">無雨水沖刷死角 ｜ 鹽害沉積穿孔隱患</div>
+            </div>
+          </div>
+
+          <div class="ev-card" onclick="openPhotoModal('field_steel_corrosion_2.png', 'C型鋼積水與外圍對比', '現場調查報告書', '外圍鋼構表面潔淨無鏽蝕；但內部 C 鋼受結構傾角影響產生積水槽效應，鹽水積聚浸泡加速金屬基材氧化。')">
+            <div class="img-box">
+              <img src="assets/field_steel_corrosion_2.png" alt="C型鋼積水實拍">
+            </div>
+            <div class="ev-info">
+              <div class="ev-title">C 型鋼積水與外圍對比</div>
+              <div class="ev-meta">結構死角積水 ｜ 建議低點鑽孔排水</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: D4 ROOT CAUSE 1 -->
+  <section class="slide" id="slide-5">
+    <div class="section-head">
+      <span class="part-tag">D4 ROOT CAUSE ANALYSIS</span>
+      <h2>D4 根本原因分析 (一)：化學性漏電實證與修復躍升</h2>
+      <p class="sec-purpose">364 天高精度同儕差分比值軌跡，實證奈米材料徹底修復清晨反潮漏電並降低阻抗</p>
+    </div>
+
+    <div class="box-card">
+      <h3>📈 Inv6 (實驗組) 相對 Inv1 (基準組) 送電量比值 364 天連續曲線</h3>
+      <div id="trendChart" style="height: 340px; width: 100%;"></div>
+      <p style="font-size: .82rem; color: var(--muted); margin-top: 8px;">
+        🔍 <strong>曲線解讀要點</strong>：在 2026/04/14 施作奈米材料前（秋冬季），Inv6 比值呈現劇烈鋸齒狀下凹（最低暴跌至 0.186 與 0.256）；4/14~4/16 施工後，即便 5~6 月遭遇連續梅雨季與高濕雷雨，比值徹底擺脫下凹，穩定攀升至 99% ~ 102%！
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>🧬 化學性漏電之物理與化學生成機制剖析</h3>
+        <ul style="margin: 0 0 10px 20px; font-size: .86rem; line-height: 1.65;">
+          <li><strong>隱蔽性極高</strong>：化學性漏電在白天高日照、高溫乾燥時自行蒸發復原，肉眼巡檢無法觀察到實體破損。</li>
+          <li><strong>凌晨凝結反應</strong>：每日凌晨 02:00 ~ 06:00 氣溫降至露點，大園沿海沉積於組件邊框與背板的鹽霧微粒吸收空氣中水分潮解，形成高導電度電解質微薄膜。</li>
+          <li><strong>絕緣阻抗跳水</strong>：高壓直流對地絕緣電阻（Riso）跌破變流器啟動安全閾值（< 1 MΩ），逆變器反覆觸發絕緣告警而延遲開機或降載，造成清晨最佳無遮蔽發電量大量蒸發！</li>
+          <li><strong>奈米超晶體修復原理</strong>：在組件接頭與封裝微隙表面形成雙疏（疏水、疏鹽）奈米防護層，徹底截斷電解質通路；同時降低線路接點阻抗，達到最佳阻抗匹配。</li>
+        </ul>
+      </div>
+
+      <div class="box-card">
+        <h3>📸 簡報分析實證圖表：改善前後送電量之差</h3>
+        <div class="grid-2" style="gap: 12px; margin-bottom: 0;">
+          <div class="ev-card" onclick="openPhotoModal('slide_3.png', '改善後近期送電量比值', '簡報第3頁實證', '2026/04/14~4/16 施工後一個月內比值維持在 93%~96%，5/16 梅雨季之後進一步增加至 99%~102%！')">
+            <div class="img-box">
+              <img src="assets/slide_3.png" alt="改善後近期比值">
+            </div>
+            <div class="ev-info">
+              <div class="ev-title">改善後比值躍升至 102%</div>
+              <div class="ev-meta">梅雨季反潮無漏電實證</div>
+            </div>
+          </div>
+
+          <div class="ev-card" onclick="openPhotoModal('slide_6.png', '送電量差值演變分析', '簡報第6頁實證', '改善後發電量高於對照組，推論源自奈米材料降低線路阻抗，逆變器達到阻抗匹配輸出更多功率至電網。')">
+            <div class="img-box">
+              <img src="assets/slide_6.png" alt="送電量差分析">
+            </div>
+            <div class="ev-info">
+              <div class="ev-title">阻抗降低輸出功率增益</div>
+              <div class="ev-meta">高於基準台 1~2% 溢價</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: D4 ROOT CAUSE 2 -->
+  <section class="slide" id="slide-6">
+    <div class="section-head">
+      <span class="part-tag">D4 EXCLUDED HYPOTHESES</span>
+      <h2>D4 根本原因分析 (二)：排除之假設清單 ＆ Inv5 跳脫特徵</h2>
+      <p class="sec-purpose">以嚴謹電氣數據逐一驗證並排除其他故障可能，鎖定根本原因</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>🚫 排除之假設清單 (Excluded Hypotheses Table)</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>待排除假說 Hypothesis</th>
+                <th>實測數據判讀依據</th>
+                <th>排除判定理由</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. 逆變器削峰截割 (Clipping)</strong></td>
+                <td>晴空日功率未在額定處平頭；全場合約與 DC 容量配比正常</td>
+                <td><span class="sev P4">排除</span> 削峰僅在高日照出現，但漏電出現在清晨陰濕天，晴天反而正常。</td>
+              </tr>
+              <tr>
+                <td><strong>2. 台電電網端過壓跳機</strong></td>
+                <td>全場 17 台並未同步降載；相鄰機台 Inv7/9 全年發電平穩</td>
+                <td><span class="sev P4">排除</span> 電網電壓異常必為全場性事件，本案僅特定單台（Inv6/5）發生。</td>
+              </tr>
+              <tr>
+                <td><strong>3. 組件老化衰退或 PID 效應</strong></td>
+                <td>PID 衰退為年單位的不可逆下滑，不會在奈米塗層後數天暴增 10%</td>
+                <td><span class="sev P4">排除</span> 改善後比值立即跨越 100%，證明組件本身矽晶健康，純屬表面漏電。</td>
+              </tr>
+              <tr>
+                <td><strong>4. 日照計或溫度感測器失真</strong></td>
+                <td>全場採用 UNSW 同儕機台差分比對 (P2P)，演算法與日射計讀值解耦</td>
+                <td><span class="sev P4">排除</span> 不受日射感測器飄移影響，完全以實際 kWh 互比為準。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h3>📉 Inv5 非預期跳脫停機之斷崖特徵 (兩次事故)</h3>
+        <div id="inv5Chart" style="height: 220px; width: 100%;"></div>
+        <div class="callout danger" style="margin-top: 10px;">
+          <strong>Inv5 事故診斷</strong>：Inv5 在 2025/11/20~11/26 連續 6 天發電量完全歸零（同場機台日發 200~380 kWh）；2026/08/31~09/07 再次斷崖跳機 4+ 天，直接造成 13,387 kWh 巨大缺口，必須落實開關鎖定防誤觸及告警通聯。
+        </div>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <h3>📸 簡報分析實證圖表：全場漏電天數遞增與 06/05 原始數據異常</h3>
+      <div class="grid-2" style="gap: 12px; margin-bottom: 0;">
+        <div class="ev-card" onclick="openPhotoModal('slide_4.png', '各逆變器每年漏電天數遞增趨勢', '簡報第4頁實證', '漏電最嚴重為 #6，其次為 #7、#11、#5、#3 及 #16。漏電次數隨年份急遽上升，必須使用奈米材料進行全面阻斷預防。')">
+          <div class="img-box"><img src="assets/slide_4.png" alt="漏電天數遞增趨勢"></div>
+          <div class="ev-info">
+            <div class="ev-title">各逆變器漏電天數遞增趨勢</div>
+            <div class="ev-meta">#6最嚴重，次為#7/#11/#5/#3/#16</div>
+          </div>
+        </div>
+
+        <div class="ev-card" onclick="openPhotoModal('slide_7.png', '2026/06/05 原始數據異常原因', '簡報第7頁實證', '2026/06/05 當天逆變器監控通訊中斷，無電壓及電流顯示造成度數短少，此為通訊丟失並非化學性漏電。')">
+          <div class="img-box"><img src="assets/slide_7.png" alt="數據異常原因"></div>
+          <div class="ev-info">
+            <div class="ev-title">2026/06/05 監控中斷非漏電</div>
+            <div class="ev-meta">數據丟失與化學性漏電之區隔</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: D5 PERMANENT ACTIONS -->
+  <section class="slide" id="slide-7">
+    <div class="section-head">
+      <span class="part-tag">D5 PERMANENT ACTIONS</span>
+      <h2>D5 永久對策選定 ＆ 成本效益回收期比選</h2>
+      <p class="sec-purpose">從材料工法、電氣安全、結構維護與回本週期評估最佳投資對策</p>
+    </div>
+
+    <div class="box-card">
+      <h3>⚖️ 四大永久改善方案綜合評估矩陣</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>改善工法方案 Plan</th>
+              <th>技術特點與施作內容</th>
+              <th>投入成本 (CAPEX)</th>
+              <th>預期年化發電增益</th>
+              <th>投資回本期</th>
+              <th>決策判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-success">
+              <td><strong>方案 A：奈米超晶體絕緣防護塗層 (已在Inv6實證)</strong></td>
+              <td>在 MC4 接頭、組件邊框噴塗奈米雙疏材料，阻絕微導電薄膜並降阻</td>
+              <td>約 NT$ 4.5 萬 / 台（高風險 5 台約 22.5 萬）</td>
+              <td>挽回漏電短少約 40,000 kWh（年增收 NT$ 19.8 萬）</td>
+              <td><strong>約 1.1 年回本</strong></td>
+              <td><span class="sev P1">✔ 主力採用</span></td>
+            </tr>
+            <tr class="row-highlight">
+              <td><strong>方案 B：鋼構除鏽防蝕塗層 ＋ C鋼鑽孔疏通</strong></td>
+              <td>塗刷鐵鏽轉換劑防止穿孔；C 鋼積水點鑽洩水孔；每年 2 次清水洗鹽</td>
+              <td>約 NT$ 8.0 萬元 (含工料)</td>
+              <td>延長屋頂鋼構壽命 10+ 年，消除結構坍塌火災風險</td>
+              <td><strong>資產保值 (N/A)</strong></td>
+              <td><span class="sev P2">✔ 同步實施</span></td>
+            </tr>
+            <tr>
+              <td><strong>方案 C：全場直流電纜與 MC4 接頭全面重抽</strong></td>
+              <td>全面更換耐候交聯聚乙烯光伏線與全新 IP68 接頭</td>
+              <td>約 NT$ 95 萬元 (停機 14 天)</td>
+              <td>改善老化接觸不良，但無法阻擋外部鹽霧反潮</td>
+              <td>約 4.8 年回本</td>
+              <td><span class="sev P4">不採用 (高成本)</span></td>
+            </tr>
+            <tr>
+              <td><strong>方案 D：傳統高壓清洗機頻繁除塵洗板</strong></td>
+              <td>每 2 個月全場清洗一次（租水車與防墜施工）</td>
+              <td>每年約 NT$ 18 萬元 (持續性 OPEX)</td>
+              <td>僅清潔玻璃表面，洗完 3 天鹽霧重新堆積，無法解決接頭漏電</td>
+              <td>無法回本</td>
+              <td><span class="sev P4">不建議 (治標不治本)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout success">
+        <strong>決策結論</strong>：方案 A 奈米材料已在 Inv6 經過完整梅雨季實證，不僅以 1.1 年超短回本期消除化學性漏電，更帶來額外 1%~2% 降阻送電溢價；搭配方案 B 鋼構除鏽排水，形成完美的「電氣＋結構」雙重資產防護。
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: D6 VALIDATION -->
+  <section class="slide" id="slide-8">
+    <div class="section-head">
+      <span class="part-tag">D6 VALIDATION & THRESHOLDS</span>
+      <h2>D6 執行成效驗證 ＆ 結案門檻指標</h2>
+      <p class="sec-purpose">以量化同儕比值與絕緣電阻作為驗收基準，確保改善效果持續穩定</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>🎯 改善效果三階段量化驗收門檻</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>驗收階段 Phase</th>
+                <th>技術驗證指標與門檻</th>
+                <th>實際達成結果</th>
+                <th>狀態判定</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-success">
+                <td><strong>第 1 階段：施工後 30 天</strong></td>
+                <td>Inv6 相對 Inv1 送電比值維持在 <strong>0.93 ~ 0.96</strong></td>
+                <td>實測穩定在 0.93 ~ 0.96（4/17~5/15）</td>
+                <td><span class="sev P1">✅ 通過</span></td>
+              </tr>
+              <tr class="row-success">
+                <td><strong>第 2 階段：梅雨高濕季</strong></td>
+                <td>5/16 起比值進一步攀升至 <strong>0.99 ~ 1.02</strong>，且雨季無跳漏</td>
+                <td>實測 7月 1.001、8月 1.007、9月 1.011！</td>
+                <td><span class="sev P1">✅ 超標達成</span></td>
+              </tr>
+              <tr class="row-highlight">
+                <td><strong>第 3 階段：Inv5 復歸</strong></td>
+                <td>Inv5 連續 14 天日照充足日發電量恢復至同儕中位數 <strong>±5%</strong> 內</td>
+                <td>待現場斷路器檢查完成後啟動驗證計時</td>
+                <td><span class="sev P2">進行中</span></td>
+              </tr>
+              <tr>
+                <td><strong>電氣安全指標</strong></td>
+                <td>IEC 62446-1：1000V 兆歐表量測直流對地阻抗 <strong>Riso ≥ 1 MΩ</strong></td>
+                <td>改善後雨天絕緣電阻維持在 20 MΩ 以上</td>
+                <td><span class="sev P1">✅ 通過</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h3>📊 Inv6 改善前後月度送電比值演變明細</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>月份 Month</th>
+                <th class="num">Inv1 等價時數</th>
+                <th class="num">Inv6 等價時數</th>
+                <th class="num">相對比值 Ratio</th>
+                <th>運轉狀態與氣候特徵</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-danger">
+                <td>2025-11</td><td class="num">60.93 h</td><td class="num">53.00 h</td><td class="num">0.870</td><td>東北季風期，11/24 單日比值僅 0.186</td>
+              </tr>
+              <tr class="row-danger">
+                <td>2026-01</td><td class="num">56.66 h</td><td class="num">48.71 h</td><td class="num">0.860</td><td>冬季潮濕反潮，多日開機延遲</td>
+              </tr>
+              <tr class="row-danger">
+                <td>2026-04</td><td class="num">97.42 h</td><td class="num">89.79 h</td><td class="num">0.922</td><td>4/14~4/16 施作奈米材料改善工程</td>
+              </tr>
+              <tr class="row-success">
+                <td>2026-05</td><td class="num">125.19 h</td><td class="num">123.79 h</td><td class="num">0.989</td><td>梅雨季高濕，漏電問題完全消失</td>
+              </tr>
+              <tr class="row-success">
+                <td>2026-06</td><td class="num">108.50 h</td><td class="num">108.45 h</td><td class="num">1.000</td><td>除 6/5 監控異常外，全月表現優異</td>
+              </tr>
+              <tr class="row-success">
+                <td>2026-07</td><td class="num">157.03 h</td><td class="num">157.20 h</td><td class="num">1.001</td><td>高溫高照期，送電比值超越基準台！</td>
+              </tr>
+              <tr class="row-success">
+                <td>2026-08</td><td class="num">135.23 h</td><td class="num">136.23 h</td><td class="num">1.007</td><td>持續維持在 100% 以上高效率</td>
+              </tr>
+              <tr class="row-success">
+                <td>2026-09</td><td class="num">74.72 h</td><td class="num">75.52 h</td><td class="num">1.011</td><td>秋季運轉平穩，降阻增益持續浮現</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: D7 PREVENTION -->
+  <section class="slide" id="slide-9">
+    <div class="section-head">
+      <span class="part-tag">D7 PREVENT RECURRENCE</span>
+      <h2>D7 防止再發機制 ＆ 標準作業程序 (SOP) 修訂</h2>
+      <p class="sec-purpose">將反潮化學性漏電與跳機預防納入日常制度，建立自動化警報截斷損失</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>📋 維運標準作業程序 (SOP) 實質修訂要點</h3>
+        <ul style="margin: 0 0 14px 20px; font-size: .88rem; line-height: 1.7;">
+          <li><strong>季節性預防巡檢 (每年 9 月底)</strong>：在東北季風來臨前，強制使用 1000V 兆歐表量測全場各 MPPT 直流對地電阻；凡阻抗小於 5 MΩ 者列入奈米防護加強組。</li>
+          <li><strong>鋼構維護制度化 (每年 2 次)</strong>：每年 4 月及 10 月以低壓清水徹底沖洗內部死角鋼構鹽沉積；C 鋼積水點納入每月無人機巡檢巡視清單。</li>
+          <li><strong>施工動火與斷路器防誤觸</strong>：凡涉及併網櫃維護，嚴格執行開關機械式掛牌上鎖 (LOTO)，並加裝防誤觸透明壓克力防護罩。</li>
+          <li><strong>橫向推展機制</strong>：將大園場之奈米防潮經驗建立標準技術工法，推展至進金生北區沿海各案場（如觀音、竹圍、八里）。</li>
+        </ul>
+      </div>
+
+      <div class="box-card">
+        <h3>🚨 SCADA 監控系統「同儕動態差分」自動告警規則</h3>
+        <div class="callout warn">
+          <strong>告警規則修訂說明 (解決傳統 SCADA 盲區)：</strong><br>
+          傳統絕對門檻告警在陰雨天無法判斷發電異常。本次新增「同儕比值偏差」自動推播：
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>觸發條件 Condition</th>
+                <th>判定等級</th>
+                <th>系統自動化處理流程</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-danger">
+                <td>單台當日發電為 0，而同儕中位數 > 50 kWh</td>
+                <td><span class="sev P1">緊急工單</span></td>
+                <td>當日上午 10:30 自動發出簡訊與 LINE 推播至現場維運工程師，2 小時內回報。</td>
+              </tr>
+              <tr class="row-highlight">
+                <td>單台等價時數低於同場中位數 <strong>15% 連續 3 天</strong></td>
+                <td><span class="sev P2">預警工單</span></td>
+                <td>系統自動判定為潛在化學性漏電或組串遮蔽，排入本週現場熱像儀與阻抗量測工單。</td>
+              </tr>
+              <tr>
+                <td>單台等價時數低於同場中位數 <strong>8% 連續 7 天</strong></td>
+                <td><span class="sev P3">巡檢提醒</span></td>
+                <td>列入月度保養清潔重點名單，比對歷史趨勢。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: D8 CONGRATULATE & DCF -->
+  <section class="slide" id="slide-10">
+    <div class="section-head">
+      <span class="part-tag">D8 FINANCIAL IMPACT & CLOSURE</span>
+      <h2>D8 結案增益評估 ＆ 20 年財務現金流 (DCF) 增值模型</h2>
+      <p class="sec-purpose">量化全場奈米防護與 Inv5 復歸後對專案 IRR、累計現金流與資產估值之巨大推升</p>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card teal">
+        <div class="kpi-label">全場修復年化發電增益</div>
+        <div class="kpi-num">58,770<small>kWh/年</small></div>
+        <div class="kpi-sub">消除跳機與秋冬反潮化學性漏電</div>
+      </div>
+      <div class="kpi-card good">
+        <div class="kpi-label">年化電費增收金額</div>
+        <div class="kpi-num">29.1<small>萬元/年</small></div>
+        <div class="kpi-sub">合約保障躉購單價 NT$ 4.9600 / kWh</div>
+      </div>
+      <div class="kpi-card good">
+        <div class="kpi-label">20年累計現金流折現 (DCF)</div>
+        <div class="kpi-num">408.5<small>萬元</small></div>
+        <div class="kpi-sub">以折現率 WACC=4.5% 計算淨現值</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-label">專案整體內部報酬率 (IRR)</div>
+        <div class="kpi-num">+0.65<small>%</small></div>
+        <div class="kpi-sub">顯著推升二級市場資產交易估值溢價</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>📈 20 年累計營收現金流增益預測 (修復前後對比)</h3>
+        <div id="dcfChart" style="height: 320px; width: 100%;"></div>
+      </div>
+
+      <div class="box-card">
+        <h3>🏆 團隊結案表揚與跨組織協同總結</h3>
+        <p style="font-size: .88rem; line-height: 1.7; margin-bottom: 12px;">
+          本次診斷展現了<strong>「大數據科學診斷 ＋ 奈米尖端材料 ＋ 現場精準落實」</strong>的完美結合：
+        </p>
+        <ul style="margin: 0 0 14px 20px; font-size: .86rem; line-height: 1.65;">
+          <li><strong>分析組</strong>：突破傳統監控死角，以 UNSW 同儕差分演算法成功在無日射計依賴下揪出隱形化學性漏電。</li>
+          <li><strong>奈米材料組</strong>：研發導入奈米超晶體塗層，不僅治癒了最難以捉摸的清晨漏電，更帶來抗阻溢價。</li>
+          <li><strong>現場維運團隊 (李昀璁、呂理淦、汪順發)</strong>：頂著沿海東北季風與高鹽霧嚴酷氣候，確實完成現場勘查、鋼構防鏽與高壓檢測。</li>
+          <li><strong>業主長榮儲運</strong>：高度信任進金生專業判斷，支持創新奈米材料工法於屋頂試驗，成功將劣化資產轉化為高收益標竿。</li>
+        </ul>
+        <div style="text-align: right;">
+          <span class="badge teal" style="font-size:.78rem; padding:6px 12px;">🎉 8D 結案狀態：D6~D8 成效驗證通過</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: APPENDIX -->
+  <section class="slide" id="slide-11">
+    <div class="section-head">
+      <span class="part-tag">APPENDIX & PROVENANCE</span>
+      <h2>附錄：數據溯源、安全規範 ＆ 現場圖資庫</h2>
+      <p class="sec-purpose">364 天原始數據檢視器、資料來源清單與 1000V DC 高壓安全警語</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>📋 數據資料來源清單 (Data Sources)</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>資料檔案名稱 Source File</th>
+                <th>採集區間</th>
+                <th>筆數 / 規模</th>
+                <th>內容描述與校核目的</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>資料分析_峰瓩值 長榮國際儲運大園場.csv</strong></td>
+                <td>2025/09/22 – 2026/09/21</td>
+                <td>364 天 × 17台</td>
+                <td>逐日發電度數 (kWh) 與峰瓩值 (Ey)，計算各台真實裝置容量之基準。</td>
+              </tr>
+              <tr>
+                <td><strong>資料分析_PR值分析 長榮國際儲運大園場.csv</strong></td>
+                <td>2025/09/22 – 2026/09/21</td>
+                <td>364 天 × 17台</td>
+                <td>等效日照時數、發電時數與 PR 值 (%)，掌握機台光電轉換效率。</td>
+              </tr>
+              <tr>
+                <td><strong>資料分析_發電收入 長榮國際儲運大園場.csv</strong></td>
+                <td>2025/09/22 – 2026/09/21</td>
+                <td>364 天 × 17台</td>
+                <td>逐日預估收入 (NTD)，換算推導出躉購單價為 NT$ 4.9600/kWh。</td>
+              </tr>
+              <tr>
+                <td><strong>長榮大園_案場異常調查報告書.doc</strong></td>
+                <td>114/07/09</td>
+                <td>現場調查 1 份</td>
+                <td>宇軒廠商與長榮業主會勘紀錄、內部鋼構鹽害腐蝕與 C 鋼積水實勘。</td>
+              </tr>
+              <tr>
+                <td><strong>進金生_桃園大園廠_分析結果(20260609).pptx</strong></td>
+                <td>2026/06/09</td>
+                <td>簡報 8 頁</td>
+                <td>奈米超晶體改善 Inv6 漏電送電量對比、漏電天數遞增與 6/5 異常說明。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action-sm" onclick="openRawDataModal()">📊 開啟完整 364 天原始對帳視窗</button>
+          <button class="btn-action-sm" onclick="exportRawCsv()">📥 下載 CSV 對帳表</button>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h3>⚠️ 現場電氣與高空作業安全規範 (Safety Warnings)</h3>
+        <div class="callout danger" style="margin-bottom: 10px;">
+          <strong>高壓直流防弧警語：</strong> 日照下光伏組件持續帶電，開路電壓最高達 1000V DC！嚴禁帶載插拔任何直流連接器 (MC4)，強大直流電弧具致命危險！
+        </div>
+        <ul style="margin: 0 0 10px 20px; font-size: .84rem; line-height: 1.65;">
+          <li><strong>絕緣手套與防護裝具</strong>：凡觸碰匯流箱或變流器直流端子，必須穿戴經檢驗合格之 Class 0 (1000V) 絕緣橡膠手套與安全面罩。</li>
+          <li><strong>LOTO 上鎖掛牌程序</strong>：檢修前必須依序：關閉變流器 AC 斷路器 $ightarrow$ 切開直流負載隔離開關 $ightarrow$ 勾表確認直流迴路電流為 0.0 A $ightarrow$ 掛牌上鎖。</li>
+          <li><strong>屋頂高空作業防墜</strong>：物流倉儲屋頂金屬浪板濕滑，作業人員須全程配戴五點式安全帶並鉤掛於母索，嚴防踩踏採光罩或無支撐邊緣。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box-card">
+      <h3>📸 現場工程證據照片總覽庫 (點擊可放大檢視)</h3>
+      <div class="ev-grid" id="appendixPhotoGrid">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Sticky Bottom Deck Controls Bar -->
+<footer class="deck-controls">
+  <button class="deck-btn" id="btnPrev" onclick="prevSlide()">
+    <span>⬅️ 上一頁 (Prev)</span>
+  </button>
+  <div class="deck-counter" id="slideCounter">Slide 1 / 12</div>
+  <button class="deck-btn primary" id="btnNext" onclick="nextSlide()">
+    <span>下一頁 (Next) ➡️</span>
+  </button>
+</footer>
+
+<!-- Lightbox Modal -->
+<div class="modal-overlay" id="photoModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 id="modalPhotoTitle">現場圖資檢視</h4>
+      <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-img-container">
+        <img id="modalPhotoImg" src="" alt="Evidence Photo">
+      </div>
+      <div style="margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:.75rem; color:var(--muted); margin-bottom:4px;">
+          <span id="modalPhotoCategory" class="sev P3">類別</span>
+          <span id="modalPhotoMeta">時間戳記</span>
+        </div>
+        <p id="modalPhotoCaption" style="font-size:.85rem; color:var(--ink); line-height:1.55;"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Raw Data Provenance Modal -->
+<div class="modal-overlay" id="rawDataModal">
+  <div class="modal-content" style="max-width:1180px;">
+    <div class="modal-header">
+      <h4>📊 長榮大園場 364 天逐日發電原始數據對帳與溯源檢視器 (Raw Telemetry Provenance)</h4>
+      <button class="modal-close" onclick="closeRawDataModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="text" id="rawSearchInput" placeholder="搜尋日期 (例 2026-04) 或狀態..." oninput="filterRawTable()" style="padding:6px 12px; border:1px solid var(--line); border-radius:6px; font-size:.8rem; width:220px;">
+          <button class="btn-action-sm" onclick="filterByAnomaly('all')">全部日期</button>
+          <button class="btn-action-sm" style="color:var(--coral);" onclick="filterByAnomaly('Inv5 跳脫停機')">僅看 Inv5 跳機</button>
+          <button class="btn-action-sm" style="color:var(--amber);" onclick="filterByAnomaly('Inv6 化學性漏電')">僅看 Inv6 漏電</button>
+          <button class="btn-action-sm" style="color:var(--green);" onclick="filterByAnomaly('改善後高效率')">僅看 改善後</button>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action-sm" onclick="exportRawCsv()">📥 匯出完整 CSV</button>
+          <button class="btn-action-sm" onclick="copyRawTable()">📋 複製數據</button>
+        </div>
+      </div>
+      <div class="table-wrap" style="max-height:480px; overflow-y:auto;">
+        <table class="data-table" id="rawDataTable">
+          <thead>
+            <tr>
+              <th>日期 Date</th>
+              <th class="num">Inv1 (kWh)</th>
+              <th class="num">Inv5 (kWh)</th>
+              <th class="num">Inv6 (kWh)</th>
+              <th class="num">Inv7 標竿 (kWh)</th>
+              <th class="num">Inv15 中位 (kWh)</th>
+              <th class="num">Inv6 / Inv1 比值</th>
+              <th class="num">Inv5 / Inv1 比值</th>
+              <th>遙測特徵判定狀態</th>
+            </tr>
+          </thead>
+          <tbody id="rawDataTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Gallery Grid Modal -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal-content" style="max-width:1160px;">
+    <div class="modal-header">
+      <h4>📸 長榮大園案場簡報實證與現場工程圖資庫總覽</h4>
+      <button class="modal-close" onclick="closeGalleryModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="ev-grid" id="allPhotosGrid">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Data Injection ---
+const rawDailyData = [{"date": "2025-09-22", "inv1_kwh": 423.8, "inv5_kwh": 417.3, "inv6_kwh": 426.8, "inv7_kwh": 433.4, "inv15_kwh": 429.2, "inv6_ratio": 1.007, "inv5_ratio": 0.985, "status": "正常"}, {"date": "2025-09-23", "inv1_kwh": 55.8, "inv5_kwh": 55.5, "inv6_kwh": 55.9, "inv7_kwh": 57.4, "inv15_kwh": 56.4, "inv6_ratio": 1.002, "inv5_ratio": 0.995, "status": "正常"}, {"date": "2025-09-24", "inv1_kwh": 475.4, "inv5_kwh": 468.8, "inv6_kwh": 477.2, "inv7_kwh": 490.3, "inv15_kwh": 481.3, "inv6_ratio": 1.004, "inv5_ratio": 0.986, "status": "正常"}, {"date": "2025-09-25", "inv1_kwh": 579.1, "inv5_kwh": 564.4, "inv6_kwh": 584.0, "inv7_kwh": 605.2, "inv15_kwh": 591.9, "inv6_ratio": 1.008, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-09-26", "inv1_kwh": 233.4, "inv5_kwh": 229.2, "inv6_kwh": 234.0, "inv7_kwh": 238.7, "inv15_kwh": 235.8, "inv6_ratio": 1.003, "inv5_ratio": 0.982, "status": "正常"}, {"date": "2025-09-27", "inv1_kwh": 357.6, "inv5_kwh": 349.7, "inv6_kwh": 360.6, "inv7_kwh": 363.2, "inv15_kwh": 361.8, "inv6_ratio": 1.008, "inv5_ratio": 0.978, "status": "正常"}, {"date": "2025-09-28", "inv1_kwh": 535.6, "inv5_kwh": 520.8, "inv6_kwh": 535.1, "inv7_kwh": 549.8, "inv15_kwh": 536.1, "inv6_ratio": 0.999, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2025-09-29", "inv1_kwh": 480.0, "inv5_kwh": 467.0, "inv6_kwh": 477.9, "inv7_kwh": 487.8, "inv15_kwh": 475.1, "inv6_ratio": 0.996, "inv5_ratio": 0.973, "status": "正常"}, {"date": "2025-09-30", "inv1_kwh": 503.6, "inv5_kwh": 492.6, "inv6_kwh": 502.4, "inv7_kwh": 521.3, "inv15_kwh": 506.6, "inv6_ratio": 0.998, "inv5_ratio": 0.978, "status": "正常"}, {"date": "2025-10-01", "inv1_kwh": 536.1, "inv5_kwh": 524.6, "inv6_kwh": 534.4, "inv7_kwh": 553.2, "inv15_kwh": 535.4, "inv6_ratio": 0.997, "inv5_ratio": 0.979, "status": "正常"}, {"date": "2025-10-02", "inv1_kwh": 518.7, "inv5_kwh": 507.2, "inv6_kwh": 521.0, "inv7_kwh": 540.9, "inv15_kwh": 524.7, "inv6_ratio": 1.004, "inv5_ratio": 0.978, "status": "正常"}, {"date": "2025-10-03", "inv1_kwh": 532.1, "inv5_kwh": 519.1, "inv6_kwh": 532.4, "inv7_kwh": 552.6, "inv15_kwh": 536.3, "inv6_ratio": 1.001, "inv5_ratio": 0.976, "status": "正常"}, {"date": "2025-10-04", "inv1_kwh": 526.4, "inv5_kwh": 513.9, "inv6_kwh": 526.9, "inv7_kwh": 546.4, "inv15_kwh": 531.1, "inv6_ratio": 1.001, "inv5_ratio": 0.976, "status": "正常"}, {"date": "2025-10-05", "inv1_kwh": 533.2, "inv5_kwh": 520.8, "inv6_kwh": 534.0, "inv7_kwh": 554.9, "inv15_kwh": 541.7, "inv6_ratio": 1.002, "inv5_ratio": 0.977, "status": "正常"}, {"date": "2025-10-06", "inv1_kwh": 534.6, "inv5_kwh": 525.6, "inv6_kwh": 541.5, "inv7_kwh": 563.6, "inv15_kwh": 536.2, "inv6_ratio": 1.013, "inv5_ratio": 0.983, "status": "正常"}, {"date": "2025-10-07", "inv1_kwh": 547.4, "inv5_kwh": 536.0, "inv6_kwh": 553.9, "inv7_kwh": 574.0, "inv15_kwh": 553.6, "inv6_ratio": 1.012, "inv5_ratio": 0.979, "status": "正常"}, {"date": "2025-10-08", "inv1_kwh": 407.9, "inv5_kwh": 399.0, "inv6_kwh": 410.6, "inv7_kwh": 417.4, "inv15_kwh": 408.7, "inv6_ratio": 1.007, "inv5_ratio": 0.978, "status": "正常"}, {"date": "2025-10-09", "inv1_kwh": 527.7, "inv5_kwh": 517.5, "inv6_kwh": 534.1, "inv7_kwh": 556.9, "inv15_kwh": 533.6, "inv6_ratio": 1.012, "inv5_ratio": 0.981, "status": "正常"}, {"date": "2025-10-10", "inv1_kwh": 541.3, "inv5_kwh": 531.6, "inv6_kwh": 548.3, "inv7_kwh": 569.1, "inv15_kwh": 548.7, "inv6_ratio": 1.013, "inv5_ratio": 0.982, "status": "正常"}, {"date": "2025-10-11", "inv1_kwh": 451.6, "inv5_kwh": 443.6, "inv6_kwh": 454.7, "inv7_kwh": 472.0, "inv15_kwh": 462.2, "inv6_ratio": 1.007, "inv5_ratio": 0.982, "status": "正常"}, {"date": "2025-10-12", "inv1_kwh": 509.8, "inv5_kwh": 500.5, "inv6_kwh": 511.0, "inv7_kwh": 530.1, "inv15_kwh": 518.4, "inv6_ratio": 1.002, "inv5_ratio": 0.982, "status": "正常"}, {"date": "2025-10-13", "inv1_kwh": 487.8, "inv5_kwh": 474.2, "inv6_kwh": 488.1, "inv7_kwh": 508.2, "inv15_kwh": 493.1, "inv6_ratio": 1.001, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2025-10-14", "inv1_kwh": 473.0, "inv5_kwh": 464.3, "inv6_kwh": 480.9, "inv7_kwh": 502.7, "inv15_kwh": 488.6, "inv6_ratio": 1.017, "inv5_ratio": 0.982, "status": "正常"}, {"date": "2025-10-15", "inv1_kwh": 473.5, "inv5_kwh": 464.6, "inv6_kwh": 477.1, "inv7_kwh": 494.5, "inv15_kwh": 480.3, "inv6_ratio": 1.008, "inv5_ratio": 0.981, "status": "正常"}, {"date": "2025-10-16", "inv1_kwh": 498.2, "inv5_kwh": 488.3, "inv6_kwh": 504.1, "inv7_kwh": 521.6, "inv15_kwh": 505.4, "inv6_ratio": 1.012, "inv5_ratio": 0.98, "status": "正常"}, {"date": "2025-10-17", "inv1_kwh": 450.5, "inv5_kwh": 439.9, "inv6_kwh": 453.9, "inv7_kwh": 473.5, "inv15_kwh": 462.4, "inv6_ratio": 1.008, "inv5_ratio": 0.976, "status": "正常"}, {"date": "2025-10-18", "inv1_kwh": 495.9, "inv5_kwh": 486.4, "inv6_kwh": 501.7, "inv7_kwh": 520.0, "inv15_kwh": 503.5, "inv6_ratio": 1.012, "inv5_ratio": 0.981, "status": "正常"}, {"date": "2025-10-19", "inv1_kwh": 207.8, "inv5_kwh": 208.2, "inv6_kwh": 211.3, "inv7_kwh": 216.4, "inv15_kwh": 213.9, "inv6_ratio": 1.017, "inv5_ratio": 1.002, "status": "正常"}, {"date": "2025-10-20", "inv1_kwh": 48.6, "inv5_kwh": 48.0, "inv6_kwh": 22.5, "inv7_kwh": 42.0, "inv15_kwh": 47.4, "inv6_ratio": 0.463, "inv5_ratio": 0.988, "status": "正常"}, {"date": "2025-10-21", "inv1_kwh": 25.7, "inv5_kwh": 1.9, "inv6_kwh": 0.0, "inv7_kwh": 0.0, "inv15_kwh": 43.5, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-10-22", "inv1_kwh": 1.2, "inv5_kwh": 0.9, "inv6_kwh": 0.1, "inv7_kwh": 0.0, "inv15_kwh": 47.6, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-10-23", "inv1_kwh": 3.3, "inv5_kwh": 0.4, "inv6_kwh": 0.0, "inv7_kwh": 0.0, "inv15_kwh": 43.6, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-10-24", "inv1_kwh": 0.3, "inv5_kwh": 0.3, "inv6_kwh": 0.1, "inv7_kwh": 0.2, "inv15_kwh": 56.0, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-10-25", "inv1_kwh": 0.7, "inv5_kwh": 0.5, "inv6_kwh": 0.0, "inv7_kwh": 0.0, "inv15_kwh": 32.4, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-10-26", "inv1_kwh": 59.1, "inv5_kwh": 55.2, "inv6_kwh": 16.9, "inv7_kwh": 20.2, "inv15_kwh": 58.1, "inv6_ratio": 0.286, "inv5_ratio": 0.934, "status": "正常"}, {"date": "2025-10-27", "inv1_kwh": 124.2, "inv5_kwh": 113.2, "inv6_kwh": 84.5, "inv7_kwh": 94.7, "inv15_kwh": 125.5, "inv6_ratio": 0.68, "inv5_ratio": 0.911, "status": "Inv6 化學性漏電"}, {"date": "2025-10-28", "inv1_kwh": 56.9, "inv5_kwh": 7.0, "inv6_kwh": 0.3, "inv7_kwh": 0.0, "inv15_kwh": 92.2, "inv6_ratio": 0.005, "inv5_ratio": 0.123, "status": "正常"}, {"date": "2025-10-29", "inv1_kwh": 284.3, "inv5_kwh": 277.4, "inv6_kwh": 275.4, "inv7_kwh": 285.0, "inv15_kwh": 283.5, "inv6_ratio": 0.969, "inv5_ratio": 0.976, "status": "正常"}, {"date": "2025-10-30", "inv1_kwh": 325.0, "inv5_kwh": 316.6, "inv6_kwh": 308.6, "inv7_kwh": 323.0, "inv15_kwh": 323.5, "inv6_ratio": 0.95, "inv5_ratio": 0.974, "status": "正常"}, {"date": "2025-10-31", "inv1_kwh": 329.5, "inv5_kwh": 322.4, "inv6_kwh": 318.8, "inv7_kwh": 336.3, "inv15_kwh": 327.2, "inv6_ratio": 0.968, "inv5_ratio": 0.978, "status": "正常"}, {"date": "2025-11-01", "inv1_kwh": 146.4, "inv5_kwh": 144.6, "inv6_kwh": 147.9, "inv7_kwh": 153.0, "inv15_kwh": 148.6, "inv6_ratio": 1.01, "inv5_ratio": 0.988, "status": "正常"}, {"date": "2025-11-02", "inv1_kwh": 163.8, "inv5_kwh": 160.9, "inv6_kwh": 139.2, "inv7_kwh": 144.8, "inv15_kwh": 162.5, "inv6_ratio": 0.85, "inv5_ratio": 0.982, "status": "正常"}, {"date": "2025-11-03", "inv1_kwh": 72.5, "inv5_kwh": 65.3, "inv6_kwh": 0.7, "inv7_kwh": 3.9, "inv15_kwh": 73.0, "inv6_ratio": 0.01, "inv5_ratio": 0.901, "status": "正常"}, {"date": "2025-11-04", "inv1_kwh": 156.6, "inv5_kwh": 153.0, "inv6_kwh": 70.4, "inv7_kwh": 81.3, "inv15_kwh": 155.3, "inv6_ratio": 0.45, "inv5_ratio": 0.977, "status": "Inv6 化學性漏電"}, {"date": "2025-11-05", "inv1_kwh": 349.4, "inv5_kwh": 340.6, "inv6_kwh": 330.6, "inv7_kwh": 355.1, "inv15_kwh": 356.3, "inv6_ratio": 0.946, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-11-06", "inv1_kwh": 440.6, "inv5_kwh": 429.8, "inv6_kwh": 432.5, "inv7_kwh": 465.5, "inv15_kwh": 454.9, "inv6_ratio": 0.982, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-11-07", "inv1_kwh": 445.6, "inv5_kwh": 433.5, "inv6_kwh": 447.6, "inv7_kwh": 478.0, "inv15_kwh": 446.3, "inv6_ratio": 1.004, "inv5_ratio": 0.973, "status": "正常"}, {"date": "2025-11-08", "inv1_kwh": 442.7, "inv5_kwh": 431.5, "inv6_kwh": 430.1, "inv7_kwh": 464.4, "inv15_kwh": 443.8, "inv6_ratio": 0.972, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-11-09", "inv1_kwh": 422.9, "inv5_kwh": 412.1, "inv6_kwh": 404.5, "inv7_kwh": 431.9, "inv15_kwh": 423.4, "inv6_ratio": 0.956, "inv5_ratio": 0.974, "status": "正常"}, {"date": "2025-11-10", "inv1_kwh": 102.4, "inv5_kwh": 95.0, "inv6_kwh": 0.0, "inv7_kwh": 0.0, "inv15_kwh": 102.0, "inv6_ratio": 0.0, "inv5_ratio": 0.928, "status": "Inv6 化學性漏電"}, {"date": "2025-11-11", "inv1_kwh": 16.0, "inv5_kwh": 1.5, "inv6_kwh": 0.1, "inv7_kwh": 0.5, "inv15_kwh": 53.8, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-11-12", "inv1_kwh": 0.0, "inv5_kwh": 0.0, "inv6_kwh": 0.0, "inv7_kwh": 0.0, "inv15_kwh": 99.9, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-11-13", "inv1_kwh": 77.3, "inv5_kwh": 71.4, "inv6_kwh": 21.9, "inv7_kwh": 21.6, "inv15_kwh": 146.9, "inv6_ratio": 0.283, "inv5_ratio": 0.924, "status": "正常"}, {"date": "2025-11-14", "inv1_kwh": 381.7, "inv5_kwh": 372.1, "inv6_kwh": 383.3, "inv7_kwh": 407.1, "inv15_kwh": 384.4, "inv6_ratio": 1.004, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-11-15", "inv1_kwh": 429.7, "inv5_kwh": 417.8, "inv6_kwh": 430.9, "inv7_kwh": 461.9, "inv15_kwh": 429.3, "inv6_ratio": 1.003, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2025-11-16", "inv1_kwh": 428.4, "inv5_kwh": 417.5, "inv6_kwh": 414.7, "inv7_kwh": 444.8, "inv15_kwh": 428.6, "inv6_ratio": 0.968, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-11-17", "inv1_kwh": 66.5, "inv5_kwh": 79.5, "inv6_kwh": 23.3, "inv7_kwh": 30.3, "inv15_kwh": 132.2, "inv6_ratio": 0.35, "inv5_ratio": 1.195, "status": "正常"}, {"date": "2025-11-18", "inv1_kwh": 28.2, "inv5_kwh": 0.0, "inv6_kwh": 1.0, "inv7_kwh": 5.3, "inv15_kwh": 50.2, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-11-19", "inv1_kwh": 3.0, "inv5_kwh": 0.0, "inv6_kwh": 0.0, "inv7_kwh": 0.5, "inv15_kwh": 13.3, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-11-20", "inv1_kwh": 214.6, "inv5_kwh": 0.0, "inv6_kwh": 213.5, "inv7_kwh": 222.5, "inv15_kwh": 207.0, "inv6_ratio": 0.995, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-21", "inv1_kwh": 66.9, "inv5_kwh": 0.0, "inv6_kwh": 29.1, "inv7_kwh": 63.8, "inv15_kwh": 67.1, "inv6_ratio": 0.435, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-22", "inv1_kwh": 284.8, "inv5_kwh": 0.0, "inv6_kwh": 285.7, "inv7_kwh": 298.4, "inv15_kwh": 280.8, "inv6_ratio": 1.003, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-23", "inv1_kwh": 387.8, "inv5_kwh": 0.0, "inv6_kwh": 359.9, "inv7_kwh": 400.9, "inv15_kwh": 389.9, "inv6_ratio": 0.928, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-24", "inv1_kwh": 370.8, "inv5_kwh": 0.0, "inv6_kwh": 69.1, "inv7_kwh": 384.6, "inv15_kwh": 374.0, "inv6_ratio": 0.186, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-25", "inv1_kwh": 202.6, "inv5_kwh": 0.0, "inv6_kwh": 203.1, "inv7_kwh": 214.1, "inv15_kwh": 198.8, "inv6_ratio": 1.002, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-26", "inv1_kwh": 371.1, "inv5_kwh": 0.0, "inv6_kwh": 368.4, "inv7_kwh": 396.9, "inv15_kwh": 363.1, "inv6_ratio": 0.993, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2025-11-27", "inv1_kwh": 0.0, "inv5_kwh": 0.0, "inv6_kwh": 0.0, "inv7_kwh": 0.0, "inv15_kwh": 295.2, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-11-28", "inv1_kwh": 316.8, "inv5_kwh": 7.3, "inv6_kwh": 316.3, "inv7_kwh": 336.1, "inv15_kwh": 310.6, "inv6_ratio": 0.998, "inv5_ratio": 0.023, "status": "正常"}, {"date": "2025-11-29", "inv1_kwh": 379.4, "inv5_kwh": 358.7, "inv6_kwh": 359.9, "inv7_kwh": 396.3, "inv15_kwh": 366.6, "inv6_ratio": 0.949, "inv5_ratio": 0.945, "status": "正常"}, {"date": "2025-11-30", "inv1_kwh": 248.5, "inv5_kwh": 249.0, "inv6_kwh": 220.6, "inv7_kwh": 238.4, "inv15_kwh": 252.1, "inv6_ratio": 0.888, "inv5_ratio": 1.002, "status": "正常"}, {"date": "2025-12-01", "inv1_kwh": 343.4, "inv5_kwh": 330.1, "inv6_kwh": 334.8, "inv7_kwh": 368.2, "inv15_kwh": 342.5, "inv6_ratio": 0.975, "inv5_ratio": 0.961, "status": "正常"}, {"date": "2025-12-02", "inv1_kwh": 307.9, "inv5_kwh": 298.7, "inv6_kwh": 311.6, "inv7_kwh": 332.0, "inv15_kwh": 313.1, "inv6_ratio": 1.012, "inv5_ratio": 0.97, "status": "正常"}, {"date": "2025-12-03", "inv1_kwh": 62.1, "inv5_kwh": 59.6, "inv6_kwh": 60.5, "inv7_kwh": 63.4, "inv15_kwh": 59.5, "inv6_ratio": 0.974, "inv5_ratio": 0.96, "status": "正常"}, {"date": "2025-12-04", "inv1_kwh": 342.3, "inv5_kwh": 325.3, "inv6_kwh": 344.3, "inv7_kwh": 365.1, "inv15_kwh": 337.6, "inv6_ratio": 1.006, "inv5_ratio": 0.95, "status": "正常"}, {"date": "2025-12-05", "inv1_kwh": 258.9, "inv5_kwh": 247.0, "inv6_kwh": 259.4, "inv7_kwh": 268.8, "inv15_kwh": 250.0, "inv6_ratio": 1.002, "inv5_ratio": 0.954, "status": "正常"}, {"date": "2025-12-06", "inv1_kwh": 298.0, "inv5_kwh": 282.2, "inv6_kwh": 296.7, "inv7_kwh": 319.6, "inv15_kwh": 286.7, "inv6_ratio": 0.996, "inv5_ratio": 0.947, "status": "正常"}, {"date": "2025-12-07", "inv1_kwh": 379.9, "inv5_kwh": 358.9, "inv6_kwh": 378.3, "inv7_kwh": 409.1, "inv15_kwh": 371.3, "inv6_ratio": 0.996, "inv5_ratio": 0.945, "status": "正常"}, {"date": "2025-12-08", "inv1_kwh": 253.1, "inv5_kwh": 241.8, "inv6_kwh": 236.0, "inv7_kwh": 259.6, "inv15_kwh": 249.2, "inv6_ratio": 0.932, "inv5_ratio": 0.955, "status": "正常"}, {"date": "2025-12-09", "inv1_kwh": 209.3, "inv5_kwh": 202.6, "inv6_kwh": 189.5, "inv7_kwh": 224.4, "inv15_kwh": 211.7, "inv6_ratio": 0.905, "inv5_ratio": 0.968, "status": "正常"}, {"date": "2025-12-10", "inv1_kwh": 275.0, "inv5_kwh": 258.3, "inv6_kwh": 246.3, "inv7_kwh": 283.6, "inv15_kwh": 269.8, "inv6_ratio": 0.896, "inv5_ratio": 0.939, "status": "正常"}, {"date": "2025-12-11", "inv1_kwh": 357.2, "inv5_kwh": 344.8, "inv6_kwh": 355.4, "inv7_kwh": 376.3, "inv15_kwh": 353.5, "inv6_ratio": 0.995, "inv5_ratio": 0.965, "status": "正常"}, {"date": "2025-12-12", "inv1_kwh": 111.3, "inv5_kwh": 108.8, "inv6_kwh": 112.9, "inv7_kwh": 116.4, "inv15_kwh": 115.1, "inv6_ratio": 1.014, "inv5_ratio": 0.978, "status": "正常"}, {"date": "2025-12-13", "inv1_kwh": 32.5, "inv5_kwh": 32.0, "inv6_kwh": 11.7, "inv7_kwh": 33.1, "inv15_kwh": 32.7, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2025-12-14", "inv1_kwh": 293.0, "inv5_kwh": 278.4, "inv6_kwh": 291.9, "inv7_kwh": 307.7, "inv15_kwh": 295.8, "inv6_ratio": 0.996, "inv5_ratio": 0.95, "status": "正常"}, {"date": "2025-12-15", "inv1_kwh": 294.0, "inv5_kwh": 279.6, "inv6_kwh": 292.0, "inv7_kwh": 297.5, "inv15_kwh": 291.8, "inv6_ratio": 0.993, "inv5_ratio": 0.951, "status": "正常"}, {"date": "2025-12-16", "inv1_kwh": 375.5, "inv5_kwh": 354.7, "inv6_kwh": 371.0, "inv7_kwh": 394.7, "inv15_kwh": 379.4, "inv6_ratio": 0.988, "inv5_ratio": 0.945, "status": "正常"}, {"date": "2025-12-17", "inv1_kwh": 358.8, "inv5_kwh": 340.4, "inv6_kwh": 346.6, "inv7_kwh": 378.4, "inv15_kwh": 363.7, "inv6_ratio": 0.966, "inv5_ratio": 0.949, "status": "正常"}, {"date": "2025-12-18", "inv1_kwh": 233.6, "inv5_kwh": 222.8, "inv6_kwh": 233.9, "inv7_kwh": 243.3, "inv15_kwh": 235.1, "inv6_ratio": 1.001, "inv5_ratio": 0.954, "status": "正常"}, {"date": "2025-12-19", "inv1_kwh": 116.2, "inv5_kwh": 111.6, "inv6_kwh": 76.1, "inv7_kwh": 101.2, "inv15_kwh": 115.1, "inv6_ratio": 0.655, "inv5_ratio": 0.96, "status": "Inv6 化學性漏電"}, {"date": "2025-12-20", "inv1_kwh": 119.0, "inv5_kwh": 116.5, "inv6_kwh": 117.6, "inv7_kwh": 119.5, "inv15_kwh": 117.2, "inv6_ratio": 0.988, "inv5_ratio": 0.979, "status": "正常"}, {"date": "2025-12-21", "inv1_kwh": 51.7, "inv5_kwh": 50.6, "inv6_kwh": 8.6, "inv7_kwh": 51.3, "inv15_kwh": 48.9, "inv6_ratio": 0.166, "inv5_ratio": 0.979, "status": "正常"}, {"date": "2025-12-22", "inv1_kwh": 322.1, "inv5_kwh": 313.0, "inv6_kwh": 319.8, "inv7_kwh": 332.4, "inv15_kwh": 331.3, "inv6_ratio": 0.993, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2025-12-23", "inv1_kwh": 348.6, "inv5_kwh": 338.8, "inv6_kwh": 327.3, "inv7_kwh": 367.3, "inv15_kwh": 354.6, "inv6_ratio": 0.939, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2025-12-24", "inv1_kwh": 371.7, "inv5_kwh": 361.3, "inv6_kwh": 332.7, "inv7_kwh": 395.8, "inv15_kwh": 382.4, "inv6_ratio": 0.895, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2025-12-25", "inv1_kwh": 39.1, "inv5_kwh": 38.6, "inv6_kwh": 9.1, "inv7_kwh": 40.1, "inv15_kwh": 38.9, "inv6_ratio": 0.233, "inv5_ratio": 0.987, "status": "正常"}, {"date": "2025-12-26", "inv1_kwh": 44.4, "inv5_kwh": 43.3, "inv6_kwh": 27.8, "inv7_kwh": 43.8, "inv15_kwh": 43.7, "inv6_ratio": 0.626, "inv5_ratio": 0.975, "status": "正常"}, {"date": "2025-12-27", "inv1_kwh": 143.2, "inv5_kwh": 138.8, "inv6_kwh": 120.5, "inv7_kwh": 147.4, "inv15_kwh": 141.7, "inv6_ratio": 0.841, "inv5_ratio": 0.969, "status": "Inv6 化學性漏電"}, {"date": "2025-12-28", "inv1_kwh": 101.1, "inv5_kwh": 97.9, "inv6_kwh": 73.2, "inv7_kwh": 100.2, "inv15_kwh": 97.4, "inv6_ratio": 0.724, "inv5_ratio": 0.968, "status": "Inv6 化學性漏電"}, {"date": "2025-12-29", "inv1_kwh": 306.7, "inv5_kwh": 294.1, "inv6_kwh": 304.6, "inv7_kwh": 326.0, "inv15_kwh": 305.4, "inv6_ratio": 0.993, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2025-12-30", "inv1_kwh": 71.0, "inv5_kwh": 68.7, "inv6_kwh": 25.0, "inv7_kwh": 65.4, "inv15_kwh": 69.4, "inv6_ratio": 0.352, "inv5_ratio": 0.968, "status": "正常"}, {"date": "2025-12-31", "inv1_kwh": 39.0, "inv5_kwh": 37.2, "inv6_kwh": 1.2, "inv7_kwh": 8.6, "inv15_kwh": 37.0, "inv6_ratio": 0.031, "inv5_ratio": 0.954, "status": "正常"}, {"date": "2026-01-01", "inv1_kwh": 43.2, "inv5_kwh": 41.4, "inv6_kwh": 0.6, "inv7_kwh": 20.4, "inv15_kwh": 42.4, "inv6_ratio": 0.014, "inv5_ratio": 0.958, "status": "正常"}, {"date": "2026-01-02", "inv1_kwh": 22.2, "inv5_kwh": 21.2, "inv6_kwh": 12.1, "inv7_kwh": 19.7, "inv15_kwh": 21.5, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2026-01-03", "inv1_kwh": 358.2, "inv5_kwh": 323.1, "inv6_kwh": 351.2, "inv7_kwh": 373.2, "inv15_kwh": 329.9, "inv6_ratio": 0.98, "inv5_ratio": 0.902, "status": "正常"}, {"date": "2026-01-04", "inv1_kwh": 392.3, "inv5_kwh": 355.5, "inv6_kwh": 381.3, "inv7_kwh": 413.8, "inv15_kwh": 366.6, "inv6_ratio": 0.972, "inv5_ratio": 0.906, "status": "正常"}, {"date": "2026-01-05", "inv1_kwh": 237.6, "inv5_kwh": 216.8, "inv6_kwh": 220.0, "inv7_kwh": 237.2, "inv15_kwh": 226.0, "inv6_ratio": 0.926, "inv5_ratio": 0.912, "status": "正常"}, {"date": "2026-01-06", "inv1_kwh": 25.8, "inv5_kwh": 24.5, "inv6_kwh": 0.7, "inv7_kwh": 12.2, "inv15_kwh": 24.8, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2026-01-07", "inv1_kwh": 174.8, "inv5_kwh": 160.9, "inv6_kwh": 171.2, "inv7_kwh": 179.1, "inv15_kwh": 163.7, "inv6_ratio": 0.979, "inv5_ratio": 0.92, "status": "正常"}, {"date": "2026-01-08", "inv1_kwh": 163.6, "inv5_kwh": 149.9, "inv6_kwh": 159.3, "inv7_kwh": 172.8, "inv15_kwh": 154.4, "inv6_ratio": 0.974, "inv5_ratio": 0.916, "status": "正常"}, {"date": "2026-01-09", "inv1_kwh": 374.0, "inv5_kwh": 340.5, "inv6_kwh": 366.7, "inv7_kwh": 396.7, "inv15_kwh": 349.7, "inv6_ratio": 0.98, "inv5_ratio": 0.91, "status": "正常"}, {"date": "2026-01-10", "inv1_kwh": 369.1, "inv5_kwh": 336.0, "inv6_kwh": 347.2, "inv7_kwh": 369.4, "inv15_kwh": 341.5, "inv6_ratio": 0.941, "inv5_ratio": 0.91, "status": "正常"}, {"date": "2026-01-11", "inv1_kwh": 377.3, "inv5_kwh": 342.7, "inv6_kwh": 371.3, "inv7_kwh": 401.1, "inv15_kwh": 352.1, "inv6_ratio": 0.984, "inv5_ratio": 0.908, "status": "正常"}, {"date": "2026-01-12", "inv1_kwh": 104.5, "inv5_kwh": 96.9, "inv6_kwh": 103.2, "inv7_kwh": 105.9, "inv15_kwh": 99.4, "inv6_ratio": 0.988, "inv5_ratio": 0.927, "status": "正常"}, {"date": "2026-01-13", "inv1_kwh": 378.1, "inv5_kwh": 341.7, "inv6_kwh": 355.9, "inv7_kwh": 385.9, "inv15_kwh": 351.4, "inv6_ratio": 0.941, "inv5_ratio": 0.904, "status": "正常"}, {"date": "2026-01-14", "inv1_kwh": 407.0, "inv5_kwh": 368.5, "inv6_kwh": 397.0, "inv7_kwh": 428.5, "inv15_kwh": 382.8, "inv6_ratio": 0.975, "inv5_ratio": 0.905, "status": "正常"}, {"date": "2026-01-15", "inv1_kwh": 372.6, "inv5_kwh": 338.3, "inv6_kwh": 342.7, "inv7_kwh": 376.4, "inv15_kwh": 348.4, "inv6_ratio": 0.92, "inv5_ratio": 0.908, "status": "正常"}, {"date": "2026-01-16", "inv1_kwh": 131.9, "inv5_kwh": 130.7, "inv6_kwh": 49.3, "inv7_kwh": 69.6, "inv15_kwh": 131.2, "inv6_ratio": 0.374, "inv5_ratio": 0.991, "status": "Inv6 化學性漏電"}, {"date": "2026-01-17", "inv1_kwh": 277.5, "inv5_kwh": 256.7, "inv6_kwh": 245.3, "inv7_kwh": 267.2, "inv15_kwh": 264.7, "inv6_ratio": 0.884, "inv5_ratio": 0.925, "status": "正常"}, {"date": "2026-01-18", "inv1_kwh": 251.5, "inv5_kwh": 231.9, "inv6_kwh": 199.0, "inv7_kwh": 221.1, "inv15_kwh": 236.5, "inv6_ratio": 0.791, "inv5_ratio": 0.922, "status": "Inv6 化學性漏電"}, {"date": "2026-01-19", "inv1_kwh": 109.0, "inv5_kwh": 100.9, "inv6_kwh": 0.3, "inv7_kwh": 45.2, "inv15_kwh": 99.8, "inv6_ratio": 0.003, "inv5_ratio": 0.926, "status": "Inv6 化學性漏電"}, {"date": "2026-01-20", "inv1_kwh": 59.6, "inv5_kwh": 70.3, "inv6_kwh": 3.2, "inv7_kwh": 36.9, "inv15_kwh": 65.6, "inv6_ratio": 0.054, "inv5_ratio": 1.18, "status": "正常"}, {"date": "2026-01-21", "inv1_kwh": 3.9, "inv5_kwh": 38.8, "inv6_kwh": 0.2, "inv7_kwh": 0.2, "inv15_kwh": 38.1, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2026-01-22", "inv1_kwh": 38.7, "inv5_kwh": 39.8, "inv6_kwh": 0.0, "inv7_kwh": 1.8, "inv15_kwh": 39.4, "inv6_ratio": 0.0, "inv5_ratio": 1.028, "status": "正常"}, {"date": "2026-01-23", "inv1_kwh": 309.9, "inv5_kwh": 300.5, "inv6_kwh": 293.9, "inv7_kwh": 338.5, "inv15_kwh": 300.8, "inv6_ratio": 0.948, "inv5_ratio": 0.97, "status": "正常"}, {"date": "2026-01-24", "inv1_kwh": 111.0, "inv5_kwh": 107.2, "inv6_kwh": 0.2, "inv7_kwh": 35.3, "inv15_kwh": 106.1, "inv6_ratio": 0.002, "inv5_ratio": 0.966, "status": "Inv6 化學性漏電"}, {"date": "2026-01-25", "inv1_kwh": 361.7, "inv5_kwh": 347.7, "inv6_kwh": 364.6, "inv7_kwh": 399.8, "inv15_kwh": 350.7, "inv6_ratio": 1.008, "inv5_ratio": 0.961, "status": "正常"}, {"date": "2026-01-26", "inv1_kwh": 215.4, "inv5_kwh": 207.6, "inv6_kwh": 184.1, "inv7_kwh": 226.4, "inv15_kwh": 208.9, "inv6_ratio": 0.855, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-01-27", "inv1_kwh": 44.6, "inv5_kwh": 40.7, "inv6_kwh": 0.5, "inv7_kwh": 1.6, "inv15_kwh": 42.4, "inv6_ratio": 0.011, "inv5_ratio": 0.913, "status": "正常"}, {"date": "2026-01-28", "inv1_kwh": 68.2, "inv5_kwh": 65.4, "inv6_kwh": 0.0, "inv7_kwh": 0.4, "inv15_kwh": 62.7, "inv6_ratio": 0.0, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2026-01-29", "inv1_kwh": 408.8, "inv5_kwh": 385.1, "inv6_kwh": 406.6, "inv7_kwh": 450.1, "inv15_kwh": 389.4, "inv6_ratio": 0.995, "inv5_ratio": 0.942, "status": "正常"}, {"date": "2026-01-30", "inv1_kwh": 290.8, "inv5_kwh": 275.2, "inv6_kwh": 282.1, "inv7_kwh": 312.1, "inv15_kwh": 271.8, "inv6_ratio": 0.97, "inv5_ratio": 0.946, "status": "正常"}, {"date": "2026-01-31", "inv1_kwh": 43.2, "inv5_kwh": 78.1, "inv6_kwh": 0.2, "inv7_kwh": 0.0, "inv15_kwh": 76.2, "inv6_ratio": 0.005, "inv5_ratio": 1.808, "status": "正常"}, {"date": "2026-02-02", "inv1_kwh": 32.9, "inv5_kwh": 31.1, "inv6_kwh": 0.4, "inv7_kwh": 0.6, "inv15_kwh": 30.1, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "正常"}, {"date": "2026-02-03", "inv1_kwh": 422.8, "inv5_kwh": 384.7, "inv6_kwh": 411.0, "inv7_kwh": 452.5, "inv15_kwh": 385.0, "inv6_ratio": 0.972, "inv5_ratio": 0.91, "status": "正常"}, {"date": "2026-02-04", "inv1_kwh": 414.6, "inv5_kwh": 376.8, "inv6_kwh": 380.8, "inv7_kwh": 420.3, "inv15_kwh": 374.3, "inv6_ratio": 0.918, "inv5_ratio": 0.909, "status": "正常"}, {"date": "2026-02-05", "inv1_kwh": 245.1, "inv5_kwh": 224.3, "inv6_kwh": 223.9, "inv7_kwh": 247.6, "inv15_kwh": 223.6, "inv6_ratio": 0.914, "inv5_ratio": 0.915, "status": "正常"}, {"date": "2026-02-06", "inv1_kwh": 106.4, "inv5_kwh": 98.3, "inv6_kwh": 57.0, "inv7_kwh": 99.9, "inv15_kwh": 95.9, "inv6_ratio": 0.536, "inv5_ratio": 0.924, "status": "Inv6 化學性漏電"}, {"date": "2026-02-07", "inv1_kwh": 37.7, "inv5_kwh": 50.7, "inv6_kwh": 0.0, "inv7_kwh": 24.3, "inv15_kwh": 47.5, "inv6_ratio": 0.0, "inv5_ratio": 1.345, "status": "正常"}, {"date": "2026-02-08", "inv1_kwh": 165.7, "inv5_kwh": 148.8, "inv6_kwh": 161.9, "inv7_kwh": 171.8, "inv15_kwh": 141.9, "inv6_ratio": 0.977, "inv5_ratio": 0.898, "status": "正常"}, {"date": "2026-02-09", "inv1_kwh": 172.5, "inv5_kwh": 145.8, "inv6_kwh": 162.0, "inv7_kwh": 167.4, "inv15_kwh": 130.3, "inv6_ratio": 0.939, "inv5_ratio": 0.845, "status": "正常"}, {"date": "2026-02-10", "inv1_kwh": 312.0, "inv5_kwh": 278.5, "inv6_kwh": 274.4, "inv7_kwh": 300.4, "inv15_kwh": 341.3, "inv6_ratio": 0.879, "inv5_ratio": 0.893, "status": "正常"}, {"date": "2026-02-11", "inv1_kwh": 121.5, "inv5_kwh": 115.9, "inv6_kwh": 50.6, "inv7_kwh": 103.3, "inv15_kwh": 119.7, "inv6_ratio": 0.416, "inv5_ratio": 0.954, "status": "Inv6 化學性漏電"}, {"date": "2026-02-12", "inv1_kwh": 461.0, "inv5_kwh": 434.7, "inv6_kwh": 431.6, "inv7_kwh": 483.0, "inv15_kwh": 460.1, "inv6_ratio": 0.936, "inv5_ratio": 0.943, "status": "正常"}, {"date": "2026-02-13", "inv1_kwh": 437.7, "inv5_kwh": 411.3, "inv6_kwh": 402.9, "inv7_kwh": 433.1, "inv15_kwh": 429.9, "inv6_ratio": 0.92, "inv5_ratio": 0.94, "status": "正常"}, {"date": "2026-02-14", "inv1_kwh": 469.1, "inv5_kwh": 441.2, "inv6_kwh": 434.2, "inv7_kwh": 485.7, "inv15_kwh": 467.4, "inv6_ratio": 0.926, "inv5_ratio": 0.941, "status": "正常"}, {"date": "2026-02-15", "inv1_kwh": 475.6, "inv5_kwh": 445.4, "inv6_kwh": 458.5, "inv7_kwh": 491.2, "inv15_kwh": 471.3, "inv6_ratio": 0.964, "inv5_ratio": 0.937, "status": "正常"}, {"date": "2026-02-16", "inv1_kwh": 120.1, "inv5_kwh": 115.8, "inv6_kwh": 115.7, "inv7_kwh": 121.5, "inv15_kwh": 121.4, "inv6_ratio": 0.963, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-02-17", "inv1_kwh": 62.2, "inv5_kwh": 60.6, "inv6_kwh": 25.4, "inv7_kwh": 63.9, "inv15_kwh": 61.6, "inv6_ratio": 0.408, "inv5_ratio": 0.974, "status": "正常"}, {"date": "2026-02-18", "inv1_kwh": 130.3, "inv5_kwh": 125.6, "inv6_kwh": 125.4, "inv7_kwh": 133.9, "inv15_kwh": 131.3, "inv6_ratio": 0.962, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-02-19", "inv1_kwh": 277.5, "inv5_kwh": 266.1, "inv6_kwh": 267.7, "inv7_kwh": 295.6, "inv15_kwh": 279.2, "inv6_ratio": 0.965, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2026-02-20", "inv1_kwh": 245.9, "inv5_kwh": 233.0, "inv6_kwh": 234.7, "inv7_kwh": 260.6, "inv15_kwh": 249.5, "inv6_ratio": 0.954, "inv5_ratio": 0.948, "status": "正常"}, {"date": "2026-02-21", "inv1_kwh": 475.4, "inv5_kwh": 449.9, "inv6_kwh": 449.3, "inv7_kwh": 498.6, "inv15_kwh": 475.7, "inv6_ratio": 0.945, "inv5_ratio": 0.946, "status": "正常"}, {"date": "2026-02-22", "inv1_kwh": 429.1, "inv5_kwh": 402.9, "inv6_kwh": 410.6, "inv7_kwh": 446.5, "inv15_kwh": 430.1, "inv6_ratio": 0.957, "inv5_ratio": 0.939, "status": "正常"}, {"date": "2026-02-23", "inv1_kwh": 454.2, "inv5_kwh": 428.1, "inv6_kwh": 439.4, "inv7_kwh": 472.0, "inv15_kwh": 456.5, "inv6_ratio": 0.967, "inv5_ratio": 0.943, "status": "正常"}, {"date": "2026-02-24", "inv1_kwh": 176.4, "inv5_kwh": 167.1, "inv6_kwh": 152.2, "inv7_kwh": 178.3, "inv15_kwh": 175.3, "inv6_ratio": 0.863, "inv5_ratio": 0.947, "status": "正常"}, {"date": "2026-02-25", "inv1_kwh": 138.2, "inv5_kwh": 136.7, "inv6_kwh": 137.1, "inv7_kwh": 145.6, "inv15_kwh": 144.6, "inv6_ratio": 0.992, "inv5_ratio": 0.989, "status": "正常"}, {"date": "2026-02-26", "inv1_kwh": 281.6, "inv5_kwh": 276.2, "inv6_kwh": 279.1, "inv7_kwh": 296.8, "inv15_kwh": 290.0, "inv6_ratio": 0.991, "inv5_ratio": 0.981, "status": "正常"}, {"date": "2026-02-27", "inv1_kwh": 218.9, "inv5_kwh": 209.5, "inv6_kwh": 208.7, "inv7_kwh": 221.5, "inv15_kwh": 219.0, "inv6_ratio": 0.953, "inv5_ratio": 0.957, "status": "正常"}, {"date": "2026-02-28", "inv1_kwh": 178.2, "inv5_kwh": 170.7, "inv6_kwh": 162.5, "inv7_kwh": 179.3, "inv15_kwh": 177.0, "inv6_ratio": 0.912, "inv5_ratio": 0.958, "status": "正常"}, {"date": "2026-03-01", "inv1_kwh": 213.6, "inv5_kwh": 204.8, "inv6_kwh": 204.2, "inv7_kwh": 215.8, "inv15_kwh": 213.4, "inv6_ratio": 0.956, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2026-03-02", "inv1_kwh": 293.6, "inv5_kwh": 281.5, "inv6_kwh": 280.5, "inv7_kwh": 292.7, "inv15_kwh": 293.9, "inv6_ratio": 0.955, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2026-03-03", "inv1_kwh": 86.6, "inv5_kwh": 84.2, "inv6_kwh": 62.7, "inv7_kwh": 87.6, "inv15_kwh": 86.3, "inv6_ratio": 0.724, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2026-03-04", "inv1_kwh": 118.8, "inv5_kwh": 114.8, "inv6_kwh": 83.9, "inv7_kwh": 119.5, "inv15_kwh": 116.6, "inv6_ratio": 0.706, "inv5_ratio": 0.966, "status": "Inv6 化學性漏電"}, {"date": "2026-03-05", "inv1_kwh": 181.3, "inv5_kwh": 174.9, "inv6_kwh": 158.2, "inv7_kwh": 183.9, "inv15_kwh": 180.5, "inv6_ratio": 0.873, "inv5_ratio": 0.965, "status": "正常"}, {"date": "2026-03-06", "inv1_kwh": 81.6, "inv5_kwh": 79.0, "inv6_kwh": 0.4, "inv7_kwh": 62.1, "inv15_kwh": 80.9, "inv6_ratio": 0.005, "inv5_ratio": 0.968, "status": "正常"}, {"date": "2026-03-07", "inv1_kwh": 136.8, "inv5_kwh": 130.0, "inv6_kwh": 130.2, "inv7_kwh": 139.9, "inv15_kwh": 136.2, "inv6_ratio": 0.952, "inv5_ratio": 0.95, "status": "正常"}, {"date": "2026-03-08", "inv1_kwh": 206.9, "inv5_kwh": 197.0, "inv6_kwh": 194.6, "inv7_kwh": 212.8, "inv15_kwh": 208.9, "inv6_ratio": 0.941, "inv5_ratio": 0.952, "status": "正常"}, {"date": "2026-03-09", "inv1_kwh": 56.2, "inv5_kwh": 54.2, "inv6_kwh": 4.1, "inv7_kwh": 29.3, "inv15_kwh": 56.7, "inv6_ratio": 0.073, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-03-10", "inv1_kwh": 73.6, "inv5_kwh": 72.4, "inv6_kwh": 38.5, "inv7_kwh": 78.0, "inv15_kwh": 77.5, "inv6_ratio": 0.523, "inv5_ratio": 0.984, "status": "正常"}, {"date": "2026-03-11", "inv1_kwh": 573.3, "inv5_kwh": 554.9, "inv6_kwh": 567.5, "inv7_kwh": 616.4, "inv15_kwh": 587.5, "inv6_ratio": 0.99, "inv5_ratio": 0.968, "status": "正常"}, {"date": "2026-03-12", "inv1_kwh": 508.9, "inv5_kwh": 493.0, "inv6_kwh": 503.1, "inv7_kwh": 542.2, "inv15_kwh": 519.4, "inv6_ratio": 0.989, "inv5_ratio": 0.969, "status": "正常"}, {"date": "2026-03-13", "inv1_kwh": 478.0, "inv5_kwh": 464.9, "inv6_kwh": 477.2, "inv7_kwh": 518.4, "inv15_kwh": 498.3, "inv6_ratio": 0.998, "inv5_ratio": 0.973, "status": "正常"}, {"date": "2026-03-14", "inv1_kwh": 583.2, "inv5_kwh": 563.5, "inv6_kwh": 574.5, "inv7_kwh": 621.4, "inv15_kwh": 596.4, "inv6_ratio": 0.985, "inv5_ratio": 0.966, "status": "正常"}, {"date": "2026-03-15", "inv1_kwh": 583.8, "inv5_kwh": 564.8, "inv6_kwh": 574.4, "inv7_kwh": 621.3, "inv15_kwh": 595.3, "inv6_ratio": 0.984, "inv5_ratio": 0.967, "status": "正常"}, {"date": "2026-03-16", "inv1_kwh": 514.5, "inv5_kwh": 495.2, "inv6_kwh": 503.5, "inv7_kwh": 535.9, "inv15_kwh": 519.0, "inv6_ratio": 0.979, "inv5_ratio": 0.962, "status": "正常"}, {"date": "2026-03-17", "inv1_kwh": 542.1, "inv5_kwh": 522.4, "inv6_kwh": 498.9, "inv7_kwh": 552.4, "inv15_kwh": 551.8, "inv6_ratio": 0.92, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-03-18", "inv1_kwh": 523.6, "inv5_kwh": 506.4, "inv6_kwh": 482.0, "inv7_kwh": 540.3, "inv15_kwh": 529.2, "inv6_ratio": 0.921, "inv5_ratio": 0.967, "status": "正常"}, {"date": "2026-03-19", "inv1_kwh": 92.7, "inv5_kwh": 88.7, "inv6_kwh": 79.5, "inv7_kwh": 94.8, "inv15_kwh": 92.1, "inv6_ratio": 0.858, "inv5_ratio": 0.957, "status": "正常"}, {"date": "2026-03-20", "inv1_kwh": 466.2, "inv5_kwh": 446.3, "inv6_kwh": 421.4, "inv7_kwh": 481.9, "inv15_kwh": 469.6, "inv6_ratio": 0.904, "inv5_ratio": 0.957, "status": "正常"}, {"date": "2026-03-21", "inv1_kwh": 75.4, "inv5_kwh": 72.1, "inv6_kwh": 0.4, "inv7_kwh": 74.5, "inv15_kwh": 72.5, "inv6_ratio": 0.005, "inv5_ratio": 0.956, "status": "正常"}, {"date": "2026-03-22", "inv1_kwh": 220.6, "inv5_kwh": 204.3, "inv6_kwh": 201.3, "inv7_kwh": 214.6, "inv15_kwh": 225.1, "inv6_ratio": 0.913, "inv5_ratio": 0.926, "status": "正常"}, {"date": "2026-03-23", "inv1_kwh": 330.7, "inv5_kwh": 301.3, "inv6_kwh": 306.2, "inv7_kwh": 315.3, "inv15_kwh": 325.1, "inv6_ratio": 0.926, "inv5_ratio": 0.911, "status": "正常"}, {"date": "2026-03-24", "inv1_kwh": 164.5, "inv5_kwh": 152.1, "inv6_kwh": 142.3, "inv7_kwh": 161.0, "inv15_kwh": 160.5, "inv6_ratio": 0.865, "inv5_ratio": 0.925, "status": "正常"}, {"date": "2026-03-25", "inv1_kwh": 340.4, "inv5_kwh": 312.2, "inv6_kwh": 316.5, "inv7_kwh": 342.7, "inv15_kwh": 346.3, "inv6_ratio": 0.93, "inv5_ratio": 0.917, "status": "正常"}, {"date": "2026-03-26", "inv1_kwh": 381.4, "inv5_kwh": 349.3, "inv6_kwh": 354.8, "inv7_kwh": 366.5, "inv15_kwh": 382.7, "inv6_ratio": 0.93, "inv5_ratio": 0.916, "status": "正常"}, {"date": "2026-03-27", "inv1_kwh": 59.6, "inv5_kwh": 56.8, "inv6_kwh": 48.5, "inv7_kwh": 60.3, "inv15_kwh": 58.0, "inv6_ratio": 0.814, "inv5_ratio": 0.953, "status": "正常"}, {"date": "2026-03-28", "inv1_kwh": 129.9, "inv5_kwh": 123.9, "inv6_kwh": 123.4, "inv7_kwh": 133.0, "inv15_kwh": 131.0, "inv6_ratio": 0.95, "inv5_ratio": 0.954, "status": "正常"}, {"date": "2026-03-29", "inv1_kwh": 114.6, "inv5_kwh": 108.7, "inv6_kwh": 108.9, "inv7_kwh": 116.0, "inv15_kwh": 113.0, "inv6_ratio": 0.95, "inv5_ratio": 0.949, "status": "正常"}, {"date": "2026-03-30", "inv1_kwh": 271.4, "inv5_kwh": 258.1, "inv6_kwh": 258.0, "inv7_kwh": 272.2, "inv15_kwh": 272.4, "inv6_ratio": 0.951, "inv5_ratio": 0.951, "status": "正常"}, {"date": "2026-03-31", "inv1_kwh": 383.9, "inv5_kwh": 363.3, "inv6_kwh": 363.6, "inv7_kwh": 387.9, "inv15_kwh": 381.3, "inv6_ratio": 0.947, "inv5_ratio": 0.946, "status": "正常"}, {"date": "2026-04-01", "inv1_kwh": 124.3, "inv5_kwh": 124.6, "inv6_kwh": 125.0, "inv7_kwh": 131.2, "inv15_kwh": 122.6, "inv6_ratio": 1.006, "inv5_ratio": 1.002, "status": "正常"}, {"date": "2026-04-02", "inv1_kwh": 545.3, "inv5_kwh": 511.8, "inv6_kwh": 519.7, "inv7_kwh": 553.1, "inv15_kwh": 541.1, "inv6_ratio": 0.953, "inv5_ratio": 0.939, "status": "正常"}, {"date": "2026-04-03", "inv1_kwh": 137.2, "inv5_kwh": 129.8, "inv6_kwh": 130.0, "inv7_kwh": 139.9, "inv15_kwh": 135.9, "inv6_ratio": 0.948, "inv5_ratio": 0.946, "status": "正常"}, {"date": "2026-04-04", "inv1_kwh": 127.1, "inv5_kwh": 120.2, "inv6_kwh": 120.0, "inv7_kwh": 128.5, "inv15_kwh": 124.6, "inv6_ratio": 0.944, "inv5_ratio": 0.946, "status": "正常"}, {"date": "2026-04-05", "inv1_kwh": 243.7, "inv5_kwh": 229.9, "inv6_kwh": 230.4, "inv7_kwh": 245.6, "inv15_kwh": 238.8, "inv6_ratio": 0.945, "inv5_ratio": 0.943, "status": "正常"}, {"date": "2026-04-06", "inv1_kwh": 196.7, "inv5_kwh": 186.9, "inv6_kwh": 186.7, "inv7_kwh": 162.8, "inv15_kwh": 194.8, "inv6_ratio": 0.949, "inv5_ratio": 0.95, "status": "正常"}, {"date": "2026-04-07", "inv1_kwh": 49.3, "inv5_kwh": 47.1, "inv6_kwh": 37.7, "inv7_kwh": 50.2, "inv15_kwh": 48.8, "inv6_ratio": 0.765, "inv5_ratio": 0.955, "status": "正常"}, {"date": "2026-04-08", "inv1_kwh": 169.9, "inv5_kwh": 162.0, "inv6_kwh": 162.2, "inv7_kwh": 174.2, "inv15_kwh": 168.9, "inv6_ratio": 0.955, "inv5_ratio": 0.954, "status": "正常"}, {"date": "2026-04-09", "inv1_kwh": 371.0, "inv5_kwh": 354.8, "inv6_kwh": 354.3, "inv7_kwh": 390.5, "inv15_kwh": 376.7, "inv6_ratio": 0.955, "inv5_ratio": 0.956, "status": "正常"}, {"date": "2026-04-10", "inv1_kwh": 555.0, "inv5_kwh": 552.6, "inv6_kwh": 548.6, "inv7_kwh": 594.3, "inv15_kwh": 579.0, "inv6_ratio": 0.988, "inv5_ratio": 0.996, "status": "正常"}, {"date": "2026-04-11", "inv1_kwh": 485.4, "inv5_kwh": 461.8, "inv6_kwh": 461.9, "inv7_kwh": 495.1, "inv15_kwh": 474.3, "inv6_ratio": 0.952, "inv5_ratio": 0.951, "status": "正常"}, {"date": "2026-04-12", "inv1_kwh": 512.2, "inv5_kwh": 490.7, "inv6_kwh": 485.8, "inv7_kwh": 521.0, "inv15_kwh": 507.0, "inv6_ratio": 0.948, "inv5_ratio": 0.958, "status": "正常"}, {"date": "2026-04-13", "inv1_kwh": 555.2, "inv5_kwh": 533.1, "inv6_kwh": 529.5, "inv7_kwh": 568.0, "inv15_kwh": 553.5, "inv6_ratio": 0.954, "inv5_ratio": 0.96, "status": "正常"}, {"date": "2026-04-14", "inv1_kwh": 541.5, "inv5_kwh": 520.0, "inv6_kwh": 138.8, "inv7_kwh": 555.3, "inv15_kwh": 544.4, "inv6_ratio": 0.256, "inv5_ratio": 0.96, "status": "Inv6 化學性漏電"}, {"date": "2026-04-15", "inv1_kwh": 394.0, "inv5_kwh": 374.4, "inv6_kwh": 373.2, "inv7_kwh": 398.7, "inv15_kwh": 387.3, "inv6_ratio": 0.947, "inv5_ratio": 0.95, "status": "奈米防護施工期"}, {"date": "2026-04-16", "inv1_kwh": 357.0, "inv5_kwh": 353.2, "inv6_kwh": 315.2, "inv7_kwh": 379.0, "inv15_kwh": 364.1, "inv6_ratio": 0.883, "inv5_ratio": 0.989, "status": "奈米防護施工期"}, {"date": "2026-04-17", "inv1_kwh": 413.5, "inv5_kwh": 391.3, "inv6_kwh": 394.2, "inv7_kwh": 416.3, "inv15_kwh": 408.5, "inv6_ratio": 0.953, "inv5_ratio": 0.946, "status": "正常"}, {"date": "2026-04-18", "inv1_kwh": 351.5, "inv5_kwh": 334.4, "inv6_kwh": 336.1, "inv7_kwh": 360.7, "inv15_kwh": 341.0, "inv6_ratio": 0.956, "inv5_ratio": 0.951, "status": "正常"}, {"date": "2026-04-19", "inv1_kwh": 622.1, "inv5_kwh": 595.3, "inv6_kwh": 603.2, "inv7_kwh": 659.7, "inv15_kwh": 623.0, "inv6_ratio": 0.97, "inv5_ratio": 0.957, "status": "正常"}, {"date": "2026-04-20", "inv1_kwh": 647.1, "inv5_kwh": 616.1, "inv6_kwh": 618.5, "inv7_kwh": 664.7, "inv15_kwh": 644.6, "inv6_ratio": 0.956, "inv5_ratio": 0.952, "status": "正常"}, {"date": "2026-04-21", "inv1_kwh": 565.7, "inv5_kwh": 536.6, "inv6_kwh": 544.4, "inv7_kwh": 592.8, "inv15_kwh": 572.5, "inv6_ratio": 0.962, "inv5_ratio": 0.949, "status": "正常"}, {"date": "2026-04-22", "inv1_kwh": 458.7, "inv5_kwh": 439.1, "inv6_kwh": 436.6, "inv7_kwh": 470.6, "inv15_kwh": 453.9, "inv6_ratio": 0.952, "inv5_ratio": 0.957, "status": "正常"}, {"date": "2026-04-23", "inv1_kwh": 402.6, "inv5_kwh": 388.1, "inv6_kwh": 385.5, "inv7_kwh": 407.0, "inv15_kwh": 402.5, "inv6_ratio": 0.958, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-04-24", "inv1_kwh": 53.1, "inv5_kwh": 51.4, "inv6_kwh": 52.3, "inv7_kwh": 55.1, "inv15_kwh": 54.1, "inv6_ratio": 0.985, "inv5_ratio": 0.968, "status": "正常"}, {"date": "2026-04-25", "inv1_kwh": 152.7, "inv5_kwh": 146.3, "inv6_kwh": 147.5, "inv7_kwh": 156.6, "inv15_kwh": 153.4, "inv6_ratio": 0.966, "inv5_ratio": 0.958, "status": "正常"}, {"date": "2026-04-26", "inv1_kwh": 676.3, "inv5_kwh": 649.5, "inv6_kwh": 656.4, "inv7_kwh": 709.2, "inv15_kwh": 673.2, "inv6_ratio": 0.971, "inv5_ratio": 0.96, "status": "正常"}, {"date": "2026-04-27", "inv1_kwh": 548.1, "inv5_kwh": 527.8, "inv6_kwh": 525.2, "inv7_kwh": 556.1, "inv15_kwh": 544.8, "inv6_ratio": 0.958, "inv5_ratio": 0.963, "status": "正常"}, {"date": "2026-04-28", "inv1_kwh": 531.2, "inv5_kwh": 506.6, "inv6_kwh": 508.0, "inv7_kwh": 543.8, "inv15_kwh": 526.1, "inv6_ratio": 0.956, "inv5_ratio": 0.954, "status": "正常"}, {"date": "2026-04-29", "inv1_kwh": 360.9, "inv5_kwh": 344.7, "inv6_kwh": 344.2, "inv7_kwh": 363.1, "inv15_kwh": 355.8, "inv6_ratio": 0.954, "inv5_ratio": 0.955, "status": "正常"}, {"date": "2026-04-30", "inv1_kwh": 71.9, "inv5_kwh": 69.3, "inv6_kwh": 69.7, "inv7_kwh": 73.6, "inv15_kwh": 70.1, "inv6_ratio": 0.969, "inv5_ratio": 0.964, "status": "正常"}, {"date": "2026-05-01", "inv1_kwh": 438.7, "inv5_kwh": 419.0, "inv6_kwh": 422.0, "inv7_kwh": 450.7, "inv15_kwh": 435.3, "inv6_ratio": 0.962, "inv5_ratio": 0.955, "status": "正常"}, {"date": "2026-05-02", "inv1_kwh": 455.2, "inv5_kwh": 436.7, "inv6_kwh": 433.8, "inv7_kwh": 472.5, "inv15_kwh": 451.7, "inv6_ratio": 0.953, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2026-05-03", "inv1_kwh": 487.4, "inv5_kwh": 470.6, "inv6_kwh": 469.0, "inv7_kwh": 499.3, "inv15_kwh": 492.9, "inv6_ratio": 0.962, "inv5_ratio": 0.966, "status": "正常"}, {"date": "2026-05-04", "inv1_kwh": 231.6, "inv5_kwh": 222.8, "inv6_kwh": 225.4, "inv7_kwh": 241.9, "inv15_kwh": 232.3, "inv6_ratio": 0.973, "inv5_ratio": 0.962, "status": "正常"}, {"date": "2026-05-05", "inv1_kwh": 86.5, "inv5_kwh": 82.9, "inv6_kwh": 83.6, "inv7_kwh": 89.2, "inv15_kwh": 85.5, "inv6_ratio": 0.966, "inv5_ratio": 0.958, "status": "正常"}, {"date": "2026-05-06", "inv1_kwh": 494.6, "inv5_kwh": 474.0, "inv6_kwh": 480.4, "inv7_kwh": 520.4, "inv15_kwh": 495.7, "inv6_ratio": 0.971, "inv5_ratio": 0.958, "status": "正常"}, {"date": "2026-05-07", "inv1_kwh": 600.6, "inv5_kwh": 567.4, "inv6_kwh": 571.3, "inv7_kwh": 610.0, "inv15_kwh": 581.9, "inv6_ratio": 0.951, "inv5_ratio": 0.945, "status": "正常"}, {"date": "2026-05-08", "inv1_kwh": 154.1, "inv5_kwh": 147.2, "inv6_kwh": 147.7, "inv7_kwh": 156.1, "inv15_kwh": 150.6, "inv6_ratio": 0.958, "inv5_ratio": 0.955, "status": "正常"}, {"date": "2026-05-09", "inv1_kwh": 142.4, "inv5_kwh": 134.6, "inv6_kwh": 135.7, "inv7_kwh": 145.4, "inv15_kwh": 139.9, "inv6_ratio": 0.953, "inv5_ratio": 0.945, "status": "正常"}, {"date": "2026-05-10", "inv1_kwh": 136.5, "inv5_kwh": 131.4, "inv6_kwh": 131.7, "inv7_kwh": 141.5, "inv15_kwh": 137.3, "inv6_ratio": 0.965, "inv5_ratio": 0.963, "status": "正常"}, {"date": "2026-05-11", "inv1_kwh": 333.2, "inv5_kwh": 320.1, "inv6_kwh": 313.2, "inv7_kwh": 337.9, "inv15_kwh": 324.6, "inv6_ratio": 0.94, "inv5_ratio": 0.961, "status": "正常"}, {"date": "2026-05-12", "inv1_kwh": 491.1, "inv5_kwh": 472.2, "inv6_kwh": 457.5, "inv7_kwh": 499.1, "inv15_kwh": 456.0, "inv6_ratio": 0.932, "inv5_ratio": 0.962, "status": "正常"}, {"date": "2026-05-13", "inv1_kwh": 204.3, "inv5_kwh": 198.6, "inv6_kwh": 206.0, "inv7_kwh": 224.8, "inv15_kwh": 212.9, "inv6_ratio": 1.008, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2026-05-14", "inv1_kwh": 141.7, "inv5_kwh": 137.2, "inv6_kwh": 134.1, "inv7_kwh": 141.5, "inv15_kwh": 126.3, "inv6_ratio": 0.946, "inv5_ratio": 0.968, "status": "正常"}, {"date": "2026-05-15", "inv1_kwh": 605.3, "inv5_kwh": 580.7, "inv6_kwh": 608.3, "inv7_kwh": 634.1, "inv15_kwh": 612.2, "inv6_ratio": 1.005, "inv5_ratio": 0.959, "status": "正常"}, {"date": "2026-05-16", "inv1_kwh": 673.2, "inv5_kwh": 644.1, "inv6_kwh": 673.9, "inv7_kwh": 686.1, "inv15_kwh": 674.3, "inv6_ratio": 1.001, "inv5_ratio": 0.957, "status": "改善後高效率"}, {"date": "2026-05-17", "inv1_kwh": 693.1, "inv5_kwh": 663.7, "inv6_kwh": 695.4, "inv7_kwh": 716.3, "inv15_kwh": 700.1, "inv6_ratio": 1.003, "inv5_ratio": 0.958, "status": "改善後高效率"}, {"date": "2026-05-18", "inv1_kwh": 633.6, "inv5_kwh": 608.7, "inv6_kwh": 637.3, "inv7_kwh": 651.6, "inv15_kwh": 626.0, "inv6_ratio": 1.006, "inv5_ratio": 0.961, "status": "改善後高效率"}, {"date": "2026-05-19", "inv1_kwh": 635.8, "inv5_kwh": 616.2, "inv6_kwh": 632.0, "inv7_kwh": 651.5, "inv15_kwh": 630.3, "inv6_ratio": 0.994, "inv5_ratio": 0.969, "status": "改善後高效率"}, {"date": "2026-05-20", "inv1_kwh": 671.8, "inv5_kwh": 654.1, "inv6_kwh": 669.8, "inv7_kwh": 683.8, "inv15_kwh": 675.6, "inv6_ratio": 0.997, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-05-21", "inv1_kwh": 530.1, "inv5_kwh": 514.9, "inv6_kwh": 527.5, "inv7_kwh": 532.7, "inv15_kwh": 525.6, "inv6_ratio": 0.995, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-05-22", "inv1_kwh": 390.0, "inv5_kwh": 378.5, "inv6_kwh": 386.3, "inv7_kwh": 395.6, "inv15_kwh": 386.9, "inv6_ratio": 0.991, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-05-23", "inv1_kwh": 581.1, "inv5_kwh": 564.2, "inv6_kwh": 578.8, "inv7_kwh": 597.1, "inv15_kwh": 583.2, "inv6_ratio": 0.996, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-05-24", "inv1_kwh": 438.4, "inv5_kwh": 425.2, "inv6_kwh": 436.9, "inv7_kwh": 443.7, "inv15_kwh": 437.3, "inv6_ratio": 0.997, "inv5_ratio": 0.97, "status": "改善後高效率"}, {"date": "2026-05-25", "inv1_kwh": 678.1, "inv5_kwh": 660.3, "inv6_kwh": 679.0, "inv7_kwh": 691.8, "inv15_kwh": 685.2, "inv6_ratio": 1.001, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-05-26", "inv1_kwh": 612.7, "inv5_kwh": 595.8, "inv6_kwh": 613.6, "inv7_kwh": 628.8, "inv15_kwh": 621.0, "inv6_ratio": 1.001, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-05-27", "inv1_kwh": 650.5, "inv5_kwh": 634.0, "inv6_kwh": 650.8, "inv7_kwh": 670.1, "inv15_kwh": 660.2, "inv6_ratio": 1.0, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-05-28", "inv1_kwh": 602.8, "inv5_kwh": 587.4, "inv6_kwh": 601.9, "inv7_kwh": 612.8, "inv15_kwh": 604.6, "inv6_ratio": 0.999, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-05-29", "inv1_kwh": 247.2, "inv5_kwh": 242.6, "inv6_kwh": 251.1, "inv7_kwh": 259.3, "inv15_kwh": 254.5, "inv6_ratio": 1.016, "inv5_ratio": 0.981, "status": "改善後高效率"}, {"date": "2026-05-30", "inv1_kwh": 656.1, "inv5_kwh": 642.4, "inv6_kwh": 668.4, "inv7_kwh": 681.7, "inv15_kwh": 665.0, "inv6_ratio": 1.019, "inv5_ratio": 0.979, "status": "改善後高效率"}, {"date": "2026-05-31", "inv1_kwh": 720.2, "inv5_kwh": 704.9, "inv6_kwh": 734.0, "inv7_kwh": 748.3, "inv15_kwh": 724.2, "inv6_ratio": 1.019, "inv5_ratio": 0.979, "status": "改善後高效率"}, {"date": "2026-06-01", "inv1_kwh": 488.3, "inv5_kwh": 474.1, "inv6_kwh": 491.4, "inv7_kwh": 513.4, "inv15_kwh": 492.9, "inv6_ratio": 1.006, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-06-02", "inv1_kwh": 611.4, "inv5_kwh": 595.3, "inv6_kwh": 612.8, "inv7_kwh": 629.7, "inv15_kwh": 618.8, "inv6_ratio": 1.002, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-06-03", "inv1_kwh": 681.0, "inv5_kwh": 671.2, "inv6_kwh": 684.5, "inv7_kwh": 696.7, "inv15_kwh": 690.0, "inv6_ratio": 1.005, "inv5_ratio": 0.986, "status": "改善後高效率"}, {"date": "2026-06-04", "inv1_kwh": 551.0, "inv5_kwh": 541.9, "inv6_kwh": 556.8, "inv7_kwh": 567.2, "inv15_kwh": 563.9, "inv6_ratio": 1.011, "inv5_ratio": 0.983, "status": "改善後高效率"}, {"date": "2026-06-05", "inv1_kwh": 232.5, "inv5_kwh": 225.2, "inv6_kwh": 208.3, "inv7_kwh": 240.6, "inv15_kwh": 232.3, "inv6_ratio": 0.896, "inv5_ratio": 0.969, "status": "正常"}, {"date": "2026-06-06", "inv1_kwh": 278.9, "inv5_kwh": 269.3, "inv6_kwh": 276.9, "inv7_kwh": 284.6, "inv15_kwh": 277.0, "inv6_ratio": 0.993, "inv5_ratio": 0.966, "status": "改善後高效率"}, {"date": "2026-06-07", "inv1_kwh": 500.3, "inv5_kwh": 483.5, "inv6_kwh": 502.2, "inv7_kwh": 508.9, "inv15_kwh": 499.7, "inv6_ratio": 1.004, "inv5_ratio": 0.966, "status": "改善後高效率"}, {"date": "2026-06-08", "inv1_kwh": 299.0, "inv5_kwh": 289.0, "inv6_kwh": 298.1, "inv7_kwh": 302.1, "inv15_kwh": 297.2, "inv6_ratio": 0.997, "inv5_ratio": 0.967, "status": "改善後高效率"}, {"date": "2026-06-09", "inv1_kwh": 120.4, "inv5_kwh": 117.3, "inv6_kwh": 120.4, "inv7_kwh": 118.8, "inv15_kwh": 121.0, "inv6_ratio": 1.0, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-06-10", "inv1_kwh": 130.5, "inv5_kwh": 126.9, "inv6_kwh": 124.4, "inv7_kwh": 131.1, "inv15_kwh": 128.1, "inv6_ratio": 0.953, "inv5_ratio": 0.972, "status": "正常"}, {"date": "2026-06-11", "inv1_kwh": 120.5, "inv5_kwh": 117.0, "inv6_kwh": 120.3, "inv7_kwh": 122.6, "inv15_kwh": 120.5, "inv6_ratio": 0.998, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-06-12", "inv1_kwh": 117.0, "inv5_kwh": 113.2, "inv6_kwh": 116.5, "inv7_kwh": 118.7, "inv15_kwh": 116.6, "inv6_ratio": 0.996, "inv5_ratio": 0.968, "status": "改善後高效率"}, {"date": "2026-06-13", "inv1_kwh": 421.4, "inv5_kwh": 409.7, "inv6_kwh": 421.1, "inv7_kwh": 434.7, "inv15_kwh": 424.2, "inv6_ratio": 0.999, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-06-14", "inv1_kwh": 125.1, "inv5_kwh": 121.5, "inv6_kwh": 124.9, "inv7_kwh": 126.8, "inv15_kwh": 124.9, "inv6_ratio": 0.998, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-06-15", "inv1_kwh": 193.3, "inv5_kwh": 187.9, "inv6_kwh": 193.4, "inv7_kwh": 196.7, "inv15_kwh": 194.4, "inv6_ratio": 1.001, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-06-16", "inv1_kwh": 369.7, "inv5_kwh": 360.3, "inv6_kwh": 371.8, "inv7_kwh": 376.6, "inv15_kwh": 374.2, "inv6_ratio": 1.006, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-06-17", "inv1_kwh": 429.9, "inv5_kwh": 417.3, "inv6_kwh": 429.9, "inv7_kwh": 435.4, "inv15_kwh": 427.9, "inv6_ratio": 1.0, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-06-18", "inv1_kwh": 646.2, "inv5_kwh": 627.4, "inv6_kwh": 649.1, "inv7_kwh": 654.9, "inv15_kwh": 643.2, "inv6_ratio": 1.004, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-06-19", "inv1_kwh": 703.3, "inv5_kwh": 685.4, "inv6_kwh": 704.3, "inv7_kwh": 710.1, "inv15_kwh": 703.4, "inv6_ratio": 1.001, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-06-20", "inv1_kwh": 691.1, "inv5_kwh": 674.5, "inv6_kwh": 692.6, "inv7_kwh": 697.0, "inv15_kwh": 695.0, "inv6_ratio": 1.002, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-06-21", "inv1_kwh": 697.0, "inv5_kwh": 680.1, "inv6_kwh": 699.2, "inv7_kwh": 711.2, "inv15_kwh": 700.5, "inv6_ratio": 1.003, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-06-22", "inv1_kwh": 712.9, "inv5_kwh": 695.1, "inv6_kwh": 714.3, "inv7_kwh": 721.2, "inv15_kwh": 711.3, "inv6_ratio": 1.002, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-06-23", "inv1_kwh": 608.5, "inv5_kwh": 593.2, "inv6_kwh": 609.6, "inv7_kwh": 611.1, "inv15_kwh": 605.2, "inv6_ratio": 1.002, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-06-24", "inv1_kwh": 636.0, "inv5_kwh": 618.8, "inv6_kwh": 635.7, "inv7_kwh": 654.1, "inv15_kwh": 636.7, "inv6_ratio": 1.0, "inv5_ratio": 0.973, "status": "改善後高效率"}, {"date": "2026-06-25", "inv1_kwh": 192.9, "inv5_kwh": 187.1, "inv6_kwh": 192.9, "inv7_kwh": 198.1, "inv15_kwh": 194.3, "inv6_ratio": 1.0, "inv5_ratio": 0.97, "status": "改善後高效率"}, {"date": "2026-06-26", "inv1_kwh": 155.0, "inv5_kwh": 150.3, "inv6_kwh": 154.2, "inv7_kwh": 157.3, "inv15_kwh": 153.1, "inv6_ratio": 0.995, "inv5_ratio": 0.97, "status": "改善後高效率"}, {"date": "2026-06-27", "inv1_kwh": 139.4, "inv5_kwh": 135.1, "inv6_kwh": 139.3, "inv7_kwh": 141.8, "inv15_kwh": 138.6, "inv6_ratio": 0.999, "inv5_ratio": 0.969, "status": "改善後高效率"}, {"date": "2026-06-28", "inv1_kwh": 423.3, "inv5_kwh": 409.2, "inv6_kwh": 423.5, "inv7_kwh": 434.7, "inv15_kwh": 425.7, "inv6_ratio": 1.0, "inv5_ratio": 0.967, "status": "改善後高效率"}, {"date": "2026-06-29", "inv1_kwh": 659.3, "inv5_kwh": 633.7, "inv6_kwh": 663.9, "inv7_kwh": 670.4, "inv15_kwh": 650.2, "inv6_ratio": 1.007, "inv5_ratio": 0.961, "status": "改善後高效率"}, {"date": "2026-06-30", "inv1_kwh": 561.1, "inv5_kwh": 537.0, "inv6_kwh": 558.3, "inv7_kwh": 567.8, "inv15_kwh": 552.8, "inv6_ratio": 0.995, "inv5_ratio": 0.957, "status": "改善後高效率"}, {"date": "2026-07-01", "inv1_kwh": 556.8, "inv5_kwh": 537.7, "inv6_kwh": 560.1, "inv7_kwh": 568.3, "inv15_kwh": 563.6, "inv6_ratio": 1.006, "inv5_ratio": 0.966, "status": "改善後高效率"}, {"date": "2026-07-02", "inv1_kwh": 652.4, "inv5_kwh": 629.5, "inv6_kwh": 646.3, "inv7_kwh": 654.1, "inv15_kwh": 635.9, "inv6_ratio": 0.991, "inv5_ratio": 0.965, "status": "改善後高效率"}, {"date": "2026-07-03", "inv1_kwh": 671.5, "inv5_kwh": 646.2, "inv6_kwh": 663.5, "inv7_kwh": 670.3, "inv15_kwh": 656.3, "inv6_ratio": 0.988, "inv5_ratio": 0.962, "status": "正常"}, {"date": "2026-07-04", "inv1_kwh": 698.2, "inv5_kwh": 679.3, "inv6_kwh": 699.0, "inv7_kwh": 708.5, "inv15_kwh": 695.5, "inv6_ratio": 1.001, "inv5_ratio": 0.973, "status": "改善後高效率"}, {"date": "2026-07-05", "inv1_kwh": 678.8, "inv5_kwh": 662.8, "inv6_kwh": 681.3, "inv7_kwh": 692.8, "inv15_kwh": 684.8, "inv6_ratio": 1.004, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-07-06", "inv1_kwh": 682.5, "inv5_kwh": 665.5, "inv6_kwh": 682.7, "inv7_kwh": 691.6, "inv15_kwh": 680.5, "inv6_ratio": 1.0, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-07-07", "inv1_kwh": 663.9, "inv5_kwh": 645.7, "inv6_kwh": 661.2, "inv7_kwh": 673.3, "inv15_kwh": 661.9, "inv6_ratio": 0.996, "inv5_ratio": 0.973, "status": "改善後高效率"}, {"date": "2026-07-08", "inv1_kwh": 705.0, "inv5_kwh": 686.2, "inv6_kwh": 704.0, "inv7_kwh": 714.1, "inv15_kwh": 703.0, "inv6_ratio": 0.999, "inv5_ratio": 0.973, "status": "改善後高效率"}, {"date": "2026-07-09", "inv1_kwh": 717.3, "inv5_kwh": 693.2, "inv6_kwh": 723.2, "inv7_kwh": 733.8, "inv15_kwh": 716.1, "inv6_ratio": 1.008, "inv5_ratio": 0.966, "status": "改善後高效率"}, {"date": "2026-07-10", "inv1_kwh": 608.8, "inv5_kwh": 590.9, "inv6_kwh": 615.7, "inv7_kwh": 619.4, "inv15_kwh": 606.6, "inv6_ratio": 1.011, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-07-11", "inv1_kwh": 110.7, "inv5_kwh": 107.4, "inv6_kwh": 73.6, "inv7_kwh": 112.0, "inv15_kwh": 108.7, "inv6_ratio": 0.665, "inv5_ratio": 0.97, "status": "Inv6 化學性漏電"}, {"date": "2026-07-12", "inv1_kwh": 365.0, "inv5_kwh": 352.2, "inv6_kwh": 366.3, "inv7_kwh": 381.6, "inv15_kwh": 369.7, "inv6_ratio": 1.004, "inv5_ratio": 0.965, "status": "改善後高效率"}, {"date": "2026-07-13", "inv1_kwh": 380.4, "inv5_kwh": 370.3, "inv6_kwh": 381.3, "inv7_kwh": 382.4, "inv15_kwh": 380.1, "inv6_ratio": 1.002, "inv5_ratio": 0.973, "status": "改善後高效率"}, {"date": "2026-07-14", "inv1_kwh": 650.9, "inv5_kwh": 624.4, "inv6_kwh": 651.3, "inv7_kwh": 652.9, "inv15_kwh": 636.4, "inv6_ratio": 1.001, "inv5_ratio": 0.959, "status": "改善後高效率"}, {"date": "2026-07-15", "inv1_kwh": 702.1, "inv5_kwh": 684.7, "inv6_kwh": 703.7, "inv7_kwh": 712.5, "inv15_kwh": 707.0, "inv6_ratio": 1.002, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-07-16", "inv1_kwh": 691.7, "inv5_kwh": 675.2, "inv6_kwh": 692.1, "inv7_kwh": 702.2, "inv15_kwh": 694.0, "inv6_ratio": 1.001, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-07-17", "inv1_kwh": 701.9, "inv5_kwh": 686.3, "inv6_kwh": 703.5, "inv7_kwh": 711.3, "inv15_kwh": 706.2, "inv6_ratio": 1.002, "inv5_ratio": 0.978, "status": "改善後高效率"}, {"date": "2026-07-18", "inv1_kwh": 658.3, "inv5_kwh": 643.1, "inv6_kwh": 659.3, "inv7_kwh": 665.2, "inv15_kwh": 664.6, "inv6_ratio": 1.002, "inv5_ratio": 0.977, "status": "改善後高效率"}, {"date": "2026-07-19", "inv1_kwh": 701.6, "inv5_kwh": 685.7, "inv6_kwh": 702.9, "inv7_kwh": 716.0, "inv15_kwh": 710.0, "inv6_ratio": 1.002, "inv5_ratio": 0.977, "status": "改善後高效率"}, {"date": "2026-07-20", "inv1_kwh": 714.1, "inv5_kwh": 697.8, "inv6_kwh": 716.3, "inv7_kwh": 723.4, "inv15_kwh": 719.7, "inv6_ratio": 1.003, "inv5_ratio": 0.977, "status": "改善後高效率"}, {"date": "2026-07-21", "inv1_kwh": 663.9, "inv5_kwh": 648.7, "inv6_kwh": 664.9, "inv7_kwh": 670.2, "inv15_kwh": 664.0, "inv6_ratio": 1.002, "inv5_ratio": 0.977, "status": "改善後高效率"}, {"date": "2026-07-22", "inv1_kwh": 651.5, "inv5_kwh": 641.8, "inv6_kwh": 655.6, "inv7_kwh": 666.8, "inv15_kwh": 657.8, "inv6_ratio": 1.006, "inv5_ratio": 0.985, "status": "改善後高效率"}, {"date": "2026-07-23", "inv1_kwh": 541.9, "inv5_kwh": 531.9, "inv6_kwh": 546.3, "inv7_kwh": 560.6, "inv15_kwh": 551.1, "inv6_ratio": 1.008, "inv5_ratio": 0.982, "status": "改善後高效率"}, {"date": "2026-07-24", "inv1_kwh": 637.3, "inv5_kwh": 615.7, "inv6_kwh": 643.2, "inv7_kwh": 651.2, "inv15_kwh": 646.8, "inv6_ratio": 1.009, "inv5_ratio": 0.966, "status": "改善後高效率"}, {"date": "2026-07-25", "inv1_kwh": 513.5, "inv5_kwh": 499.0, "inv6_kwh": 515.9, "inv7_kwh": 524.5, "inv15_kwh": 517.0, "inv6_ratio": 1.005, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-07-26", "inv1_kwh": 497.2, "inv5_kwh": 481.6, "inv6_kwh": 500.6, "inv7_kwh": 509.3, "inv15_kwh": 491.0, "inv6_ratio": 1.007, "inv5_ratio": 0.969, "status": "改善後高效率"}, {"date": "2026-07-27", "inv1_kwh": 351.6, "inv5_kwh": 341.0, "inv6_kwh": 352.0, "inv7_kwh": 359.7, "inv15_kwh": 351.2, "inv6_ratio": 1.001, "inv5_ratio": 0.97, "status": "改善後高效率"}, {"date": "2026-07-28", "inv1_kwh": 578.0, "inv5_kwh": 554.1, "inv6_kwh": 587.6, "inv7_kwh": 590.8, "inv15_kwh": 585.0, "inv6_ratio": 1.017, "inv5_ratio": 0.959, "status": "改善後高效率"}, {"date": "2026-07-29", "inv1_kwh": 499.9, "inv5_kwh": 483.4, "inv6_kwh": 507.7, "inv7_kwh": 510.7, "inv15_kwh": 501.1, "inv6_ratio": 1.016, "inv5_ratio": 0.967, "status": "改善後高效率"}, {"date": "2026-07-30", "inv1_kwh": 282.8, "inv5_kwh": 275.5, "inv6_kwh": 284.4, "inv7_kwh": 287.5, "inv15_kwh": 282.3, "inv6_ratio": 1.006, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-07-31", "inv1_kwh": 556.0, "inv5_kwh": 534.8, "inv6_kwh": 559.1, "inv7_kwh": 573.4, "inv15_kwh": 550.1, "inv6_ratio": 1.006, "inv5_ratio": 0.962, "status": "改善後高效率"}, {"date": "2026-08-01", "inv1_kwh": 605.1, "inv5_kwh": 583.6, "inv6_kwh": 605.6, "inv7_kwh": 613.3, "inv15_kwh": 598.9, "inv6_ratio": 1.001, "inv5_ratio": 0.964, "status": "改善後高效率"}, {"date": "2026-08-02", "inv1_kwh": 601.0, "inv5_kwh": 578.1, "inv6_kwh": 603.0, "inv7_kwh": 608.3, "inv15_kwh": 586.7, "inv6_ratio": 1.003, "inv5_ratio": 0.962, "status": "改善後高效率"}, {"date": "2026-08-03", "inv1_kwh": 651.2, "inv5_kwh": 629.9, "inv6_kwh": 662.4, "inv7_kwh": 671.8, "inv15_kwh": 648.4, "inv6_ratio": 1.017, "inv5_ratio": 0.967, "status": "改善後高效率"}, {"date": "2026-08-04", "inv1_kwh": 705.0, "inv5_kwh": 679.5, "inv6_kwh": 717.0, "inv7_kwh": 727.0, "inv15_kwh": 703.3, "inv6_ratio": 1.017, "inv5_ratio": 0.964, "status": "改善後高效率"}, {"date": "2026-08-05", "inv1_kwh": 653.1, "inv5_kwh": 631.0, "inv6_kwh": 659.0, "inv7_kwh": 669.0, "inv15_kwh": 646.0, "inv6_ratio": 1.009, "inv5_ratio": 0.966, "status": "改善後高效率"}, {"date": "2026-08-06", "inv1_kwh": 591.4, "inv5_kwh": 572.5, "inv6_kwh": 597.0, "inv7_kwh": 599.4, "inv15_kwh": 583.6, "inv6_ratio": 1.009, "inv5_ratio": 0.968, "status": "改善後高效率"}, {"date": "2026-08-07", "inv1_kwh": 629.0, "inv5_kwh": 606.1, "inv6_kwh": 629.2, "inv7_kwh": 646.0, "inv15_kwh": 632.0, "inv6_ratio": 1.0, "inv5_ratio": 0.964, "status": "改善後高效率"}, {"date": "2026-08-08", "inv1_kwh": 372.6, "inv5_kwh": 363.0, "inv6_kwh": 373.5, "inv7_kwh": 374.0, "inv15_kwh": 371.0, "inv6_ratio": 1.002, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-08-09", "inv1_kwh": 135.0, "inv5_kwh": 132.0, "inv6_kwh": 135.0, "inv7_kwh": 137.0, "inv15_kwh": 134.0, "inv6_ratio": 1.0, "inv5_ratio": 0.978, "status": "改善後高效率"}, {"date": "2026-08-10", "inv1_kwh": 430.0, "inv5_kwh": 413.4, "inv6_kwh": 430.6, "inv7_kwh": 438.0, "inv15_kwh": 428.3, "inv6_ratio": 1.001, "inv5_ratio": 0.961, "status": "改善後高效率"}, {"date": "2026-08-11", "inv1_kwh": 560.0, "inv5_kwh": 546.0, "inv6_kwh": 561.0, "inv7_kwh": 573.4, "inv15_kwh": 569.0, "inv6_ratio": 1.002, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-08-12", "inv1_kwh": 578.3, "inv5_kwh": 564.2, "inv6_kwh": 579.2, "inv7_kwh": 589.1, "inv15_kwh": 584.0, "inv6_ratio": 1.002, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-08-13", "inv1_kwh": 552.3, "inv5_kwh": 539.0, "inv6_kwh": 553.0, "inv7_kwh": 555.0, "inv15_kwh": 554.6, "inv6_ratio": 1.001, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-08-14", "inv1_kwh": 640.0, "inv5_kwh": 624.5, "inv6_kwh": 640.2, "inv7_kwh": 657.0, "inv15_kwh": 643.0, "inv6_ratio": 1.0, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-08-15", "inv1_kwh": 650.0, "inv5_kwh": 635.0, "inv6_kwh": 648.6, "inv7_kwh": 656.0, "inv15_kwh": 649.2, "inv6_ratio": 0.998, "inv5_ratio": 0.977, "status": "改善後高效率"}, {"date": "2026-08-16", "inv1_kwh": 462.2, "inv5_kwh": 448.1, "inv6_kwh": 461.0, "inv7_kwh": 461.1, "inv15_kwh": 457.3, "inv6_ratio": 0.997, "inv5_ratio": 0.969, "status": "改善後高效率"}, {"date": "2026-08-17", "inv1_kwh": 629.0, "inv5_kwh": 608.5, "inv6_kwh": 633.0, "inv7_kwh": 648.6, "inv15_kwh": 622.1, "inv6_ratio": 1.006, "inv5_ratio": 0.967, "status": "改善後高效率"}, {"date": "2026-08-18", "inv1_kwh": 516.3, "inv5_kwh": 501.0, "inv6_kwh": 525.2, "inv7_kwh": 547.0, "inv15_kwh": 533.1, "inv6_ratio": 1.017, "inv5_ratio": 0.97, "status": "改善後高效率"}, {"date": "2026-08-19", "inv1_kwh": 391.0, "inv5_kwh": 382.2, "inv6_kwh": 401.0, "inv7_kwh": 406.0, "inv15_kwh": 401.0, "inv6_ratio": 1.026, "inv5_ratio": 0.977, "status": "改善後高效率"}, {"date": "2026-08-20", "inv1_kwh": 494.7, "inv5_kwh": 481.0, "inv6_kwh": 496.2, "inv7_kwh": 511.0, "inv15_kwh": 502.5, "inv6_ratio": 1.003, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-08-21", "inv1_kwh": 613.0, "inv5_kwh": 593.0, "inv6_kwh": 612.1, "inv7_kwh": 624.0, "inv15_kwh": 611.0, "inv6_ratio": 0.999, "inv5_ratio": 0.967, "status": "改善後高效率"}, {"date": "2026-08-22", "inv1_kwh": 401.6, "inv5_kwh": 392.1, "inv6_kwh": 402.1, "inv7_kwh": 410.2, "inv15_kwh": 404.0, "inv6_ratio": 1.001, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-08-23", "inv1_kwh": 390.1, "inv5_kwh": 378.0, "inv6_kwh": 393.0, "inv7_kwh": 394.0, "inv15_kwh": 384.0, "inv6_ratio": 1.007, "inv5_ratio": 0.969, "status": "改善後高效率"}, {"date": "2026-08-24", "inv1_kwh": 227.0, "inv5_kwh": 221.0, "inv6_kwh": 228.2, "inv7_kwh": 229.3, "inv15_kwh": 229.7, "inv6_ratio": 1.005, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-08-25", "inv1_kwh": 223.1, "inv5_kwh": 217.7, "inv6_kwh": 224.0, "inv7_kwh": 227.1, "inv15_kwh": 224.0, "inv6_ratio": 1.004, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-08-26", "inv1_kwh": 353.0, "inv5_kwh": 365.0, "inv6_kwh": 376.7, "inv7_kwh": 386.0, "inv15_kwh": 360.0, "inv6_ratio": 1.067, "inv5_ratio": 1.034, "status": "改善後高效率"}, {"date": "2026-08-27", "inv1_kwh": 624.5, "inv5_kwh": 352.0, "inv6_kwh": 623.0, "inv7_kwh": 639.0, "inv15_kwh": 621.1, "inv6_ratio": 0.998, "inv5_ratio": 0.564, "status": "改善後高效率"}, {"date": "2026-08-28", "inv1_kwh": 387.2, "inv5_kwh": 362.0, "inv6_kwh": 389.3, "inv7_kwh": 398.2, "inv15_kwh": 393.0, "inv6_ratio": 1.005, "inv5_ratio": 0.935, "status": "改善後高效率"}, {"date": "2026-08-29", "inv1_kwh": 617.0, "inv5_kwh": 564.7, "inv6_kwh": 628.0, "inv7_kwh": 638.1, "inv15_kwh": 611.5, "inv6_ratio": 1.018, "inv5_ratio": 0.915, "status": "改善後高效率"}, {"date": "2026-08-30", "inv1_kwh": 367.1, "inv5_kwh": 84.1, "inv6_kwh": 371.0, "inv7_kwh": 374.0, "inv15_kwh": 367.2, "inv6_ratio": 1.011, "inv5_ratio": 0.229, "status": "改善後高效率"}, {"date": "2026-08-31", "inv1_kwh": 523.1, "inv5_kwh": 0.0, "inv6_kwh": 531.0, "inv7_kwh": 540.0, "inv15_kwh": 537.0, "inv6_ratio": 1.015, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-01", "inv1_kwh": 313.2, "inv5_kwh": 0.0, "inv6_kwh": 316.2, "inv7_kwh": 314.6, "inv15_kwh": 313.3, "inv6_ratio": 1.01, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-02", "inv1_kwh": 462.0, "inv5_kwh": 0.0, "inv6_kwh": 464.4, "inv7_kwh": 473.1, "inv15_kwh": 457.0, "inv6_ratio": 1.005, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-03", "inv1_kwh": 190.3, "inv5_kwh": 0.0, "inv6_kwh": 190.6, "inv7_kwh": 195.0, "inv15_kwh": 190.4, "inv6_ratio": 1.002, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-04", "inv1_kwh": 23.0, "inv5_kwh": 0.0, "inv6_kwh": 23.0, "inv7_kwh": 23.4, "inv15_kwh": 22.8, "inv6_ratio": 1.0, "inv5_ratio": 1.0, "status": "改善後高效率"}, {"date": "2026-09-05", "inv1_kwh": 361.3, "inv5_kwh": 0.0, "inv6_kwh": 363.8, "inv7_kwh": 372.0, "inv15_kwh": 364.0, "inv6_ratio": 1.007, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-06", "inv1_kwh": 74.0, "inv5_kwh": 0.0, "inv6_kwh": 74.0, "inv7_kwh": 75.0, "inv15_kwh": 74.0, "inv6_ratio": 1.0, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-07", "inv1_kwh": 476.3, "inv5_kwh": 0.0, "inv6_kwh": 480.0, "inv7_kwh": 486.8, "inv15_kwh": 476.2, "inv6_ratio": 1.008, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-08", "inv1_kwh": 401.0, "inv5_kwh": 0.0, "inv6_kwh": 402.0, "inv7_kwh": 410.0, "inv15_kwh": 400.4, "inv6_ratio": 1.002, "inv5_ratio": 0.0, "status": "Inv5 跳脫停機"}, {"date": "2026-09-09", "inv1_kwh": 400.5, "inv5_kwh": 21.6, "inv6_kwh": 406.3, "inv7_kwh": 403.3, "inv15_kwh": 400.0, "inv6_ratio": 1.014, "inv5_ratio": 0.054, "status": "改善後高效率"}, {"date": "2026-09-10", "inv1_kwh": 407.1, "inv5_kwh": 398.0, "inv6_kwh": 410.3, "inv7_kwh": 420.0, "inv15_kwh": 408.0, "inv6_ratio": 1.008, "inv5_ratio": 0.978, "status": "改善後高效率"}, {"date": "2026-09-11", "inv1_kwh": 136.0, "inv5_kwh": 132.6, "inv6_kwh": 137.2, "inv7_kwh": 140.0, "inv15_kwh": 139.5, "inv6_ratio": 1.009, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-09-12", "inv1_kwh": 460.8, "inv5_kwh": 448.0, "inv6_kwh": 467.0, "inv7_kwh": 479.5, "inv15_kwh": 466.0, "inv6_ratio": 1.013, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-09-13", "inv1_kwh": 533.0, "inv5_kwh": 514.3, "inv6_kwh": 535.4, "inv7_kwh": 554.1, "inv15_kwh": 534.4, "inv6_ratio": 1.005, "inv5_ratio": 0.965, "status": "改善後高效率"}, {"date": "2026-09-14", "inv1_kwh": 581.0, "inv5_kwh": 565.0, "inv6_kwh": 588.0, "inv7_kwh": 596.0, "inv15_kwh": 577.0, "inv6_ratio": 1.012, "inv5_ratio": 0.972, "status": "改善後高效率"}, {"date": "2026-09-15", "inv1_kwh": 293.1, "inv5_kwh": 286.0, "inv6_kwh": 295.2, "inv7_kwh": 307.0, "inv15_kwh": 295.1, "inv6_ratio": 1.007, "inv5_ratio": 0.976, "status": "改善後高效率"}, {"date": "2026-09-16", "inv1_kwh": 536.0, "inv5_kwh": 520.0, "inv6_kwh": 541.0, "inv7_kwh": 566.8, "inv15_kwh": 546.0, "inv6_ratio": 1.009, "inv5_ratio": 0.97, "status": "改善後高效率"}, {"date": "2026-09-17", "inv1_kwh": 614.1, "inv5_kwh": 598.0, "inv6_kwh": 623.0, "inv7_kwh": 642.0, "inv15_kwh": 617.0, "inv6_ratio": 1.014, "inv5_ratio": 0.974, "status": "改善後高效率"}, {"date": "2026-09-18", "inv1_kwh": 608.1, "inv5_kwh": 590.6, "inv6_kwh": 616.4, "inv7_kwh": 638.0, "inv15_kwh": 613.6, "inv6_ratio": 1.014, "inv5_ratio": 0.971, "status": "改善後高效率"}, {"date": "2026-09-19", "inv1_kwh": 593.0, "inv5_kwh": 578.0, "inv6_kwh": 602.4, "inv7_kwh": 623.5, "inv15_kwh": 599.0, "inv6_ratio": 1.016, "inv5_ratio": 0.975, "status": "改善後高效率"}, {"date": "2026-09-20", "inv1_kwh": 560.2, "inv5_kwh": 545.2, "inv6_kwh": 569.0, "inv7_kwh": 587.3, "inv15_kwh": 564.9, "inv6_ratio": 1.016, "inv5_ratio": 0.973, "status": "改善後高效率"}, {"date": "2026-09-21", "inv1_kwh": 582.0, "inv5_kwh": 566.4, "inv6_kwh": 592.0, "inv7_kwh": 612.0, "inv15_kwh": 589.0, "inv6_ratio": 1.017, "inv5_ratio": 0.973, "status": "改善後高效率"}];
+const inverterRankData = [{"inv": "Inv7", "kwp": 114.84, "total_kwh": 133367.2, "total_ey": 1161.3305468477881, "avg_ey_day": 3.1904685352961213, "total_rev": 661501.3119999999, "avg_pr": 80.85710316108094, "ratio_to_benchmark": 1.0, "ratio_to_median": 1.0174710740994917, "shortfall_kwh_vs_bm": 0.0, "shortfall_rev_vs_bm": 0.0, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv9", "kwp": 114.84, "total_kwh": 133103.0, "total_ey": 1159.0299547196098, "avg_ey_day": 3.1841482272516752, "total_rev": 660190.88, "avg_pr": 85.32810752112175, "ratio_to_benchmark": 0.998019003173194, "ratio_to_median": 1.0154554671303337, "shortfall_kwh_vs_bm": 264.1999999999986, "shortfall_rev_vs_bm": 1310.4319999999932, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv4", "kwp": 114.84, "total_kwh": 132537.5, "total_ey": 1154.1057122953673, "avg_ey_day": 3.1706200887235365, "total_rev": 657386.0, "avg_pr": 84.83867976163252, "ratio_to_benchmark": 0.993778830177135, "ratio_to_median": 1.0111412137576659, "shortfall_kwh_vs_bm": 829.7000000000065, "shortfall_rev_vs_bm": 4115.312000000033, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv17", "kwp": 115.17, "total_kwh": 132472.2, "total_ey": 1150.2318312060434, "avg_ey_day": 3.159977558258361, "total_rev": 657062.112, "avg_pr": 85.31790119815474, "ratio_to_benchmark": 0.9904431036694332, "ratio_to_median": 1.0077472085249723, "shortfall_kwh_vs_bm": 1278.2390804597458, "shortfall_rev_vs_bm": 6340.065839080339, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv2", "kwp": 114.84, "total_kwh": 131848.6, "total_ey": 1148.1069313827934, "avg_ey_day": 3.1541399213813004, "total_rev": 653969.0559999999, "avg_pr": 83.97575572327267, "ratio_to_benchmark": 0.9886133921983816, "ratio_to_median": 1.0058855300292295, "shortfall_kwh_vs_bm": 1518.5999999999956, "shortfall_rev_vs_bm": 7532.2559999999785, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv13", "kwp": 114.84, "total_kwh": 131766.09999999998, "total_ey": 1147.3885405781957, "avg_ey_day": 3.1521663202697683, "total_rev": 653559.8559999999, "avg_pr": 85.18025745247586, "ratio_to_benchmark": 0.9879947993209726, "ratio_to_median": 1.0052561296698217, "shortfall_kwh_vs_bm": 1601.0999999999926, "shortfall_rev_vs_bm": 7941.455999999964, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv14", "kwp": 115.17, "total_kwh": 131809.90000000002, "total_ey": 1144.481201701832, "avg_ey_day": 3.144179125554484, "total_rev": 653777.104, "avg_pr": 84.92509831613567, "ratio_to_benchmark": 0.9854913442243551, "ratio_to_median": 1.0027089365237065, "shortfall_kwh_vs_bm": 1940.539080459755, "shortfall_rev_vs_bm": 9625.073839080385, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv3", "kwp": 115.17, "total_kwh": 131690.90000000002, "total_ey": 1143.447946513849, "avg_ey_day": 3.141340512400684, "total_rev": 653186.864, "avg_pr": 81.81623370522468, "ratio_to_benchmark": 0.9846016275189885, "ratio_to_median": 1.001803675511853, "shortfall_kwh_vs_bm": 2059.539080459764, "shortfall_rev_vs_bm": 10215.31383908043, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv15", "kwp": 115.17, "total_kwh": 131453.8, "total_ey": 1141.3892506729183, "avg_ey_day": 3.135684754595929, "total_rev": 652010.848, "avg_pr": 84.55702710542474, "ratio_to_benchmark": 0.9828289230581279, "ratio_to_median": 1.0, "shortfall_kwh_vs_bm": 2296.6390804597636, "shortfall_rev_vs_bm": 11391.329839080427, "shortfall_kwh_vs_med": 0.0, "shortfall_rev_vs_med": 0.0}, {"inv": "Inv1", "kwp": 115.17, "total_kwh": 130809.20000000001, "total_ey": 1135.7923070243987, "avg_ey_day": 3.1203085357813154, "total_rev": 648813.632, "avg_pr": 82.50752988217258, "ratio_to_benchmark": 0.9780094996272094, "ratio_to_median": 0.9950963760652032, "shortfall_kwh_vs_bm": 2941.2390804597576, "shortfall_rev_vs_bm": 14588.545839080398, "shortfall_kwh_vs_med": 644.599999999994, "shortfall_rev_vs_med": 3197.2159999999703}, {"inv": "Inv16", "kwp": 115.17, "total_kwh": 130288.29999999999, "total_ey": 1131.2694278023791, "avg_ey_day": 3.1078830434131297, "total_rev": 646229.968, "avg_pr": 81.12927875866055, "ratio_to_benchmark": 0.974114932973214, "ratio_to_median": 0.9911337671486105, "shortfall_kwh_vs_bm": 3462.139080459753, "shortfall_rev_vs_bm": 17172.209839080377, "shortfall_kwh_vs_med": 1165.4999999999893, "shortfall_rev_vs_med": 5780.879999999947}, {"inv": "Inv12", "kwp": 115.17, "total_kwh": 130116.00000000001, "total_ey": 1129.7733784839802, "avg_ey_day": 3.103773017813132, "total_rev": 645375.36, "avg_pr": 83.62842615432558, "ratio_to_benchmark": 0.9728267129031748, "ratio_to_median": 0.9898230404902711, "shortfall_kwh_vs_bm": 3634.4390804597597, "shortfall_rev_vs_bm": 18026.81783908041, "shortfall_kwh_vs_med": 1337.7999999999959, "shortfall_rev_vs_med": 6635.487999999979}, {"inv": "Inv11", "kwp": 115.15, "total_kwh": 129205.09999999999, "total_ey": 1122.0590534085975, "avg_ey_day": 3.0825798170565863, "total_rev": 640857.2960000001, "avg_pr": 79.29925923995775, "ratio_to_benchmark": 0.9661840519516294, "ratio_to_median": 0.9830643251170235, "shortfall_kwh_vs_bm": 4522.112469522802, "shortfall_rev_vs_bm": 22429.677848833097, "shortfall_kwh_vs_med": 2225.8722149865357, "shortfall_rev_vs_med": 11040.326186333217}, {"inv": "Inv8", "kwp": 115.17, "total_kwh": 128218.09999999999, "total_ey": 1113.2942606581576, "avg_ey_day": 3.0585007160938393, "total_rev": 635961.7760000001, "avg_pr": 80.36216886767889, "ratio_to_benchmark": 0.9586368529442234, "ratio_to_median": 0.9753852684365154, "shortfall_kwh_vs_bm": 5532.339080459753, "shortfall_rev_vs_bm": 27440.401839080376, "shortfall_kwh_vs_med": 3235.6999999999894, "shortfall_rev_vs_med": 16049.071999999947}, {"inv": "Inv10", "kwp": 115.17, "total_kwh": 127768.2, "total_ey": 1109.3878614222454, "avg_ey_day": 3.0477688500611135, "total_rev": 633730.272, "avg_pr": 81.93134609373854, "ratio_to_benchmark": 0.9552731256690601, "ratio_to_median": 0.9719627732328773, "shortfall_kwh_vs_bm": 5982.239080459762, "shortfall_rev_vs_bm": 29671.905839080417, "shortfall_kwh_vs_med": 3685.599999999998, "shortfall_rev_vs_med": 18280.57599999999}, {"inv": "Inv6", "kwp": 115.17, "total_kwh": 126230.4, "total_ey": 1096.0354258921593, "avg_ey_day": 3.0110863348685695, "total_rev": 626102.7840000001, "avg_pr": 73.49320736030623, "ratio_to_benchmark": 0.9437755933202135, "ratio_to_median": 0.9602643666444027, "shortfall_kwh_vs_bm": 7520.039080459771, "shortfall_rev_vs_bm": 37299.39383908046, "shortfall_kwh_vs_med": 5223.400000000007, "shortfall_rev_vs_med": 25908.064000000035}, {"inv": "Inv5", "kwp": 115.17, "total_kwh": 120363.9, "total_ey": 1045.0976816879397, "avg_ey_day": 2.8711474771646697, "total_rev": 597004.944, "avg_pr": 75.01568819465537, "ratio_to_benchmark": 0.8999140550678353, "ratio_to_median": 0.9156365202070995, "shortfall_kwh_vs_bm": 13386.539080459743, "shortfall_rev_vs_bm": 66397.23383908032, "shortfall_kwh_vs_med": 11089.899999999978, "shortfall_rev_vs_med": 55005.90399999989}];
+
+const photoList = [
+  { id: "EV-01", title: "奈米超晶體改善及送電分析封面", src: "assets/slide_1.png", category: "簡報實證 Slide 1", meta: "2026/06/09 ｜ 進金生-長榮大園場", caption: "奈米超晶體逆變器#6化學性漏電改善及送電量分析封面。紀錄改善後逆變器送電量提升實證。" },
+  { id: "EV-02", title: "逆變器#6與#1送電量比值演變", src: "assets/slide_2.png", category: "簡報實證 Slide 2", meta: "2025/10 – 2026/05 ｜ 每年秋冬反潮期", caption: "每年漏電時間集中在10月至第二年5月。只要出現漏電，送電量遠低於#1對照組，漏電次數每年逐漸增加；改善時間點 2026/04/14。" },
+  { id: "EV-03", title: "改善後近期送電量比值跳升", src: "assets/slide_3.png", category: "簡報實證 Slide 3", meta: "2026/04/14 – 06/09 ｜ 改善工程驗證", caption: "改善後約一個月之間送電量維持在 93%~96%，5/16 之後增加至 99%~102%！遇連續雨季高濕環境，漏電問題完全消失。" },
+  { id: "EV-04", title: "各逆變器每年漏電天數遞增結果", src: "assets/slide_4.png", category: "簡報實證 Slide 4", meta: "歷史趨勢 ｜ 漏電惡化曲線", caption: "漏電最嚴重為 #6，其次為 #7、#11、#5、#3 及 #16。漏電次數明顯隨時間增加，上升率越來越大，亟需奈米材料阻斷。" },
+  { id: "EV-05", title: "逆變器#6與#7漏電波形對比", src: "assets/slide_5.png", category: "簡報實證 Slide 5", meta: "2026/06/09 ｜ 機台對比", caption: "逆變器#6化學性漏電比逆變器#7嚴重許多；改善後逆變器#6漏電完全消失。" },
+  { id: "EV-06", title: "改善後逆變器#6與#1送電量差", src: "assets/slide_6.png", category: "簡報實證 Slide 6", meta: "2026/06/09 ｜ 功率增益分析", caption: "輸出功率增加推論源自奈米材料降低線路阻抗，逆變器達到阻抗匹配輸出更多功率至電網。" },
+  { id: "EV-07", title: "2026/06/05 原始數據異常原因", src: "assets/slide_7.png", category: "簡報實證 Slide 7", meta: "2026/06/05 ｜ 監控通訊中斷", caption: "6/5 當天逆變器（或監控）出現異常，電壓及電流沒有數據造成度數短少，此為通訊丟失與化學性漏電無關。" },
+  { id: "EV-08", title: "奈米材料解決漏電技術結論", src: "assets/slide_8.png", category: "簡報實證 Slide 8", meta: "技術結論 ｜ 阻抗匹配", caption: "利用兩種奈米材料不僅解決凌晨反潮嚴重的化學性漏電，還能降低阻抗讓逆變器維持高發電效率。" },
+  { id: "EV-09", title: "現場內部死角鋼構鹽害堆積腐蝕", src: "assets/field_steel_corrosion_1.png", category: "現場實勘 ｜ 調查報告", meta: "114/07/09 ｜ 屋頂鋼構勘驗", caption: "最外面鋼構有雨水天然清洗無鹽害，但內部死角鋼構因海風鹽分長期沉積，引發鎂鋁鋅鋼材邊緣嚴重腐蝕生鏽。" },
+  { id: "EV-10", title: "現場 C 型鋼積水與外圍對比", src: "assets/field_steel_corrosion_2.png", category: "現場實勘 ｜ 調查報告", meta: "114/07/09 ｜ 屋頂鋼構勘驗", caption: "外圍鋼構表面潔淨無鹽害；但內部 C 型鋼受排水坡度影響積水浸泡，建議於低點鑽孔排水以利維護結構安全。" }
+];
+
+// --- Slide Deck Navigation Engine ---
+const totalSlides = 12;
+let currentSlide = 0;
+let isDocView = false;
+let isOwnerMode = false;
+const slides = document.querySelectorAll('.slide');
+const navtabs = document.querySelectorAll('.navtab');
+const progressBar = document.getElementById('progressBar');
+const slideCounter = document.getElementById('slideCounter');
+
+function updateDeck() {
+  if (isDocView) return;
+  slides.forEach((s, idx) => {
+    if (idx === currentSlide) s.classList.add('active');
+    else s.classList.remove('active');
+  });
+
+  navtabs.forEach((t, idx) => {
+    if (idx === currentSlide) t.classList.add('active');
+    else t.classList.remove('active');
+  });
+
+  slideCounter.innerText = `Slide ${currentSlide + 1} / ${totalSlides}`;
+  progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+
+  // Trigger charts/map resize
+  if (currentSlide === 0 && window.coverMap) setTimeout(() => { window.coverMap.invalidateSize(); }, 200);
+  if (currentSlide === 3 && window.eyChart) setTimeout(() => { window.eyChart.resize(); }, 200);
+  if (currentSlide === 5 && window.trendChart) setTimeout(() => { window.trendChart.resize(); }, 200);
+  if (currentSlide === 6 && window.inv5Chart) setTimeout(() => { window.inv5Chart.resize(); }, 200);
+  if (currentSlide === 10 && window.dcfChart) setTimeout(() => { window.dcfChart.resize(); }, 200);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToSlide(idx) {
+  if (isDocView) {
+    const target = document.getElementById(`slide-${idx}`);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (idx >= 0 && idx < totalSlides) {
+    currentSlide = idx;
+    updateDeck();
+  }
+}
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++;
+    updateDeck();
+  }
+}
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    updateDeck();
+  }
+}
+
+// Toggle View Mode (Deck vs Doc)
+function toggleViewMode() {
+  isDocView = !isDocView;
+  const btn = document.getElementById('viewModeBtn');
+  if (isDocView) {
+    document.body.classList.add('doc-view-mode');
+    btn.innerHTML = '<span>🖥️ 簡報模式</span>';
+  } else {
+    document.body.classList.remove('doc-view-mode');
+    btn.innerHTML = '<span>📑 文件模式</span>';
+    updateDeck();
+  }
+}
+
+// Toggle Audience Mode (Internal vs Owner)
+function toggleAudienceMode() {
+  isOwnerMode = !isOwnerMode;
+  const btn = document.getElementById('audienceBtn');
+  const title = document.getElementById('pageTitle');
+  if (isOwnerMode) {
+    document.body.classList.add('owner-mode');
+    btn.classList.add('owner');
+    btn.innerHTML = '<span>👔 業主交付版</span>';
+    title.innerText = '長榮國際儲運大園場 1.96MWp｜發電異常診斷暨投資決策平台｜業主交付版';
+  } else {
+    document.body.classList.remove('owner-mode');
+    btn.classList.remove('owner');
+    btn.innerHTML = '<span>🛠️ 內部維運版</span>';
+    title.innerText = '長榮國際儲運大園場 1.96MWp｜8D 異常診斷暨投資決策平台｜內部維運版';
+  }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+    e.preventDefault(); nextSlide();
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    e.preventDefault(); prevSlide();
+  } else if (e.key === 'Home') {
+    e.preventDefault(); goToSlide(0);
+  } else if (e.key === 'End') {
+    e.preventDefault(); goToSlide(totalSlides - 1);
+  } else if (e.key.toLowerCase() === 'd') {
+    toggleViewMode();
+  } else if (e.key.toLowerCase() === 'm') {
+    toggleAudienceMode();
+  } else if (e.key.toLowerCase() === 'f') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+// Modals
+function openPhotoModal(imgSrc, title, meta, caption) {
+  document.getElementById('modalPhotoTitle').innerText = title;
+  document.getElementById('modalPhotoImg').src = 'assets/' + imgSrc.replace('assets/', '');
+  document.getElementById('modalPhotoMeta').innerText = meta;
+  document.getElementById('modalPhotoCaption').innerText = caption;
+  document.getElementById('photoModal').classList.add('active');
+}
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.remove('active');
+}
+
+function openPhotoGallery() {
+  populateGallery();
+  document.getElementById('galleryModal').classList.add('active');
+}
+function closeGalleryModal() {
+  document.getElementById('galleryModal').classList.remove('active');
+}
+
+function openRawDataModal() {
+  populateRawTable(rawDailyData);
+  document.getElementById('rawDataModal').classList.add('active');
+}
+function closeRawDataModal() {
+  document.getElementById('rawDataModal').classList.remove('active');
+}
+
+// Populate Photo Gallery
+function populateGallery() {
+  const g = document.getElementById('allPhotosGrid');
+  const a = document.getElementById('appendixPhotoGrid');
+  const html = photoList.map(p => `
+    <div class="ev-card" onclick="openPhotoModal('${p.src}', '${p.title}', '${p.meta}', '${p.caption}')">
+      <div class="img-box"><img src="${p.src}" alt="${p.title}"></div>
+      <div class="ev-info">
+        <div class="ev-title">${p.title}</div>
+        <div class="ev-meta">${p.category}</div>
+      </div>
+    </div>
+  `).join('');
+  if (g) g.innerHTML = html;
+  if (a) a.innerHTML = html;
+}
+
+// Populate Inverter Ranking Table
+function populateInverterTable() {
+  const tbody = document.querySelector('#inverterRankingTable tbody');
+  if (!tbody || !inverterRankData) return;
+  tbody.innerHTML = inverterRankData.map((r, i) => {
+    let rowClass = '';
+    let statusText = '正常運轉';
+    if (r.inv === 'Inv7') { rowClass = 'row-success'; statusText = '👑 全場標竿 (Benchmark)'; }
+    else if (r.inv === 'Inv15') { rowClass = 'row-highlight'; statusText = '⚖️ 同儕中位數 (Median)'; }
+    else if (r.inv === 'Inv1') { statusText = '📐 工程對照基準台'; }
+    else if (r.inv === 'Inv6') { rowClass = 'row-highlight'; statusText = '🔧 嚴重漏電 (已奈米修復)'; }
+    else if (r.inv === 'Inv5') { rowClass = 'row-danger'; statusText = '🚨 連續跳機停機 10+ 天'; }
+    else if (r.ratio_to_benchmark < 0.965) { rowClass = 'row-warn'; statusText = '⚠️ 漏電天數遞增群'; }
+
+    return `
+      <tr class="${rowClass}">
+        <td><strong>#${i + 1}</strong></td>
+        <td><strong>${r.inv}</strong></td>
+        <td class="num">${r.kwp}</td>
+        <td class="num">${r.total_kwh.toLocaleString('zh-TW', {maximumFractionDigits:1})}</td>
+        <td class="num"><strong>${r.total_ey.toFixed(2)}</strong></td>
+        <td class="num"><strong>${(r.ratio_to_benchmark * 100).toFixed(1)}%</strong></td>
+        <td class="num">${(r.ratio_to_median * 100).toFixed(1)}%</td>
+        <td class="num" style="color:${r.shortfall_kwh_vs_bm > 1000 ? 'var(--coral)' : 'var(--muted)'};">
+          ${Math.round(r.shortfall_kwh_vs_bm).toLocaleString('zh-TW')}
+        </td>
+        <td class="num" style="color:${r.shortfall_rev_vs_bm > 5000 ? 'var(--coral)' : 'var(--muted)'}; font-weight:700;">
+          ${Math.round(r.shortfall_rev_vs_bm).toLocaleString('zh-TW')}
+        </td>
+        <td class="num">${r.avg_pr.toFixed(1)}%</td>
+        <td><small>${statusText}</small></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// Populate Raw Telemetry Table
+function populateRawTable(data) {
+  const tbody = document.getElementById('rawDataTableBody');
+  if (!tbody || !data) return;
+  tbody.innerHTML = data.map(r => {
+    let statusClass = '';
+    if (r.status.includes('跳脫')) statusClass = 'row-danger';
+    else if (r.status.includes('漏電')) statusClass = 'row-warn';
+    else if (r.status.includes('改善後')) statusClass = 'row-success';
+
+    return `
+      <tr class="${statusClass}">
+        <td><code>${r.date}</code></td>
+        <td class="num">${r.inv1_kwh.toFixed(1)}</td>
+        <td class="num" style="${r.inv5_kwh === 0 ? 'color:var(--coral);font-weight:800;' : ''}">${r.inv5_kwh.toFixed(1)}</td>
+        <td class="num">${r.inv6_kwh.toFixed(1)}</td>
+        <td class="num">${r.inv7_kwh.toFixed(1)}</td>
+        <td class="num">${r.inv15_kwh.toFixed(1)}</td>
+        <td class="num" style="font-weight:700; color:${r.inv6_ratio < 0.85 ? 'var(--coral)' : (r.inv6_ratio >= 1.0 ? 'var(--green)' : 'var(--ink)')};">
+          ${r.inv6_ratio.toFixed(3)}
+        </td>
+        <td class="num" style="font-weight:700; color:${r.inv5_ratio < 0.8 ? 'var(--coral)' : 'var(--ink)'};">
+          ${r.inv5_ratio.toFixed(3)}
+        </td>
+        <td><span class="sev ${r.status.includes('跳脫') ? 'P1' : (r.status.includes('漏電') ? 'P2' : (r.status.includes('改善') ? 'P1' : 'P3'))}">${r.status}</span></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterRawTable() {
+  const query = document.getElementById('rawSearchInput').value.trim().toLowerCase();
+  if (!query) {
+    populateRawTable(rawDailyData);
+    return;
+  }
+  const filtered = rawDailyData.filter(r => 
+    r.date.toLowerCase().includes(query) || r.status.toLowerCase().includes(query)
+  );
+  populateRawTable(filtered);
+}
+
+function filterByAnomaly(type) {
+  if (type === 'all') {
+    populateRawTable(rawDailyData);
+  } else {
+    const filtered = rawDailyData.filter(r => r.status.includes(type));
+    populateRawTable(filtered);
+  }
+}
+
+function exportRawCsv() {
+  let csv = "\uFEFF日期,Inv1_kWh,Inv5_kWh,Inv6_kWh,Inv7_kWh,Inv15_kWh,Inv6_Inv1比率,Inv5_Inv1比率,判定狀態\n";
+  rawDailyData.forEach(r => {
+    csv += `${r.date},${r.inv1_kwh},${r.inv5_kwh},${r.inv6_kwh},${r.inv7_kwh},${r.inv15_kwh},${r.inv6_ratio},${r.inv5_ratio},${r.status}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "長榮國際儲運大園場_364天發電原始數據對帳表.csv";
+  a.click();
+}
+
+function copyRawTable() {
+  let txt = "日期\tInv1\tInv5\tInv6\tInv7\tInv15\tInv6比率\tInv5比率\t狀態\n";
+  rawDailyData.forEach(r => {
+    txt += `${r.date}\t${r.inv1_kwh}\t${r.inv5_kwh}\t${r.inv6_kwh}\t${r.inv7_kwh}\t${r.inv15_kwh}\t${r.inv6_ratio}\t${r.inv5_ratio}\t${r.status}\n`;
+  });
+  navigator.clipboard.writeText(txt).then(() => alert("✅ 已複製原始數據表格至剪貼簿！"));
+}
+
+// --- Initialize ECharts & Leaflet Map ---
+window.addEventListener('DOMContentLoaded', () => {
+  populateGallery();
+  populateInverterTable();
+
+  // 1. Cover Leaflet Map
+  try {
+    const map = L.map('coverMiniMap', { zoomControl: false }).setView([25.0600, 121.2300], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+    L.circleMarker([25.0600, 121.2300], {
+      radius: 8, fillColor: '#1968AD', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9
+    }).addTo(map).bindPopup('<strong>長榮國際儲運 大園物流園區</strong><br>1,956.22 kWp 屋頂型光伏').openPopup();
+    window.coverMap = map;
+  } catch(e) { console.error('Map init error:', e); }
+
+  // 2. Ey Ranking Chart
+  try {
+    const eyChart = echarts.init(document.getElementById('eyRankingChart'));
+    const sortedInvs = [...inverterRankData].reverse();
+    const invNames = sortedInvs.map(d => d.inv);
+    const eyVals = sortedInvs.map(d => d.total_ey);
+    const colors = sortedInvs.map(d => {
+      if (d.inv === 'Inv7') return '#2E7D32'; // Benchmark green
+      if (d.inv === 'Inv15') return '#1BB1BF'; // Median teal
+      if (d.inv === 'Inv6') return '#E09A2B'; // Repaired amber
+      if (d.inv === 'Inv5') return '#D95F45'; // Tripped red
+      return '#1968AD';
+    });
+
+    eyChart.setOption({
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        formatter: (params) => {
+          const item = params[0];
+          const matched = inverterRankData.find(x => x.inv === item.name);
+          return `<strong>${item.name}</strong><br>等價時數 Ey: <strong>${item.value.toFixed(2)} h</strong><br>相對標竿比率: <strong>${(matched.ratio_to_benchmark*100).toFixed(1)}%</strong><br>年度發電量: ${matched.total_kwh.toLocaleString()} kWh`;
+        }
+      },
+      grid: { left: '10%', right: '8%', bottom: '8%', top: '10%' },
+      xAxis: { type: 'value', min: 1000, max: 1200, name: '等價時數 (h)', nameTextStyle: { color: '#5B7285', fontSize: 11 } },
+      yAxis: { type: 'category', data: invNames, axisLabel: { fontSize: 11, fontWeight: 'bold' } },
+      series: [{
+        type: 'bar',
+        data: eyVals.map((v, i) => ({ value: v, itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0] } })),
+        label: { show: true, position: 'right', formatter: '{c} h', fontSize: 11, fontWeight: 'bold', color: '#12293D' }
+      }]
+    });
+    window.eyChart = eyChart;
+  } catch(e) { console.error('Ey Chart error:', e); }
+
+  // 3. Trend Chart (Inv6 vs Inv1 Daily Ratio)
+  try {
+    const trendChart = echarts.init(document.getElementById('trendChart'));
+    const dates = rawDailyData.map(d => d.date);
+    const ratios = rawDailyData.map(d => d.inv6_ratio);
+
+    trendChart.setOption({
+      tooltip: {
+        trigger: 'axis',
+        formatter: (params) => {
+          const p = params[0];
+          const d = rawDailyData[p.dataIndex];
+          return `<code>${p.name}</code><br>Inv6 / Inv1 比值: <strong>${p.value}</strong><br>Inv6: ${d.inv6_kwh} kWh ｜ Inv1: ${d.inv1_kwh} kWh<br>狀態: <span style="font-weight:bold;color:${p.value < 0.85 ? '#D95F45' : '#2E7D32'}">${d.status}</span>`;
+        }
+      },
+      grid: { left: '5%', right: '5%', bottom: '12%', top: '14%' },
+      xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 10, interval: 30 } },
+      yAxis: { type: 'value', min: 0.1, max: 1.1, name: '送電比值 (Ratio to Inv1)', splitLine: { lineStyle: { type: 'dashed' } } },
+      visualMap: {
+        show: false,
+        dimension: 1,
+        pieces: [
+          { lte: 0.85, color: '#D95F45' },
+          { gt: 0.85, lte: 0.96, color: '#E09A2B' },
+          { gt: 0.96, color: '#2E7D32' }
+        ]
+      },
+      series: [{
+        name: 'Inv6/Inv1 比值',
+        type: 'line',
+        data: ratios,
+        smooth: false,
+        showSymbol: false,
+        markLine: {
+          symbol: 'none',
+          data: [
+            { yAxis: 0.90, lineStyle: { color: '#E09A2B', type: 'dashed', width: 1.5 }, label: { formatter: '門檻 0.90', position: 'end' } },
+            { yAxis: 1.00, lineStyle: { color: '#2E7D32', type: 'dotted', width: 1.5 }, label: { formatter: '基準 1.00', position: 'end' } }
+          ]
+        },
+        markPoint: {
+          data: [
+            { name: '施工修復日', coord: ['2026-04-14', 0.256], value: '4/14 奈米材料施工', itemStyle: { color: '#0C3A63' }, label: { offset: [0, -20] } },
+            { name: '最低漏電谷底', coord: ['2025-11-24', 0.186], value: '暴跌至 0.186', itemStyle: { color: '#D95F45' } }
+          ]
+        }
+      }]
+    });
+    window.trendChart = trendChart;
+  } catch(e) { console.error('Trend Chart error:', e); }
+
+  // 4. Inv5 Chart
+  try {
+    const inv5Chart = echarts.init(document.getElementById('inv5Chart'));
+    const dates = rawDailyData.map(d => d.date);
+    const inv5k = rawDailyData.map(d => d.inv5_kwh);
+    const inv1k = rawDailyData.map(d => d.inv1_kwh);
+
+    inv5Chart.setOption({
+      tooltip: { trigger: 'axis' },
+      legend: { data: ['Inv5 (異常跳脫)', 'Inv1 (對照正常)'], textStyle: { fontSize: 11 } },
+      grid: { left: '6%', right: '4%', bottom: '15%', top: '18%' },
+      xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 9, interval: 40 } },
+      yAxis: { type: 'value', name: '日發電量 (kWh)', splitLine: { lineStyle: { type: 'dashed' } } },
+      series: [
+        { name: 'Inv5 (異常跳脫)', type: 'line', data: inv5k, itemStyle: { color: '#D95F45' }, showSymbol: false },
+        { name: 'Inv1 (對照正常)', type: 'line', data: inv1k, itemStyle: { color: '#1968AD' }, showSymbol: false, lineStyle: { opacity: 0.6 } }
+      ]
+    });
+    window.inv5Chart = inv5Chart;
+  } catch(e) { console.error('Inv5 Chart error:', e); }
+
+  // 5. 20-Year DCF Chart
+  try {
+    const dcfChart = echarts.init(document.getElementById('dcfChart'));
+    const years = Array.from({length: 20}, (_, i) => `第 ${i+1} 年`);
+    const annualBenefit = 29.15; // 萬元
+    const discountRate = 0.045; // 4.5%
+    let cumBaseline = 0;
+    let cumRepaired = 0;
+    const repairedSeries = [];
+    const baselineSeries = [];
+
+    for (let y = 1; y <= 20; y++) {
+      const disc = Math.pow(1 + discountRate, y);
+      cumRepaired += (annualBenefit / disc);
+      repairedSeries.push(Number(cumRepaired.toFixed(1)));
+      baselineSeries.push(0);
+    }
+
+    dcfChart.setOption({
+      tooltip: { trigger: 'axis', formatter: '{b}<br>累計折現增益: <strong>NT$ {c} 萬元</strong>' },
+      grid: { left: '8%', right: '5%', bottom: '12%', top: '15%' },
+      xAxis: { type: 'category', data: years, axisLabel: { fontSize: 10, interval: 2 } },
+      yAxis: { type: 'value', name: '累計折現現金流 (NT$ 萬元)', splitLine: { lineStyle: { type: 'dashed' } } },
+      series: [{
+        name: '累計折現增益 (DCF)',
+        type: 'line',
+        data: repairedSeries,
+        smooth: true,
+        itemStyle: { color: '#2E7D32' },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(46, 125, 50, 0.4)' },
+            { offset: 1, color: 'rgba(46, 125, 50, 0.02)' }
+          ])
+        },
+        label: { show: true, position: 'top', formatter: (p) => p.dataIndex === 19 ? `${p.value} 萬` : '', fontWeight: 'bold' }
+      }]
+    });
+    window.dcfChart = dcfChart;
+  } catch(e) { console.error('DCF Chart error:', e); }
+
+  window.addEventListener('resize', () => {
+    if (window.eyChart) window.eyChart.resize();
+    if (window.trendChart) window.trendChart.resize();
+    if (window.inv5Chart) window.inv5Chart.resize();
+    if (window.dcfChart) window.dcfChart.resize();
+    if (window.coverMap) window.coverMap.invalidateSize();
+  });
+});
+</script>
+</body>
+</html>
