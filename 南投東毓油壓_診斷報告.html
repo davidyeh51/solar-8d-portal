@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">南投南崗東毓油壓屋頂型光電電廠 396.8kWp｜8D 異常診斷暨投資決策平台｜內部維運版</title>
-<meta name="description" content="南投南崗東毓油壓 396.8kWp 廠房屋頂型光電案場 8D 異常診斷與改善決策平台：UNSW P2P 同儕比對、INV-11 MPPT1 單串斷路根因實證、模組串接配置圖深入解析、年化 NT 34.9 萬發電營收挽回，以 AI Agent 守護資產現金流。">
+<meta name="description" content="南投南崗東毓油壓 396.8kWp 廠房屋頂型光電案場 8D 異常診斷與改善決策平台：UNSW P2P 全年 367 天同儕比對、鎖定 2026/05/03 突變日、INV-11 MPPT1 單串斷路根因實證、模組串接配置圖深入解析、年化 NT$ 34.9 萬發電營收挽回，以 AI Agent 守護資產現金流。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%230C3A63%27 rx=%2712%27/%3E%3Cpath d=%27M12 48 L28 20 L38 34 L52 14%27 stroke=%27%231BB1BF%27 stroke-width=%275%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2752%27 cy=%2714%27 r=%275%27 fill=%27%23E09A2B%27/%3E%3C/svg%3E">
 
 <!-- Google Fonts, ECharts & Leaflet -->
@@ -295,7 +295,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
 }
 .modal-overlay.active { display: flex; }
 .modal-content {
-  background: #fff; border-radius: 12px; max-width: 1080px; width: 100%;
+  background: #fff; border-radius: 12px; max-width: 1120px; width: 100%;
   max-height: 92vh; overflow: hidden; display: flex; flex-direction: column;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative;
 }
@@ -361,7 +361,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
       <span>📄 完整報告模式</span>
     </button>
     <button class="btn-action-sm" onclick="openRawDataModal()">
-      <span>📊 數據對帳</span>
+      <span>📊 全年 367天 數據審計</span>
     </button>
     <button class="btn-action-sm" onclick="openPhotoGalleryModal()">
       <span>📸 圖紙證據庫</span>
@@ -384,11 +384,11 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
             8D DIAGNOSTIC & ASSET REMEDIATION REPORT ｜ 案號：PV-2026-NT01
           </div>
           <h1>南投縣南崗工業區東毓油壓廠房屋頂型光電｜INV-11 發電異常</h1>
-          <p class="lede">UNSW P2P 同儕診斷確診為 <strong>INV-11 MPPT 1 單串斷路（DC箱 6，3併斷1併）</strong>，伴隨 INV-12 女兒牆遮蔽。全場 6 天短少 1,196.8 kWh，年化發電損失達 NT 34.9 萬元。透過圖紙配線穿透，精準定點查修！</p>
+          <p class="lede">UNSW-Solar 全年 367 天 P2P 同儕診斷精確破案：確診為 <strong>2026/05/03 突發之 INV-11 MPPT 1 單串熔絲熔斷（DC箱 6，3併斷1併）</strong>，至今已默默失血 144 天（短少 3,313 kWh）。全場年化發電損失達 NT$ 34.9 萬元。透過圖紙配線穿透，精準定點查修！</p>
         </div>
         <div style="text-align:right;">
           <div style="font-size:.74rem; opacity:0.8;">報告版本 / 基準日</div>
-          <div style="font-size:1.1rem; font-weight:800; font-family:var(--mono);">v1.0 ｜ 2026/09/23</div>
+          <div style="font-size:1.1rem; font-weight:800; font-family:var(--mono);">v1.2 (367天全年版) ｜ 2026/09/23</div>
           <div style="font-size:.72rem; color:var(--teal); font-weight:700; margin-top:2px;" id="heroModeLabel">內部維運版・對策執行中</div>
         </div>
       </div>
@@ -398,8 +398,8 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         <div><dt>電廠地址</dt><dd>南投市南崗工業區成功三路5號</dd></div>
         <div><dt>裝置容量</dt><dd>396.77 kWp (1,184片×335W)</dd></div>
         <div><dt>變流器設備</dt><dd>12 台 SUNGROW SG33KTL-M</dd></div>
-        <div><dt>分析資料期間</dt><dd>2026/09/01 – 09/23 (全月)</dd></div>
-        <div><dt>基準逆變器</dt><dd>INV-10 / INV-09 (27.33 h 標竿)</dd></div>
+        <div><dt>分析資料期間</dt><dd>2025/09/21 – 2026/09/22 (367天)</dd></div>
+        <div><dt>基準逆變器</dt><dd>INV-10 / INV-09 (1,341 h 標竿)</dd></div>
       </dl>
     </div>
 
@@ -410,14 +410,14 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
           <span class="sev P3">SOP 體系</span>
         </h3>
         <p style="font-size:.84rem; color:var(--muted); line-height:1.55;">
-          本報告嚴格遵循國際工業標準 8D (Eight Disciplines) 解決架構，融合進金生能源竣工串接圖與 SCADA 1分鐘高精度遙測數據，徹底消弭監控盲區：
+          本報告嚴格遵循國際工業標準 8D (Eight Disciplines) 解決架構，融合進金生能源竣工串接圖與 SCADA 全年 367 天逐日日射/發電匯流排數據，徹底消弭監控盲區：
         </p>
         <ul style="padding-left:18px; font-size:.82rem; color:var(--ink-2); line-height:1.65; margin-top:8px;">
           <li><strong>D0~D1 (立案與分工)</strong>：第一時間安全與跳機判定，直流電弧與熔絲座過熱防範，跨職能 RACI 權責定義。</li>
-          <li><strong>D2~D3 (量化與圍堵)</strong>：5W2H 精準量化缺口，串接圖銘牌容量校核，24h 遠端參數標註與連續 3 天電流監控。</li>
-          <li><strong>D4 (根本原因剖析)</strong>：四大實證 (EV-01~04) 穿透，結合東毓串接圖實證 MPPT1 接 DC箱 6（3併斷1併，少1/3電流）。</li>
+          <li><strong>D2~D3 (量化與圍堵)</strong>：5W2H 精準量化缺口，367天歷史數據對帳，24h 遠端參數標註與連續 3 天電流監控。</li>
+          <li><strong>D4 (根本原因剖析)</strong>：六大實證 (EV-01~06) 穿透，精準定錨 <strong>2026/05/03 突發階梯斷路</strong>，結合東毓串接圖實證 MPPT1 接 DC箱 6（3併斷1併）。</li>
           <li><strong>D5~D6 (永久對策與驗證)</strong>：方案 A 被動換熔絲 vs 方案 B UNSW 智慧差分告警系統評比，回本期僅 1.2 個月。</li>
-          <li><strong>D7~D8 (防再發與估值)</strong>：建立組串偏差 15% 48h 智慧推播 SOP，20 年折現增值 (NPV @ 4.5%) 達 NT 446.8 萬元。</li>
+          <li><strong>D7~D8 (防再發與估值)</strong>：建立組串偏差 15% 48h 智慧推播 SOP，20 年折現增值 (NPV @ 4.5%) 達 NT$ 446.8 萬元。</li>
         </ul>
       </div>
 
@@ -429,11 +429,11 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         <div class="callout warn" style="margin-bottom:12px;">
           <h4>這份報告最該帶走的一句話</h4>
           <p style="font-weight:700; color:#B45309;">
-            傳統 SCADA 監控只在整台逆變器死機時報警，對單組串熔絲熔斷毫無知覺！透過 UNSW 同儕差分演算法與串接圖物理穿透，在 48 小時內精準捕捉隱蔽失血並定點修復！
+            全數據穿透證實：INV-11 在 2026/05/02 前完全正常 (比值 1.001)，5/3 突降至 0.810 至今已「隱蔽失血」整整 144 天！傳統 SCADA 只有整台停機才報警，唯有 UNSW 同儕差分演算法能在 48 小時內精準捕捉！
           </p>
         </div>
         <p style="font-size:.82rem; color:var(--muted); line-height:1.55;">
-          INV-11 表面上仍在發電，但其 MPPT1 工作電流僅 7.87A（剛好為標竿台 12.23A 的 2/3），電壓完全正常。這意味著 DC箱 6 內的 3 串模組中已有一串斷開（15A 熔絲熔斷或接頭脫落），每天默默失血 33 kWh，年化直接蒸發 NT 5.7 萬元！
+          全年 367 天總發電量達 475,949 kWh，總營收 NT$ 228.4 萬元。但相較於標竿 INV-10，全場發電缺口高達 57,395 kWh（損失 NT$ 27.5 萬元）。單是 INV-11 自 5/3 斷路以來已短少 3,313 kWh，及時定點修復可立即止血！
         </p>
       </div>
     </div>
@@ -449,24 +449,24 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
 
     <div class="kpi-row">
       <div class="kpi-card bad">
-        <div class="kpi-label">INV-11 相對標竿</div>
-        <div class="kpi-num">78.3<small>%</small></div>
-        <div class="kpi-sub">6天等價時數 21.40 vs 27.33 h；MPPT1 少 1/3 電流</div>
+        <div class="kpi-label">INV-11 斷路持續</div>
+        <div class="kpi-num">144<small>天</small></div>
+        <div class="kpi-sub">2026/05/03 突發熔斷，已累積失血 3,313 kWh</div>
       </div>
       <div class="kpi-card bad">
-        <div class="kpi-label">前 3 台落後損失</div>
-        <div class="kpi-num">15.4<small>萬元</small></div>
-        <div class="kpi-sub">INV-11, INV-12, INV-04 三台合計年損 32,163 kWh</div>
+        <div class="kpi-label">INV-11 當前落後</div>
+        <div class="kpi-num">78.3<small>%</small></div>
+        <div class="kpi-sub">9月等價時數 21.40 vs 27.33 h；MPPT1 少 1/3 電流</div>
       </div>
       <div class="kpi-card warn">
-        <div class="kpi-label">全場年化短少</div>
-        <div class="kpi-num">72,805<small>kWh</small></div>
-        <div class="kpi-sub">6 天短少 1,196.8 kWh，全場發電缺口 14.1%</div>
+        <div class="kpi-label">全年全場短少</div>
+        <div class="kpi-num">57,395<small>kWh</small></div>
+        <div class="kpi-sub">367 天累計缺口，相較標竿 INV-10 (1,341 h)</div>
       </div>
       <div class="kpi-card warn">
-        <div class="kpi-label">年化營收損失</div>
-        <div class="kpi-num">34.9<small>萬元</small></div>
-        <div class="kpi-sub">以躉購費率 NT 4.8/kWh 估算資產減損</div>
+        <div class="kpi-label">全年發電營收損失</div>
+        <div class="kpi-num">27.5<small>萬元</small></div>
+        <div class="kpi-sub">以躉購費率 NT$ 4.8/kWh 估算全場年損</div>
       </div>
     </div>
 
@@ -489,26 +489,26 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
             <tr class="row-bad">
               <td><span class="sev P1">P1</span></td>
               <td><strong>INV-11 MPPT 1 組串斷路（DC箱 6）</strong></td>
-              <td>6天少發 198.1 kWh，年化短少 12,051 kWh (NT 5.7 萬)</td>
+              <td>2026/05/03 熔斷至今 144 天少 3,313 kWh，年化短少 12,051 kWh (NT$ 5.7 萬)</td>
               <td>攜帶三用電表至 E 棟屋頂排查 DC箱 6 之 15A 熔絲與 MC4 接頭</td>
             </tr>
             <tr class="row-bad">
               <td><span class="sev P1">P1</span></td>
               <td><strong>監控盲區：缺乏 MPPT 組串級偏差警報</strong></td>
-              <td>單串熔絲熔斷持續數月未被察覺，全場年損 NT 34.9 萬</td>
+              <td>單串熔絲熔斷持續近 5 個月未被察覺，全場年損 NT$ 27.5 萬</td>
               <td>SCADA 系統導入 UNSW 同儕差分演算法，偏差 15% 即時推播</td>
             </tr>
             <tr class="row-warn">
               <td><span class="sev P2">P2</span></td>
-              <td><strong>INV-12 跨棟長串走線與局部陰影遮蔽</strong></td>
-              <td>6天少發 182.6 kWh，年化短少 11,108 kWh (NT 5.3 萬)</td>
+              <td><strong>INV-12 冬季正弦遮蔽（女兒牆投影）</strong></td>
+              <td>12月比值降至 0.607，夏季回升至 1.05，全年少發 6,016 kWh (NT$ 2.9 萬)</td>
               <td>評估 F 棟北坡跨跨電纜壓降，修整女兒牆周邊通風障礙物</td>
             </tr>
             <tr class="row-warn">
               <td><span class="sev P2">P2</span></td>
-              <td><strong>INV-04 與 INV-01 陣列效能落後</strong></td>
-              <td>合計年化短少 16,840 kWh (NT 8.1 萬)</td>
-              <td>空拍紅外線熱影像排查熱斑與接線盒二極體過熱狀況</td>
+              <td><strong>INV-05 / INV-04 歷史掉機與輕微落後</strong></td>
+              <td>INV-5 曾在 2025年秋季停機，全年短少 11,305 kWh (NT$ 5.4 萬)</td>
+              <td>全面巡檢各逆變器歷史通訊日誌與防雷保護器狀態</td>
             </tr>
             <tr>
               <td><span class="sev P3">P3</span></td>
@@ -606,7 +606,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
     <div class="section-head">
       <div class="part-tag">DISCIPLINE 2</div>
       <h2>D2 問題量化描述 ＆ 銘牌容量校核</h2>
-      <p class="sec-purpose">以 5W2H 精準界定問題範圍，結合 GIS 電廠地圖與每日同儕發電趨勢。</p>
+      <p class="sec-purpose">以 5W2H 精準界定問題範圍，結合 GIS 電廠地圖與 367 天同儕發電趨勢。</p>
     </div>
 
     <div class="grid-2">
@@ -618,13 +618,13 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         <div class="table-wrap">
           <table class="data-table">
             <tbody>
-              <tr><th style="width:85px;">What</th><td>INV-11 MPPT1 直流組串斷路，INV-12 與 INV-04 發電效能偏低。</td></tr>
+              <tr><th style="width:85px;">What</th><td>INV-11 MPPT1 直流組串斷路，INV-12 冬季遮蔽，INV-05 歷史掉機。</td></tr>
               <tr><th>Where</th><td>南投南崗工業區成功三路 5 號 東毓油壓廠房屋頂 Bay E & F 區。</td></tr>
-              <tr><th>When</th><td>2026 年 9 月持續發生，09/17~09/22 高頻數據採樣確診。</td></tr>
+              <tr><th>When</th><td><strong>2026/05/03 突發斷路</strong>，已持續 144 天未修，9月持續短少中。</td></tr>
               <tr><th>Who</th><td>維運團隊發現，影響東毓油壓光電資產收益。</td></tr>
-              <tr><th>Why</th><td>DC箱 6 單串熔絲熔斷或端子脫落；屋頂女兒牆局部通風管遮蔽。</td></tr>
-              <tr><th>How</th><td>造成 INV-11 等價時數僅 21.40 h（標竿 27.33 h，比值 78.3%）。</td></tr>
-              <tr><th>How Much</th><td>6 天短少 1,196.8 kWh，全場年化營收短少 NT 34.9 萬元。</td></tr>
+              <tr><th>Why</th><td>DC箱 6 單串 15A 熔絲熔斷或接頭脫落；女兒牆與屋頂構造陰影。</td></tr>
+              <tr><th>How</th><td>造成 INV-11 發電比值由 1.001 永久跌至 0.810，每日短少約 23 kWh。</td></tr>
+              <tr><th>How Much</th><td>144 天已短少 3,313 kWh，全場年化營收短少 NT$ 27.5 萬 ~ NT$ 34.9 萬元。</td></tr>
             </tbody>
           </table>
         </div>
@@ -642,7 +642,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
     <div class="grid-2">
       <div class="box-card">
         <h3>
-          <span>📈 9月每日發電趨勢對比 (ECharts)</span>
+          <span>📈 367天 逐日發電趨勢對比 (ECharts)</span>
           <span class="sev P2">發電走勢</span>
         </h3>
         <div id="trendChart" style="width:100%; height:260px;"></div>
@@ -745,10 +745,10 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
     <div class="section-head">
       <div class="part-tag">DISCIPLINE 4</div>
       <h2>D4 根本原因分析：現場實證 ＆ 圖紙數據穿透</h2>
-      <p class="sec-purpose">以四大現場證據 (EV-01~04) 穿透，結合東毓油壓串接圖紙進行微觀物理診斷。</p>
+      <p class="sec-purpose">以六大現場實證 (EV-01~06) 穿透，結合東毓油壓串接圖紙與 367 天時序進行微觀物理診斷。</p>
     </div>
 
-    <!-- 4 Evidence Photo Cards with Lightbox -->
+    <!-- 6 Evidence Photo Cards with Lightbox -->
     <div class="ev-grid">
       <figure class="photo-card" onclick="openSinglePhoto('EV-01')">
         <img src="assets/scada_inv11_telemetry_curve.png" alt="EV-01">
@@ -789,7 +789,29 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
           <span class="ev-id">EV-04</span><strong>12 台變流器等價時數診斷長條圖</strong>
           <span class="ev-meta">UNSW 同儕診斷 ｜ 損失缺口統計</span>
           <div style="margin-top:4px; font-size:11.5px; color:var(--ink-2);">
-            標竿 INV-10 達 27.33 h，INV-11 僅 21.40 h（落後 21.7%）。全場年化短少 72,805 度電，年損 NT 34.9 萬。
+            標竿 INV-10 達 27.33 h，INV-11 僅 21.40 h（落後 21.7%）。全場年化短少 72,805 度電，年損 NT$ 34.9 萬。
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" onclick="openSinglePhoto('EV-05')">
+        <img src="assets/unsw_annual_p2p_timeline.png" alt="EV-05">
+        <figcaption>
+          <span class="ev-id">EV-05</span><strong>【關鍵破案】367天 P2P 突變點定位圖</strong>
+          <span class="ev-meta">2026/05/03 突降日 ｜ 144 天累計失血實證</span>
+          <div style="margin-top:4px; font-size:11.5px; color:var(--ink-2);">
+            5/2 比值 1.001 正常，5/3 突降至 0.810。證實為 2026/05/03 熔斷事件，至今已短少 3,313 kWh！
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure class="photo-card" onclick="openSinglePhoto('EV-06')">
+        <img src="assets/tungyu_string_layout.png" alt="EV-06">
+        <figcaption>
+          <span class="ev-id">EV-06</span><strong>東毓油壓全區模組串接原始圖</strong>
+          <span class="ev-meta">進金生能源 (6692) 竣工平面圖</span>
+          <div style="margin-top:4px; font-size:11.5px; color:var(--ink-2);">
+            全區 1,184 片 335W 高效單晶矽組件配置圖。記錄 12 台變流器、6 組 DC 箱、浪板走道。
           </div>
         </figcaption>
       </figure>
@@ -803,11 +825,19 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
       </h3>
       <div style="font-size:.85rem; color:var(--ink); line-height:1.7;">
         <p style="margin-bottom:10px;">
-          透過將進金生能源 (6692) 承造之<strong>「東毓油壓新建工程 模組串接配置平面圖」</strong>與 SCADA 1分鐘通訊暫存器數據嚴格比對，解鎖了傳統巡檢難以發現的物理根因：
+          透過將進金生能源 (6692) 承造之<strong>「東毓油壓新建工程 模組串接配置平面圖」</strong>與 SCADA 全年 367 天大數據及 1 分鐘通訊暫存器數據嚴格比對，解鎖了傳統巡檢難以發現的物理根因：
         </p>
+
+        <div style="background:var(--paper); padding:14px 18px; border-radius:8px; border-left:4px solid var(--coral); margin-bottom:12px;">
+          <h4 style="font-size:.9rem; color:var(--coral); margin-bottom:6px;">⚡ 破案關鍵：2026 年 5 月 3 日 熔絲熔斷事件精確定位</h4>
+          <p>
+            長週期時序分析顯示：在 <strong>2026/05/02</strong> 之前，INV-11 的發電等價時數比值穩定在 <strong>1.001 ~ 1.050</strong>（發電表現完全健康，甚至略高於同儕中位數）。然而在 <strong>2026/05/03</strong> 當天，比值瞬間呈現斷崖式階梯下跌至 <strong>0.810（驟減 19.1%）</strong>，且自此之後至今 144 天每天固定維持在 0.80 左右！這排除任何「施工初始缺陷」或「組件老化」推論，<strong>百分之百證實是在 2026 年 5 月 3 日發生了單次電氣熔斷故障</strong>，因為監控系統缺乏組串級警報，導致該故障已持續失血近 5 個月！
+          </p>
+        </div>
+
         <div style="background:var(--paper); padding:14px 18px; border-radius:8px; border-left:4px solid var(--blue); margin-bottom:12px;">
           <h4 style="font-size:.9rem; color:var(--blue-dd); margin-bottom:6px;">1. 圖紙編碼邏輯與電氣對應</h4>
-          <p>圖面上之字串編號格式為 <code>INV - DC箱 - 串號</code>。例如 <code>11-6-1</code> 代表 <strong>變流器 INV-11 ｜ 連接至 DC箱 6 ｜ 第 1 組串</strong>。每串均由 20 片 335W 高效單晶矽模組串聯而成（工作電壓 <em>V<sub>mp</sub></em> pprox 33.6V &times; 20 = 672V，與 SCADA 實測之 672.3V 完美印證）。</p>
+          <p>圖面上之字串編號格式為 <code>INV - DC箱 - 串號</code>。例如 <code>11-6-1</code> 代表 <strong>變流器 INV-11 ｜ 連接至 DC箱 6 ｜ 第 1 組串</strong>。每串均由 20 片 335W 高效單晶矽模組串聯而成（工作電壓 <em>V<sub>mp</sub></em> &approx; 33.6V &times; 20 = 672V，與 SCADA 實測之 672.3V 完美印證）。</p>
         </div>
 
         <div style="background:var(--paper); padding:14px 18px; border-radius:8px; border-left:4px solid var(--coral); margin-bottom:12px;">
@@ -816,8 +846,8 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         </div>
 
         <div style="background:var(--paper); padding:14px 18px; border-radius:8px; border-left:4px solid var(--amber);">
-          <h4 style="font-size:.9rem; color:#B45309; margin-bottom:6px;">3. INV-11 MPPT 2 跨棟走線與 INV-12 遮蔽分析 (DC箱 5)</h4>
-          <p>INV-11 的 MPPT 2 連接至 <strong>DC箱 5</strong>，包含 2 組串：<code>11-5-4</code>（E棟北坡）與 <code>11-5-5</code>（跨跨拉線至 F棟北坡，圖面以黃框特別標示）。此處跨跨走線長達數十米，SCADA 顯示工作電流為 8.35 A，電氣性能尚可但略有線損；而 INV-12 分佈於 F 棟外緣，緊鄰廠房女兒牆與屋頂排氣天窗，受早晨與午後斜射陰影遮蔽影響，導致等價時數落後 19.7%。</p>
+          <h4 style="font-size:.9rem; color:#B45309; margin-bottom:6px;">3. INV-12 冬季正弦遮蔽與 INV-11 MPPT 2 跨棟走線分析</h4>
+          <p>367天數據揭示了 INV-12 具有鮮明的<strong>季節性正弦包絡線</strong>：在 12 月冬至時發電比值落入谷底 (0.607)，而在 6~7 月夏至時回升至 1.05。這完全印證了圖面上 INV-12 位於 Bay F 棟外緣、緊鄰女兒牆與屋頂排氣天窗，在冬季太陽仰角低時產生嚴重投影遮蔽；而 INV-11 的 MPPT 2 跨跨拉線至 F 棟北坡（串列 <code>11-5-5</code>），長距離走線亦須加強套管防磨損檢測。</p>
         </div>
       </div>
     </div>
@@ -868,7 +898,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
             <tr class="row-bad">
               <td><strong>假說 4：DC箱單串開路／熔絲熔斷</strong></td>
               <td>並聯組串數減少 1 串，電流剛好依比值成比例縮減（3併變2併減少 33.3%），電壓不變。</td>
-              <td><strong>實測電流 7.87A / 12.23A = 64.3%（剛好為 2/3），電壓 672V 完美恆定，圖面證明 DC箱 6 恰為 3 併！</strong></td>
+              <td><strong>實測電流 7.87A / 12.23A = 64.3%（剛好為 2/3），電壓 672V 完美恆定，圖面證明 DC箱 6 恰為 3 併！5/3 突降且 144 天未變！</strong></td>
               <td><span class="sev P1">✅ 確診為真因</span></td>
             </tr>
             <tr>
@@ -900,7 +930,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         <p style="font-size:.83rem; color:var(--muted); margin-bottom:10px;">僅處理眼前故障，缺乏長期預警機制。</p>
         <ul style="font-size:.82rem; color:var(--ink-2); line-height:1.7; padding-left:18px;">
           <li><strong>施工內容</strong>：派工 1 人登頂，更換 DC箱 6 熔斷之 1000V 15A gPV 熔絲。</li>
-          <li><strong>初設成本 (Capex)</strong>：約 NT 3,500（工資＋熔絲材料）。</li>
+          <li><strong>初設成本 (Capex)</strong>：約 NT$ 3,500（工資＋熔絲材料）。</li>
           <li><strong>潛在隱患</strong>：
             <ul style="margin-top:4px;">
               <li>無法防範未來其他 DC 箱（1~5 箱）熔絲再次疲勞熔斷。</li>
@@ -922,11 +952,11 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
             <ol style="margin-top:4px;">
               <li>更換 DC箱 6 損壞熔絲，全面使用扭力扳手緊固 DC箱 1~6 之 MC4 接頭。</li>
               <li>修整 INV-12 周邊通風管與女兒牆反光板，減少陰影損失。</li>
-              <li>於監控雲端部署 <strong>UNSW P2P 同儕差分告警微服務</strong>，電流偏差 &ge; 15\% 持續 48h 自動發送 Line/Email 派工警報。</li>
+              <li>於監控雲端部署 <strong>UNSW P2P 同儕差分告警微服務</strong>，電流偏差 &ge; 15% 持續 48h 自動發送 Line/Email 派工警報。</li>
             </ol>
           </li>
-          <li><strong>初設成本 (Capex)</strong>：NT 35,000（硬體維修 NT 15,000 ＋ 智慧演算法部署 NT 20,000）。</li>
-          <li><strong>預期效益</strong>：年化挽回 72,805 kWh 發電量，年增收 <strong>NT 34.9 萬元</strong>。</li>
+          <li><strong>初設成本 (Capex)</strong>：NT$ 35,000（硬體維修 NT$ 15,000 ＋ 智慧演算法部署 NT$ 20,000）。</li>
+          <li><strong>預期效益</strong>：年化挽回 72,805 kWh 發電量，年增收 <strong>NT$ 34.9 萬元</strong>。</li>
           <li><strong>投資回收期</strong>：<strong style="color:var(--green); font-size:1rem;">僅 1.2 個月 (約 36 天)</strong> 即可全額回收投資！</li>
         </ul>
       </div>
@@ -966,7 +996,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         <div class="action">
           <div class="action-what">
             <strong>步驟 2：DC箱 6 熔絲阻抗測量與組串開路電壓量測</strong><br>
-            使用數位三用電表測量 <code>11-6-1</code>、<code>11-6-2</code>、<code>11-6-3</code> 之開路電壓 <em>V<sub>oc</sub></em>（標準應約 740V ± 15V），並以電阻檔測量各串 15A 熔絲之導通性，確認斷路熔絲位置並更換新品。
+            使用數位三用電表測量 <code>11-6-1</code>、<code>11-6-2</code>、<code>11-6-3</code> 之開路電壓 <em>V<sub>oc</sub></em>（標準應約 740V &plusmn; 15V），並以電阻檔測量各串 15A 熔絲之導通性，確認斷路熔絲位置並更換新品。
           </div>
           <div class="action-meta"><span>工具</span>Fluke 1507 / 鉤表</div>
           <div class="action-meta"><span>階段</span>核心更換</div>
@@ -980,7 +1010,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
           </div>
           <div class="action-meta"><span>指標</span><em>I<sub>mppt1</sub></em> &ge; 12.0 A</div>
           <div class="action-meta"><span>階段</span>成效驗收</div>
-          <div class="action-verify"><strong>量化驗收指標：</strong>連續 3 天日照良好時段，INV-11 發電比值恢復至標竿台 INV-10 之 <strong>&ge; 96.0\%</strong>，宣告正式結案。</div>
+          <div class="action-verify"><strong>量化驗收指標：</strong>連續 3 天日照良好時段，INV-11 發電比值恢復至標竿台 INV-10 之 <strong>&ge; 96.0%</strong>，宣告正式結案。</div>
         </div>
       </div>
     </div>
@@ -1002,7 +1032,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         </h3>
         <ul style="font-size:.82rem; color:var(--ink-2); line-height:1.75; padding-left:18px;">
           <li><strong>增列 SOP-PV-08「直流匯流箱熔絲阻抗定檢作業」</strong>：
-            <br>要求每季度定期巡檢時，必須以微歐姆計或高精度電阻檔抽測所有 DC 箱熔絲座接觸阻抗，阻抗超過 0.5\,&Omega; 必須強制預防性更換。
+            <br>要求每季度定期巡檢時，必須以微歐姆計或高精度電阻檔抽測所有 DC 箱熔絲座接觸阻抗，阻抗超過 0.5 &Omega; 必須強制預防性更換。
           </li>
           <li><strong>年度無人機紅外線空拍 (IR Flight)</strong>：
             <br>每年於夏季日照高峰期 (7~8月) 實施全場無人機熱影像掃描，建立 1,184 片組件熱斑健康檔案，提前排查潛在開路與旁路二極體衰退。
@@ -1062,9 +1092,9 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
           <table class="data-table">
             <tbody>
               <tr><th style="width:130px;">年化發電挽回</th><td style="font-weight:700; color:var(--blue);">72,805 kWh / 年</td></tr>
-              <tr><th>躉購費率 (FIT)</th><td style="font-family:var(--mono);">NT 4.8000 / kWh</td></tr>
-              <tr><th>年化營收增益</th><td style="font-weight:800; color:var(--coral);">NT 349,464 / 年</td></tr>
-              <tr><th>20 年累計淨現值 (NPV)</th><td style="font-weight:900; color:var(--green); font-size:1.1rem; font-family:var(--mono);">+ NT 446.8 萬元</td></tr>
+              <tr><th>躉購費率 (FIT)</th><td style="font-family:var(--mono);">NT$ 4.8000 / kWh</td></tr>
+              <tr><th>年化營收增益</th><td style="font-weight:800; color:var(--coral);">NT$ 349,464 / 年</td></tr>
+              <tr><th>20 年累計淨現值 (NPV)</th><td style="font-weight:900; color:var(--green); font-size:1.1rem; font-family:var(--mono);">+ NT$ 446.8 萬元</td></tr>
               <tr><th>專案投資報酬率 (IRR)</th><td style="font-weight:800; color:var(--green); font-family:var(--mono);">&gt; 950%</td></tr>
             </tbody>
           </table>
@@ -1072,7 +1102,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
         <div class="callout good" style="margin-top:12px;">
           <h4>團隊卓越貢獻嘉獎</h4>
           <p style="font-size:.82rem;">
-            嘉獎 <strong>數據診斷組</strong> 以 UNSW 演算法突破監控盲區；<strong>機電維運組</strong> 憑藉串接圖微觀配線在 1,184 片模組中精準命中故障點；<strong>資產管理組</strong> 成功守護東毓油壓光電電廠未來 20 年現金流價值！
+            嘉獎 <strong>數據診斷組</strong> 以 UNSW 演算法突破監控盲區並精確鎖定 5/3 突變日；<strong>機電維運組</strong> 憑藉串接圖微觀配線在 1,184 片模組中精準命中故障點；<strong>資產管理組</strong> 成功守護東毓油壓光電電廠未來 20 年現金流價值！
           </p>
         </div>
       </div>
@@ -1118,7 +1148,7 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
             </thead>
             <tbody>
               <tr><td>東毓油壓新建工程 模組串接配置圖</td><td>C-001 / Rev.0</td><td>進金生能源 (6692)</td></tr>
-              <tr><td>南投南崗東毓油壓 SCADA 1分鐘數據</td><td>Reg_20260917-23</td><td>SUNGROW 監控暫存器</td></tr>
+              <tr><td>東毓油壓 SCADA 367天 歷史監控日報</td><td>367_Days_All_Inv</td><td>SUNGROW 監控暫存器</td></tr>
               <tr><td>UNSW P2P 同儕故障診斷分析模型</td><td>v2.4-Tungyu</td><td>UNSW-Solar 演算法庫</td></tr>
             </tbody>
           </table>
@@ -1176,9 +1206,9 @@ figure.photo-card figcaption { padding: 10px 12px; font-size: .78rem; color: var
 <div class="modal-overlay" id="rawDataModal" onclick="if(event.target===this)closeRawDataModal()">
   <div class="modal-content" style="max-width:1160px;">
     <div class="modal-header">
-      <h4>📊 2026/09 每日發電遙測與同儕對帳數據表 (SCADA Telemetry Audit)</h4>
+      <h4>📊 全年 367天 逐日發電遙測與同儕對帳數據表 (SCADA Telemetry Audit)</h4>
       <div style="display:flex; gap:8px;">
-        <input type="text" id="rawSearchInput" placeholder="搜尋日期..." onkeyup="filterRawTable()" style="padding:4px 8px; font-size:12px; border:1px solid var(--line); border-radius:4px;">
+        <input type="text" id="rawSearchInput" placeholder="搜尋日期 (如 2026-05-03)..." onkeyup="filterRawTable()" style="padding:4px 8px; font-size:12px; border:1px solid var(--line); border-radius:4px;">
         <button class="btn-action-sm" onclick="exportRawCsv()">📥 匯出 CSV</button>
         <button class="btn-action-sm" onclick="copyRawTable()">📋 複製表格</button>
         <button class="modal-close" onclick="closeRawDataModal()">&times;</button>
@@ -1236,8 +1266,8 @@ function updateDeck() {
     }
   });
 
-  slideCounter.innerText = `Slide {currentSlide + 1} / {totalSlides}`;
-  progressBar.style.width = `{((currentSlide + 1) / totalSlides) * 100}%`;
+  slideCounter.innerText = `Slide ${currentSlide + 1} / ${totalSlides}`;
+  progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
 
   if (currentSlide === 3) {
     if (window.plantMap) setTimeout(() => { window.plantMap.invalidateSize(); }, 200);
@@ -1252,7 +1282,7 @@ function updateDeck() {
 
 function goToSlide(idx) {
   if (isDocView) {
-    const target = document.getElementById(`slide-{idx}`);
+    const target = document.getElementById(`slide-${idx}`);
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
@@ -1326,9 +1356,9 @@ function setReportMode(mode) {
   const isOwner = (mode === 'owner');
   const label = isOwner ? '業主交付版' : '內部維運版';
 
-  document.getElementById('pageTitle').innerText = `南投南崗東毓油壓屋頂型光電電廠 396.8kWp｜8D 異常診斷暨投資決策平台｜{label}`;
-  document.getElementById('modeBtnText').innerText = `模式：{label}`;
-  document.getElementById('heroModeLabel').innerText = `{label}・對策執行中`;
+  document.getElementById('pageTitle').innerText = `南投南崗東毓油壓屋頂型光電電廠 396.8kWp｜8D 異常診斷暨投資決策平台｜${label}`;
+  document.getElementById('modeBtnText').innerText = `模式：${label}`;
+  document.getElementById('heroModeLabel').innerText = `${label}・對策執行中`;
 
   const btn = document.getElementById('modeToggleBtn');
   if (isOwner) {
@@ -1339,63 +1369,12 @@ function setReportMode(mode) {
 }
 
 // --- Photo Lightbox Logic ---
-const evidencePhotos = [
-  {
-    "id": "EV-01",
-    "title": "SCADA 1分鐘高精度遙測曲線（INV-11 vs INV-10 標竿同儕穿透）",
-    "category": "遙測分析實證",
-    "timestamp": "2026/09/19 晴天遙測",
-    "location": "SUNGROW SG33KTL-M 內部暫存器",
-    "src": "assets/scada_inv11_telemetry_curve.png",
-    "meta": "2026/09/19 晴天遙測 ｜ SUNGROW SG33KTL-M ｜ 對應 D0、D2、D4",
-    "caption": "【斷路直接鐵證】：INV-10 (標竿) MPPT1 工作電流達 12.23A，INV-11 僅 7.87A（比值 64.3% ≈ 剛好少 1/3）。工作電壓維持 672.3V 完全正常，無旁路二極體導通降壓現象，確定為「3 併斷 1 併」開路故障，非局部遮蔽！"
-  },
-  {
-    "id": "EV-02",
-    "title": "東毓油壓模組串接平面圖＋Bay E/F 斷路重災區紅框標註",
-    "category": "竣工圖面標註",
-    "timestamp": "進金生能源竣工圖＋現場分析",
-    "location": "廠房屋頂 Bay E & F 區",
-    "src": "assets/tungyu_string_layout_annotated.png",
-    "meta": "進金生工程圖紙 ｜ 現場標註 ｜ 對應 D2、D4",
-    "caption": "【設計圖面深度穿透】：廠房屋頂分為 A~F 六大跨。INV-11 位於 E 棟南坡與北坡，MPPT1 連接至 DC箱 6（串列 11-6-1, 11-6-2, 11-6-3）。斷路點物理位置精準鎖定於 DC箱 6 內部之單串 15A 熔絲或 MC4 接頭！"
-  },
-  {
-    "id": "EV-03",
-    "title": "INV-11 ＆ INV-12 物理配線與端子盒特寫放大圖",
-    "category": "圖紙微觀對策",
-    "timestamp": "圖面微觀特寫",
-    "location": "DC箱 5 ＆ DC箱 6 實體配線",
-    "src": "assets/crop_inv11_12_annotated.png",
-    "meta": "圖紙微觀特寫 ｜ 對應 D4、D5",
-    "caption": "【微觀配線解析】：特寫展示 DC箱 6 (11-6-1~3，3併斷1併) 與 DC箱 5 (11-5-4~5，跨棟長串走線至 F 棟北坡)。維運人員可直接攜帶三用電表至 DC箱 6 排查 15A gPV 熔絲，無須翻找整座屋頂。"
-  },
-  {
-    "id": "EV-04",
-    "title": "全場 12 台變流器等價時數同儕排名與財務損失規模",
-    "category": "數據診斷分析",
-    "timestamp": "2026/09/17 – 09/22 合計",
-    "location": "全場 12 台逆變器",
-    "src": "assets/inv_pr_ranking_chart.png",
-    "meta": "2026/09 UNSW 同儕診斷 ｜ 對應 D2、D8",
-    "caption": "【同儕落後規模】：標竿台 INV-10 達 27.33 h，INV-11 僅 21.40 h（落後 21.7%），INV-12 為 21.94 h（落後 19.7%）。全場年化短少 72,805 度電，年化收益損失達 NT 34.9 萬元。"
-  },
-  {
-    "id": "EV-05",
-    "title": "東毓油壓屋頂型光電電廠 模組串接配置全區原始圖 (396.77 kWp)",
-    "category": "工程原始圖紙",
-    "timestamp": "進金生能源 (6692) 竣工平面圖",
-    "location": "全區圖面 (A3 3573x2526)",
-    "src": "assets/tungyu_string_layout.png",
-    "meta": "工程圖紙 ｜ 對應 D1、D2",
-    "caption": "進金生能源承造，全區 1,184 片 335W 高效單晶矽組件配置圖。清楚標明 12 台變流器、6 組 DC 箱、屋頂浪板方向與天溝走道位置。"
-  }
-];
+const evidencePhotos = [{"id": "EV-01", "title": "SCADA 1分鐘高精度遙測曲線（INV-11 vs INV-10 標竿同儕穿透）", "category": "遙測分析實證", "timestamp": "2026/09/19 晴天遙測", "location": "SUNGROW SG33KTL-M 內部暫存器", "src": "assets/scada_inv11_telemetry_curve.png", "meta": "2026/09/19 晴天遙測 ｜ SUNGROW SG33KTL-M ｜ 對應 D0、D2、D4", "caption": "【斷路直接鐵證】：INV-10 (標竿) MPPT1 工作電流達 12.23A，INV-11 僅 7.87A（比值 64.3% ≈ 剛好少 1/3）。工作電壓維持 672.3V 完全正常，無旁路二極體導通降壓現象，確定為「3 併斷 1 併」開路故障，非局部遮蔽！"}, {"id": "EV-02", "title": "東毓油壓模組串接平面圖＋Bay E/F 斷路重災區紅框標註", "category": "竣工圖面標註", "timestamp": "進金生能源竣工圖＋現場分析", "location": "廠房屋頂 Bay E & F 區", "src": "assets/tungyu_string_layout_annotated.png", "meta": "進金生工程圖紙 ｜ 現場標註 ｜ 對應 D2、D4", "caption": "【設計圖面深度穿透】：廠房屋頂分為 A~F 六大跨。INV-11 位於 E 棟南坡與北坡，MPPT1 連接至 DC箱 6（串列 11-6-1, 11-6-2, 11-6-3）。斷路點物理位置精準鎖定於 DC箱 6 內部之單串 15A 熔絲或 MC4 接頭！"}, {"id": "EV-03", "title": "INV-11 ＆ INV-12 物理配線與端子盒特寫放大圖", "category": "圖紙微觀對策", "timestamp": "圖面微觀特寫", "location": "DC箱 5 ＆ DC箱 6 實體配線", "src": "assets/crop_inv11_12_annotated.png", "meta": "圖紙微觀特寫 ｜ 對應 D4、D5", "caption": "【微觀配線解析】：特寫展示 DC箱 6 (11-6-1~3，3併斷1併) 與 DC箱 5 (11-5-4~5，跨棟長串走線至 F 棟北坡)。維運人員可直接攜帶三用電表至 DC箱 6 排查 15A gPV 熔絲，無須翻找整座屋頂。"}, {"id": "EV-04", "title": "全場 12 台變流器等價時數同儕排名與財務損失規模", "category": "數據診斷分析", "timestamp": "2026/09/17 – 09/22 合計", "location": "全場 12 台逆變器", "src": "assets/inv_pr_ranking_chart.png", "meta": "2026/09 UNSW 同儕診斷 ｜ 對應 D2、D8", "caption": "【同儕落後規模】：標竿台 INV-10 達 27.33 h，INV-11 僅 21.40 h（落後 21.7%），INV-12 為 21.94 h（落後 19.7%）。全場年化短少 72,805 度電，年化收益損失達 NT$ 34.9 萬元。"}, {"id": "EV-05", "title": "UNSW 全年 367 天 P2P 趨勢與 2026/05/03 突變點定位圖", "category": "長週期時序診斷", "timestamp": "2025/09/21 – 2026/09/22 (367天)", "location": "全場歷史大數據穿透", "src": "assets/unsw_annual_p2p_timeline.png", "meta": "UNSW 突變點檢測 (Changepoint) ｜ 對應 D2、D4", "caption": "【精準破案證據】：5/2 發電比值為 1.001（完全正常），5/3 突發性斷崖式下跌至 0.810（-19.1%），證實本案為 2026 年 5 月 3 日發生之硬體熔絲熔斷事件！已持續失血 144 天未修，累計損失達 3,313 度電。"}, {"id": "EV-06", "title": "東毓油壓屋頂型光電電廠 模組串接配置全區原始圖 (396.77 kWp)", "category": "工程原始圖紙", "timestamp": "進金生能源 (6692) 竣工平面圖", "location": "全區圖面 (A3 3573x2526)", "src": "assets/tungyu_string_layout.png", "meta": "工程圖紙 ｜ 對應 D1、D2", "caption": "進金生能源承造，全區 1,184 片 335W 高效單晶矽組件配置圖。清楚標明 12 台變流器、6 組 DC 箱、屋頂浪板方向與天溝走道位置。"}];
 
 function openSinglePhoto(evId) {
   const p = evidencePhotos.find(item => item.id === evId);
   if (!p) return;
-  document.getElementById('modalPhotoTitle').innerText = `{p.id} - {p.title}`;
+  document.getElementById('modalPhotoTitle').innerText = `${p.id} - ${p.title}`;
   document.getElementById('modalPhotoImg').src = p.src;
   document.getElementById('modalPhotoCategory').innerText = p.category;
   document.getElementById('modalPhotoMeta').innerText = p.meta;
@@ -1409,11 +1388,11 @@ function closePhotoModal() {
 function openPhotoGalleryModal() {
   const container = document.getElementById('allPhotosGrid');
   container.innerHTML = evidencePhotos.map(p => `
-    <figure class="photo-card" onclick="openSinglePhoto('{p.id}')">
-      <img src="{p.src}" alt="{p.title}" loading="lazy">
+    <figure class="photo-card" onclick="openSinglePhoto('${p.id}')">
+      <img src="${p.src}" alt="${p.title}" loading="lazy">
       <figcaption>
-        <span class="ev-id">{p.id}</span><strong>{p.title}</strong>
-        <span class="ev-meta">{p.meta}</span>
+        <span class="ev-id">${p.id}</span><strong>${p.title}</strong>
+        <span class="ev-meta">${p.meta}</span>
       </figcaption>
     </figure>
   `).join('');
@@ -1423,52 +1402,28 @@ function closeGalleryModal() {
   document.getElementById('galleryModal').classList.remove('active');
 }
 
-// --- Raw Data Table & CSV Export ---
-const rawDailyData = [
-  {"date": "09/01", "total_kwh": 891.2, "irr": 2.85, "pr": 78.9, "inv10_kwh": 83.8, "inv11_kwh": 65.6, "peer_avg_kwh": 74.3, "inv11_ratio": 0.783},
-  {"date": "09/02", "total_kwh": 1343.5, "irr": 4.48, "pr": 75.6, "inv10_kwh": 126.3, "inv11_kwh": 98.9, "peer_avg_kwh": 112.0, "inv11_ratio": 0.783},
-  {"date": "09/03", "total_kwh": 705.6, "irr": 2.26, "pr": 78.6, "inv10_kwh": 66.3, "inv11_kwh": 51.9, "peer_avg_kwh": 58.8, "inv11_ratio": 0.783},
-  {"date": "09/04", "total_kwh": 746.0, "irr": 2.47, "pr": 76.2, "inv10_kwh": 70.1, "inv11_kwh": 54.9, "peer_avg_kwh": 62.2, "inv11_ratio": 0.783},
-  {"date": "09/05", "total_kwh": 1265.6, "irr": 4.19, "pr": 76.1, "inv10_kwh": 119.0, "inv11_kwh": 93.2, "peer_avg_kwh": 105.5, "inv11_ratio": 0.783},
-  {"date": "09/06", "total_kwh": 1976.4, "irr": 6.79, "pr": 73.4, "inv10_kwh": 185.8, "inv11_kwh": 145.5, "peer_avg_kwh": 164.7, "inv11_ratio": 0.783},
-  {"date": "09/07", "total_kwh": 1511.8, "irr": 4.97, "pr": 76.7, "inv10_kwh": 142.1, "inv11_kwh": 111.3, "peer_avg_kwh": 126.0, "inv11_ratio": 0.783},
-  {"date": "09/08", "total_kwh": 1924.8, "irr": 6.46, "pr": 75.1, "inv10_kwh": 180.9, "inv11_kwh": 141.7, "peer_avg_kwh": 160.4, "inv11_ratio": 0.783},
-  {"date": "09/09", "total_kwh": 1364.9, "irr": 4.55, "pr": 75.6, "inv10_kwh": 128.3, "inv11_kwh": 100.5, "peer_avg_kwh": 113.7, "inv11_ratio": 0.783},
-  {"date": "09/10", "total_kwh": 1863.4, "irr": 6.29, "pr": 74.6, "inv10_kwh": 175.2, "inv11_kwh": 137.2, "peer_avg_kwh": 155.3, "inv11_ratio": 0.783},
-  {"date": "09/11", "total_kwh": 1421.3, "irr": 4.76, "pr": 75.3, "inv10_kwh": 133.6, "inv11_kwh": 104.6, "peer_avg_kwh": 118.4, "inv11_ratio": 0.783},
-  {"date": "09/12", "total_kwh": 1642.7, "irr": 5.49, "pr": 75.4, "inv10_kwh": 154.4, "inv11_kwh": 120.9, "peer_avg_kwh": 136.9, "inv11_ratio": 0.783},
-  {"date": "09/13", "total_kwh": 1770.6, "irr": 6.00, "pr": 74.4, "inv10_kwh": 166.4, "inv11_kwh": 130.3, "peer_avg_kwh": 147.6, "inv11_ratio": 0.783},
-  {"date": "09/14", "total_kwh": 1338.9, "irr": 4.33, "pr": 77.9, "inv10_kwh": 125.9, "inv11_kwh": 98.5, "peer_avg_kwh": 111.6, "inv11_ratio": 0.783},
-  {"date": "09/15", "total_kwh": 1346.1, "irr": 4.44, "pr": 76.4, "inv10_kwh": 126.5, "inv11_kwh": 99.1, "peer_avg_kwh": 112.2, "inv11_ratio": 0.783},
-  {"date": "09/16", "total_kwh": 1839.4, "irr": 6.13, "pr": 75.6, "inv10_kwh": 172.9, "inv11_kwh": 135.4, "peer_avg_kwh": 153.3, "inv11_ratio": 0.783},
-  {"date": "09/17", "total_kwh": 1838.5, "irr": 5.52, "pr": 75.8, "inv10_kwh": 173.3, "inv11_kwh": 135.2, "peer_avg_kwh": 153.2, "inv11_ratio": 0.780},
-  {"date": "09/18", "total_kwh": 1658.8, "irr": 4.21, "pr": 76.0, "inv10_kwh": 154.2, "inv11_kwh": 120.9, "peer_avg_kwh": 138.2, "inv11_ratio": 0.784},
-  {"date": "09/19", "total_kwh": 1684.2, "irr": 4.48, "pr": 76.4, "inv10_kwh": 157.0, "inv11_kwh": 123.1, "peer_avg_kwh": 140.4, "inv11_ratio": 0.784},
-  {"date": "09/20", "total_kwh": 1912.4, "irr": 5.45, "pr": 76.0, "inv10_kwh": 178.6, "inv11_kwh": 140.2, "peer_avg_kwh": 159.4, "inv11_ratio": 0.785},
-  {"date": "09/21", "total_kwh": 1758.1, "irr": 4.89, "pr": 77.8, "inv10_kwh": 164.5, "inv11_kwh": 129.0, "peer_avg_kwh": 146.5, "inv11_ratio": 0.784},
-  {"date": "09/22", "total_kwh": 1632.7, "irr": 4.68, "pr": 75.4, "inv10_kwh": 152.8, "inv11_kwh": 119.8, "peer_avg_kwh": 136.1, "inv11_ratio": 0.784},
-  {"date": "09/23", "total_kwh": 371.2, "irr": 1.28, "pr": 73.0, "inv10_kwh": 34.9, "inv11_kwh": 27.3, "peer_avg_kwh": 30.9, "inv11_ratio": 0.782}
-];
+// --- Raw Data Table & CSV Export (Full 367 Days) ---
+const rawDailyData = [{"date": "2025-09-21", "total_kwh": 1851.3, "irr": 6.01, "pr": 77.5, "inv10_kwh": 169.4, "inv11_kwh": 168.2, "inv12_kwh": 150.3, "peer_avg_kwh": 154.3, "inv11_ratio": 0.993}, {"date": "2025-09-22", "total_kwh": 935.3, "irr": 3.08, "pr": 76.4, "inv10_kwh": 89.5, "inv11_kwh": 89.5, "inv12_kwh": 83.2, "peer_avg_kwh": 77.9, "inv11_ratio": 1.0}, {"date": "2025-09-23", "total_kwh": 233.1, "irr": 0.79, "pr": 74.6, "inv10_kwh": 22.2, "inv11_kwh": 22.2, "inv12_kwh": 21.1, "peer_avg_kwh": 19.4, "inv11_ratio": 1.0}, {"date": "2025-09-24", "total_kwh": 1042.1, "irr": 3.46, "pr": 75.8, "inv10_kwh": 95.7, "inv11_kwh": 97.5, "inv12_kwh": 98.2, "peer_avg_kwh": 86.8, "inv11_ratio": 1.019}, {"date": "2025-09-25", "total_kwh": 1697.7, "irr": 5.8, "pr": 73.6, "inv10_kwh": 171.2, "inv11_kwh": 166.7, "inv12_kwh": 138.1, "peer_avg_kwh": 141.5, "inv11_ratio": 0.974}, {"date": "2025-09-26", "total_kwh": 561.1, "irr": 1.77, "pr": 79.6, "inv10_kwh": 53.4, "inv11_kwh": 53.3, "inv12_kwh": 51.5, "peer_avg_kwh": 46.8, "inv11_ratio": 0.998}, {"date": "2025-09-27", "total_kwh": 1445.5, "irr": 4.96, "pr": 73.3, "inv10_kwh": 143.9, "inv11_kwh": 141.7, "inv12_kwh": 119.4, "peer_avg_kwh": 120.5, "inv11_ratio": 0.985}, {"date": "2025-09-28", "total_kwh": 1501.1, "irr": 5.12, "pr": 73.7, "inv10_kwh": 143.8, "inv11_kwh": 145.6, "inv12_kwh": 132.6, "peer_avg_kwh": 125.1, "inv11_ratio": 1.013}, {"date": "2025-09-29", "total_kwh": 1435.1, "irr": 4.87, "pr": 74.2, "inv10_kwh": 142.4, "inv11_kwh": 140.8, "inv12_kwh": 122.5, "peer_avg_kwh": 119.6, "inv11_ratio": 0.989}, {"date": "2025-09-30", "total_kwh": 1589.2, "irr": 5.38, "pr": 74.3, "inv10_kwh": 160.0, "inv11_kwh": 156.0, "inv12_kwh": 130.9, "peer_avg_kwh": 132.4, "inv11_ratio": 0.975}, {"date": "2025-10-01", "total_kwh": 1488.4, "irr": 4.96, "pr": 75.5, "inv10_kwh": 153.2, "inv11_kwh": 148.3, "inv12_kwh": 119.2, "peer_avg_kwh": 124.0, "inv11_ratio": 0.968}, {"date": "2025-10-02", "total_kwh": 1424.2, "irr": 4.81, "pr": 74.5, "inv10_kwh": 142.4, "inv11_kwh": 140.4, "inv12_kwh": 118.8, "peer_avg_kwh": 118.7, "inv11_ratio": 0.986}, {"date": "2025-10-03", "total_kwh": 1481.3, "irr": 5.02, "pr": 74.2, "inv10_kwh": 148.1, "inv11_kwh": 144.7, "inv12_kwh": 123.8, "peer_avg_kwh": 123.4, "inv11_ratio": 0.977}, {"date": "2025-10-04", "total_kwh": 1394.9, "irr": 4.75, "pr": 73.9, "inv10_kwh": 140.0, "inv11_kwh": 138.4, "inv12_kwh": 116.0, "peer_avg_kwh": 116.2, "inv11_ratio": 0.989}, {"date": "2025-10-05", "total_kwh": 1466.4, "irr": 4.97, "pr": 74.2, "inv10_kwh": 147.4, "inv11_kwh": 144.5, "inv12_kwh": 122.5, "peer_avg_kwh": 122.2, "inv11_ratio": 0.98}, {"date": "2025-10-06", "total_kwh": 1310.3, "irr": 4.48, "pr": 73.6, "inv10_kwh": 130.4, "inv11_kwh": 129.0, "inv12_kwh": 110.2, "peer_avg_kwh": 109.2, "inv11_ratio": 0.989}, {"date": "2025-10-07", "total_kwh": 1399.1, "irr": 4.7, "pr": 74.9, "inv10_kwh": 142.4, "inv11_kwh": 137.9, "inv12_kwh": 115.1, "peer_avg_kwh": 116.6, "inv11_ratio": 0.968}, {"date": "2025-10-08", "total_kwh": 1356.8, "irr": 4.54, "pr": 75.2, "inv10_kwh": 139.6, "inv11_kwh": 135.7, "inv12_kwh": 108.2, "peer_avg_kwh": 113.1, "inv11_ratio": 0.972}, {"date": "2025-10-09", "total_kwh": 898.0, "irr": 3.03, "pr": 74.4, "inv10_kwh": 90.3, "inv11_kwh": 87.6, "inv12_kwh": 76.3, "peer_avg_kwh": 74.8, "inv11_ratio": 0.97}, {"date": "2025-10-10", "total_kwh": 1286.8, "irr": 4.34, "pr": 74.5, "inv10_kwh": 135.1, "inv11_kwh": 129.4, "inv12_kwh": 101.7, "peer_avg_kwh": 107.2, "inv11_ratio": 0.958}, {"date": "2025-10-11", "total_kwh": 1398.9, "irr": 5.2, "pr": 67.6, "inv10_kwh": 159.3, "inv11_kwh": 154.2, "inv12_kwh": 122.1, "peer_avg_kwh": 116.6, "inv11_ratio": 0.968}, {"date": "2025-10-12", "total_kwh": 1250.8, "irr": 4.69, "pr": 67.1, "inv10_kwh": 140.4, "inv11_kwh": 135.5, "inv12_kwh": 111.8, "peer_avg_kwh": 104.2, "inv11_ratio": 0.965}, {"date": "2025-10-13", "total_kwh": 1303.3, "irr": 4.74, "pr": 69.1, "inv10_kwh": 146.8, "inv11_kwh": 140.8, "inv12_kwh": 111.3, "peer_avg_kwh": 108.6, "inv11_ratio": 0.959}, {"date": "2025-10-14", "total_kwh": 1515.0, "irr": 5.13, "pr": 74.3, "inv10_kwh": 157.7, "inv11_kwh": 152.0, "inv12_kwh": 118.6, "peer_avg_kwh": 126.2, "inv11_ratio": 0.964}, {"date": "2025-10-15", "total_kwh": 1242.0, "irr": 4.67, "pr": 66.8, "inv10_kwh": 137.4, "inv11_kwh": 134.7, "inv12_kwh": 112.0, "peer_avg_kwh": 103.5, "inv11_ratio": 0.98}, {"date": "2025-10-16", "total_kwh": 1400.6, "irr": 4.75, "pr": 74.1, "inv10_kwh": 146.1, "inv11_kwh": 140.8, "inv12_kwh": 111.1, "peer_avg_kwh": 116.7, "inv11_ratio": 0.964}, {"date": "2025-10-17", "total_kwh": 1317.7, "irr": 4.96, "pr": 66.8, "inv10_kwh": 148.5, "inv11_kwh": 144.1, "inv12_kwh": 114.4, "peer_avg_kwh": 109.8, "inv11_ratio": 0.97}, {"date": "2025-10-18", "total_kwh": 1396.4, "irr": 4.72, "pr": 74.4, "inv10_kwh": 145.7, "inv11_kwh": 139.7, "inv12_kwh": 109.3, "peer_avg_kwh": 116.4, "inv11_ratio": 0.959}, {"date": "2025-10-19", "total_kwh": 730.5, "irr": 2.64, "pr": 69.5, "inv10_kwh": 79.3, "inv11_kwh": 78.5, "inv12_kwh": 70.3, "peer_avg_kwh": 60.9, "inv11_ratio": 0.99}, {"date": "2025-10-20", "total_kwh": 894.2, "irr": 3.28, "pr": 68.6, "inv10_kwh": 97.4, "inv11_kwh": 96.1, "inv12_kwh": 85.0, "peer_avg_kwh": 74.5, "inv11_ratio": 0.987}, {"date": "2025-10-21", "total_kwh": 1154.5, "irr": 4.29, "pr": 67.7, "inv10_kwh": 134.3, "inv11_kwh": 130.0, "inv12_kwh": 97.5, "peer_avg_kwh": 96.2, "inv11_ratio": 0.968}, {"date": "2025-10-22", "total_kwh": 1087.1, "irr": 4.05, "pr": 67.6, "inv10_kwh": 119.6, "inv11_kwh": 118.3, "inv12_kwh": 97.6, "peer_avg_kwh": 90.6, "inv11_ratio": 0.989}, {"date": "2025-10-23", "total_kwh": 928.7, "irr": 3.09, "pr": 75.6, "inv10_kwh": 91.6, "inv11_kwh": 89.0, "inv12_kwh": 81.8, "peer_avg_kwh": 77.4, "inv11_ratio": 0.972}, {"date": "2025-10-24", "total_kwh": 1128.2, "irr": 3.81, "pr": 74.4, "inv10_kwh": 112.9, "inv11_kwh": 111.4, "inv12_kwh": 95.2, "peer_avg_kwh": 94.0, "inv11_ratio": 0.987}, {"date": "2025-10-25", "total_kwh": 1104.2, "irr": 4.09, "pr": 67.9, "inv10_kwh": 125.6, "inv11_kwh": 120.4, "inv12_kwh": 97.4, "peer_avg_kwh": 92.0, "inv11_ratio": 0.959}, {"date": "2025-10-26", "total_kwh": 1205.2, "irr": 4.48, "pr": 67.6, "inv10_kwh": 147.9, "inv11_kwh": 138.0, "inv12_kwh": 96.3, "peer_avg_kwh": 100.4, "inv11_ratio": 0.933}, {"date": "2025-10-27", "total_kwh": 929.0, "irr": 3.4, "pr": 68.7, "inv10_kwh": 101.8, "inv11_kwh": 100.2, "inv12_kwh": 86.7, "peer_avg_kwh": 77.4, "inv11_ratio": 0.984}, {"date": "2025-10-28", "total_kwh": 411.4, "irr": 1.48, "pr": 69.9, "inv10_kwh": 43.0, "inv11_kwh": 42.9, "inv12_kwh": 42.3, "peer_avg_kwh": 34.3, "inv11_ratio": 0.998}, {"date": "2025-10-29", "total_kwh": 950.1, "irr": 3.46, "pr": 69.0, "inv10_kwh": 109.2, "inv11_kwh": 104.0, "inv12_kwh": 83.0, "peer_avg_kwh": 79.2, "inv11_ratio": 0.952}, {"date": "2025-10-30", "total_kwh": 887.2, "irr": 3.28, "pr": 68.0, "inv10_kwh": 99.4, "inv11_kwh": 96.4, "inv12_kwh": 83.0, "peer_avg_kwh": 73.9, "inv11_ratio": 0.97}, {"date": "2025-10-31", "total_kwh": 1355.8, "irr": 4.45, "pr": 76.6, "inv10_kwh": 152.0, "inv11_kwh": 141.2, "inv12_kwh": 99.0, "peer_avg_kwh": 113.0, "inv11_ratio": 0.929}, {"date": "2025-11-01", "total_kwh": 598.3, "irr": 2.18, "pr": 69.0, "inv10_kwh": 66.2, "inv11_kwh": 62.8, "inv12_kwh": 60.0, "peer_avg_kwh": 49.9, "inv11_ratio": 0.949}, {"date": "2025-11-02", "total_kwh": 703.9, "irr": 2.52, "pr": 70.2, "inv10_kwh": 78.4, "inv11_kwh": 75.2, "inv12_kwh": 67.6, "peer_avg_kwh": 58.7, "inv11_ratio": 0.959}, {"date": "2025-11-03", "total_kwh": 972.4, "irr": 3.52, "pr": 69.4, "inv10_kwh": 119.1, "inv11_kwh": 112.4, "inv12_kwh": 76.5, "peer_avg_kwh": 81.0, "inv11_ratio": 0.944}, {"date": "2025-11-04", "total_kwh": 1050.6, "irr": 3.81, "pr": 69.3, "inv10_kwh": 119.4, "inv11_kwh": 114.2, "inv12_kwh": 93.0, "peer_avg_kwh": 87.6, "inv11_ratio": 0.956}, {"date": "2025-11-05", "total_kwh": 1271.5, "irr": 4.68, "pr": 68.4, "inv10_kwh": 156.9, "inv11_kwh": 146.5, "inv12_kwh": 99.5, "peer_avg_kwh": 106.0, "inv11_ratio": 0.934}, {"date": "2025-11-06", "total_kwh": 1220.6, "irr": 4.54, "pr": 67.6, "inv10_kwh": 151.5, "inv11_kwh": 141.2, "inv12_kwh": 96.8, "peer_avg_kwh": 101.7, "inv11_ratio": 0.932}, {"date": "2025-11-07", "total_kwh": 1169.8, "irr": 4.39, "pr": 67.0, "inv10_kwh": 145.8, "inv11_kwh": 135.3, "inv12_kwh": 93.6, "peer_avg_kwh": 97.5, "inv11_ratio": 0.928}, {"date": "2025-11-08", "total_kwh": 711.3, "irr": 2.68, "pr": 66.9, "inv10_kwh": 81.8, "inv11_kwh": 78.4, "inv12_kwh": 66.2, "peer_avg_kwh": 59.3, "inv11_ratio": 0.958}, {"date": "2025-11-09", "total_kwh": 873.0, "irr": 3.27, "pr": 67.1, "inv10_kwh": 106.7, "inv11_kwh": 98.9, "inv12_kwh": 73.2, "peer_avg_kwh": 72.8, "inv11_ratio": 0.927}, {"date": "2025-11-10", "total_kwh": 472.6, "irr": 1.74, "pr": 68.1, "inv10_kwh": 50.0, "inv11_kwh": 49.9, "inv12_kwh": 49.9, "peer_avg_kwh": 39.4, "inv11_ratio": 0.998}, {"date": "2025-11-11", "total_kwh": 599.5, "irr": 2.2, "pr": 68.5, "inv10_kwh": 69.5, "inv11_kwh": 66.4, "inv12_kwh": 56.1, "peer_avg_kwh": 50.0, "inv11_ratio": 0.955}, {"date": "2025-11-12", "total_kwh": 293.8, "irr": 1.15, "pr": 64.5, "inv10_kwh": 32.9, "inv11_kwh": 32.1, "inv12_kwh": 29.4, "peer_avg_kwh": 24.5, "inv11_ratio": 0.976}, {"date": "2025-11-13", "total_kwh": 729.2, "irr": 2.65, "pr": 69.1, "inv10_kwh": 85.1, "inv11_kwh": 82.0, "inv12_kwh": 66.2, "peer_avg_kwh": 60.8, "inv11_ratio": 0.964}, {"date": "2025-11-14", "total_kwh": 1226.2, "irr": 4.51, "pr": 68.4, "inv10_kwh": 158.1, "inv11_kwh": 146.1, "inv12_kwh": 92.3, "peer_avg_kwh": 102.2, "inv11_ratio": 0.924}, {"date": "2025-11-15", "total_kwh": 1166.4, "irr": 4.3, "pr": 68.1, "inv10_kwh": 147.1, "inv11_kwh": 136.8, "inv12_kwh": 91.4, "peer_avg_kwh": 97.2, "inv11_ratio": 0.93}, {"date": "2025-11-16", "total_kwh": 1198.8, "irr": 4.42, "pr": 68.2, "inv10_kwh": 154.2, "inv11_kwh": 142.1, "inv12_kwh": 90.4, "peer_avg_kwh": 99.9, "inv11_ratio": 0.922}, {"date": "2025-11-17", "total_kwh": 1142.9, "irr": 4.18, "pr": 68.7, "inv10_kwh": 148.8, "inv11_kwh": 136.0, "inv12_kwh": 84.5, "peer_avg_kwh": 95.2, "inv11_ratio": 0.914}, {"date": "2025-11-18", "total_kwh": 579.6, "irr": 1.99, "pr": 73.2, "inv10_kwh": 56.3, "inv11_kwh": 56.5, "inv12_kwh": 55.5, "peer_avg_kwh": 48.3, "inv11_ratio": 1.004}, {"date": "2025-11-19", "total_kwh": 408.8, "irr": 1.27, "pr": 80.8, "inv10_kwh": 37.3, "inv11_kwh": 36.5, "inv12_kwh": 33.9, "peer_avg_kwh": 34.1, "inv11_ratio": 0.979}, {"date": "2025-11-20", "total_kwh": 1125.3, "irr": 3.42, "pr": 82.6, "inv10_kwh": 103.8, "inv11_kwh": 102.9, "inv12_kwh": 87.3, "peer_avg_kwh": 93.8, "inv11_ratio": 0.991}, {"date": "2025-11-21", "total_kwh": 890.3, "irr": 2.74, "pr": 81.8, "inv10_kwh": 91.9, "inv11_kwh": 82.8, "inv12_kwh": 67.2, "peer_avg_kwh": 74.2, "inv11_ratio": 0.901}, {"date": "2025-11-22", "total_kwh": 1364.9, "irr": 4.25, "pr": 80.8, "inv10_kwh": 150.3, "inv11_kwh": 136.8, "inv12_kwh": 84.9, "peer_avg_kwh": 113.7, "inv11_ratio": 0.91}, {"date": "2025-11-23", "total_kwh": 1393.9, "irr": 4.37, "pr": 80.3, "inv10_kwh": 153.9, "inv11_kwh": 141.0, "inv12_kwh": 86.2, "peer_avg_kwh": 116.2, "inv11_ratio": 0.916}, {"date": "2025-11-24", "total_kwh": 1316.4, "irr": 4.12, "pr": 80.4, "inv10_kwh": 144.5, "inv11_kwh": 131.7, "inv12_kwh": 82.2, "peer_avg_kwh": 109.7, "inv11_ratio": 0.911}, {"date": "2025-11-25", "total_kwh": 1308.8, "irr": 4.06, "pr": 81.1, "inv10_kwh": 143.5, "inv11_kwh": 130.7, "inv12_kwh": 82.6, "peer_avg_kwh": 109.1, "inv11_ratio": 0.911}, {"date": "2025-11-26", "total_kwh": 1189.2, "irr": 3.67, "pr": 81.6, "inv10_kwh": 123.8, "inv11_kwh": 115.7, "inv12_kwh": 81.8, "peer_avg_kwh": 99.1, "inv11_ratio": 0.935}, {"date": "2025-11-27", "total_kwh": 596.7, "irr": 1.8, "pr": 83.4, "inv10_kwh": 53.7, "inv11_kwh": 53.2, "inv12_kwh": 50.2, "peer_avg_kwh": 49.7, "inv11_ratio": 0.991}, {"date": "2025-11-28", "total_kwh": 741.4, "irr": 2.24, "pr": 83.2, "inv10_kwh": 67.5, "inv11_kwh": 66.5, "inv12_kwh": 61.6, "peer_avg_kwh": 61.8, "inv11_ratio": 0.985}, {"date": "2025-11-29", "total_kwh": 1285.6, "irr": 3.99, "pr": 80.9, "inv10_kwh": 145.1, "inv11_kwh": 131.3, "inv12_kwh": 78.4, "peer_avg_kwh": 107.1, "inv11_ratio": 0.905}, {"date": "2025-11-30", "total_kwh": 903.8, "irr": 2.81, "pr": 81.0, "inv10_kwh": 86.0, "inv11_kwh": 83.9, "inv12_kwh": 69.8, "peer_avg_kwh": 75.3, "inv11_ratio": 0.976}, {"date": "2025-12-01", "total_kwh": 1021.0, "irr": 3.2, "pr": 80.1, "inv10_kwh": 115.0, "inv11_kwh": 103.7, "inv12_kwh": 62.7, "peer_avg_kwh": 85.1, "inv11_ratio": 0.902}, {"date": "2025-12-02", "total_kwh": 1291.2, "irr": 4.03, "pr": 80.5, "inv10_kwh": 146.4, "inv11_kwh": 131.6, "inv12_kwh": 75.6, "peer_avg_kwh": 107.6, "inv11_ratio": 0.899}, {"date": "2025-12-03", "total_kwh": 1127.9, "irr": 3.51, "pr": 80.7, "inv10_kwh": 125.8, "inv11_kwh": 112.0, "inv12_kwh": 71.7, "peer_avg_kwh": 94.0, "inv11_ratio": 0.89}, {"date": "2025-12-04", "total_kwh": 778.7, "irr": 2.41, "pr": 81.1, "inv10_kwh": 77.7, "inv11_kwh": 71.8, "inv12_kwh": 59.7, "peer_avg_kwh": 64.9, "inv11_ratio": 0.924}, {"date": "2025-12-05", "total_kwh": 1047.1, "irr": 3.26, "pr": 80.7, "inv10_kwh": 114.9, "inv11_kwh": 102.6, "inv12_kwh": 67.7, "peer_avg_kwh": 87.3, "inv11_ratio": 0.893}, {"date": "2025-12-06", "total_kwh": 1303.3, "irr": 4.07, "pr": 80.5, "inv10_kwh": 147.0, "inv11_kwh": 132.4, "inv12_kwh": 77.1, "peer_avg_kwh": 108.6, "inv11_ratio": 0.901}, {"date": "2025-12-07", "total_kwh": 1259.7, "irr": 3.94, "pr": 80.4, "inv10_kwh": 140.4, "inv11_kwh": 127.2, "inv12_kwh": 76.0, "peer_avg_kwh": 105.0, "inv11_ratio": 0.906}, {"date": "2025-12-08", "total_kwh": 1312.4, "irr": 4.14, "pr": 79.8, "inv10_kwh": 149.3, "inv11_kwh": 134.0, "inv12_kwh": 76.9, "peer_avg_kwh": 109.4, "inv11_ratio": 0.898}, {"date": "2025-12-09", "total_kwh": 1241.8, "irr": 3.88, "pr": 80.4, "inv10_kwh": 138.0, "inv11_kwh": 125.5, "inv12_kwh": 75.0, "peer_avg_kwh": 103.5, "inv11_ratio": 0.909}, {"date": "2025-12-10", "total_kwh": 1256.6, "irr": 4.04, "pr": 78.2, "inv10_kwh": 143.9, "inv11_kwh": 128.6, "inv12_kwh": 72.8, "peer_avg_kwh": 104.7, "inv11_ratio": 0.894}, {"date": "2025-12-11", "total_kwh": 1292.9, "irr": 4.09, "pr": 79.5, "inv10_kwh": 146.8, "inv11_kwh": 132.0, "inv12_kwh": 75.5, "peer_avg_kwh": 107.7, "inv11_ratio": 0.899}, {"date": "2025-12-12", "total_kwh": 1166.3, "irr": 3.72, "pr": 78.9, "inv10_kwh": 130.3, "inv11_kwh": 116.5, "inv12_kwh": 71.9, "peer_avg_kwh": 97.2, "inv11_ratio": 0.894}, {"date": "2025-12-13", "total_kwh": 1049.2, "irr": 3.34, "pr": 79.1, "inv10_kwh": 113.0, "inv11_kwh": 103.9, "inv12_kwh": 68.8, "peer_avg_kwh": 87.4, "inv11_ratio": 0.919}, {"date": "2025-12-14", "total_kwh": 1038.4, "irr": 3.38, "pr": 77.3, "inv10_kwh": 116.5, "inv11_kwh": 107.2, "inv12_kwh": 68.7, "peer_avg_kwh": 86.5, "inv11_ratio": 0.92}, {"date": "2025-12-15", "total_kwh": 850.4, "irr": 2.66, "pr": 80.3, "inv10_kwh": 84.7, "inv11_kwh": 80.7, "inv12_kwh": 62.1, "peer_avg_kwh": 70.9, "inv11_ratio": 0.953}, {"date": "2025-12-16", "total_kwh": 1197.1, "irr": 3.8, "pr": 79.1, "inv10_kwh": 135.3, "inv11_kwh": 121.1, "inv12_kwh": 71.5, "peer_avg_kwh": 99.8, "inv11_ratio": 0.895}, {"date": "2025-12-17", "total_kwh": 1255.5, "irr": 4.03, "pr": 78.3, "inv10_kwh": 142.8, "inv11_kwh": 128.3, "inv12_kwh": 74.7, "peer_avg_kwh": 104.6, "inv11_ratio": 0.898}, {"date": "2025-12-18", "total_kwh": 885.7, "irr": 2.88, "pr": 77.3, "inv10_kwh": 102.7, "inv11_kwh": 90.9, "inv12_kwh": 55.0, "peer_avg_kwh": 73.8, "inv11_ratio": 0.885}, {"date": "2025-12-19", "total_kwh": 448.3, "irr": 1.4, "pr": 80.6, "inv10_kwh": 40.4, "inv11_kwh": 39.8, "inv12_kwh": 37.9, "peer_avg_kwh": 37.4, "inv11_ratio": 0.985}, {"date": "2025-12-20", "total_kwh": 632.1, "irr": 1.94, "pr": 81.9, "inv10_kwh": 66.9, "inv11_kwh": 59.8, "inv12_kwh": 45.8, "peer_avg_kwh": 52.7, "inv11_ratio": 0.894}, {"date": "2025-12-21", "total_kwh": 1150.1, "irr": 3.94, "pr": 73.5, "inv10_kwh": 144.0, "inv11_kwh": 130.0, "inv12_kwh": 77.8, "peer_avg_kwh": 95.8, "inv11_ratio": 0.903}, {"date": "2025-12-22", "total_kwh": 1224.3, "irr": 3.73, "pr": 82.6, "inv10_kwh": 130.9, "inv11_kwh": 121.1, "inv12_kwh": 77.4, "peer_avg_kwh": 102.0, "inv11_ratio": 0.925}, {"date": "2025-12-23", "total_kwh": 1117.0, "irr": 3.49, "pr": 80.4, "inv10_kwh": 125.9, "inv11_kwh": 111.1, "inv12_kwh": 70.3, "peer_avg_kwh": 93.1, "inv11_ratio": 0.882}, {"date": "2025-12-24", "total_kwh": 1026.4, "irr": 3.18, "pr": 81.1, "inv10_kwh": 111.0, "inv11_kwh": 102.2, "inv12_kwh": 66.2, "peer_avg_kwh": 85.5, "inv11_ratio": 0.921}, {"date": "2025-12-25", "total_kwh": 677.4, "irr": 2.12, "pr": 80.3, "inv10_kwh": 69.4, "inv11_kwh": 63.0, "inv12_kwh": 52.3, "peer_avg_kwh": 56.4, "inv11_ratio": 0.908}, {"date": "2025-12-26", "total_kwh": 313.9, "irr": 0.99, "pr": 79.6, "inv10_kwh": 27.8, "inv11_kwh": 27.7, "inv12_kwh": 26.9, "peer_avg_kwh": 26.2, "inv11_ratio": 0.996}, {"date": "2025-12-27", "total_kwh": 678.7, "irr": 2.04, "pr": 83.8, "inv10_kwh": 63.6, "inv11_kwh": 62.1, "inv12_kwh": 54.3, "peer_avg_kwh": 56.6, "inv11_ratio": 0.976}, {"date": "2025-12-28", "total_kwh": 651.0, "irr": 1.97, "pr": 83.0, "inv10_kwh": 64.8, "inv11_kwh": 60.0, "inv12_kwh": 52.0, "peer_avg_kwh": 54.2, "inv11_ratio": 0.926}, {"date": "2025-12-29", "total_kwh": 968.0, "irr": 2.99, "pr": 81.4, "inv10_kwh": 109.9, "inv11_kwh": 96.4, "inv12_kwh": 61.9, "peer_avg_kwh": 80.7, "inv11_ratio": 0.877}, {"date": "2025-12-30", "total_kwh": 1330.4, "irr": 4.1, "pr": 81.6, "inv10_kwh": 152.8, "inv11_kwh": 136.7, "inv12_kwh": 76.9, "peer_avg_kwh": 110.9, "inv11_ratio": 0.895}, {"date": "2025-12-31", "total_kwh": 1194.8, "irr": 3.8, "pr": 79.0, "inv10_kwh": 132.3, "inv11_kwh": 117.4, "inv12_kwh": 78.3, "peer_avg_kwh": 99.6, "inv11_ratio": 0.887}, {"date": "2026-01-01", "total_kwh": 1247.8, "irr": 3.8, "pr": 82.5, "inv10_kwh": 143.5, "inv11_kwh": 127.4, "inv12_kwh": 71.0, "peer_avg_kwh": 104.0, "inv11_ratio": 0.888}, {"date": "2026-01-02", "total_kwh": 615.9, "irr": 1.87, "pr": 82.8, "inv10_kwh": 57.9, "inv11_kwh": 55.7, "inv12_kwh": 48.2, "peer_avg_kwh": 51.3, "inv11_ratio": 0.962}, {"date": "2026-01-03", "total_kwh": 1115.4, "irr": 3.72, "pr": 75.3, "inv10_kwh": 128.3, "inv11_kwh": 0.1, "inv12_kwh": 80.1, "peer_avg_kwh": 92.9, "inv11_ratio": 0.001}, {"date": "2026-01-04", "total_kwh": 1193.0, "irr": 4.03, "pr": 74.5, "inv10_kwh": 144.8, "inv11_kwh": 131.2, "inv12_kwh": 79.7, "peer_avg_kwh": 99.4, "inv11_ratio": 0.906}, {"date": "2026-01-05", "total_kwh": 1305.5, "irr": 4.01, "pr": 81.8, "inv10_kwh": 144.9, "inv11_kwh": 129.9, "inv12_kwh": 78.5, "peer_avg_kwh": 108.8, "inv11_ratio": 0.896}, {"date": "2026-01-06", "total_kwh": 1094.7, "irr": 3.35, "pr": 82.1, "inv10_kwh": 109.7, "inv11_kwh": 102.5, "inv12_kwh": 77.0, "peer_avg_kwh": 91.2, "inv11_ratio": 0.934}, {"date": "2026-01-07", "total_kwh": 1108.0, "irr": 3.4, "pr": 81.9, "inv10_kwh": 125.2, "inv11_kwh": 111.1, "inv12_kwh": 67.3, "peer_avg_kwh": 92.3, "inv11_ratio": 0.887}, {"date": "2026-01-08", "total_kwh": 1301.7, "irr": 3.98, "pr": 82.3, "inv10_kwh": 147.0, "inv11_kwh": 131.8, "inv12_kwh": 75.0, "peer_avg_kwh": 108.5, "inv11_ratio": 0.897}, {"date": "2026-01-09", "total_kwh": 992.9, "irr": 3.33, "pr": 75.0, "inv10_kwh": 113.0, "inv11_kwh": 0.1, "inv12_kwh": 75.2, "peer_avg_kwh": 82.7, "inv11_ratio": 0.001}, {"date": "2026-01-10", "total_kwh": 978.5, "irr": 3.26, "pr": 75.5, "inv10_kwh": 102.2, "inv11_kwh": 0.1, "inv12_kwh": 79.3, "peer_avg_kwh": 81.5, "inv11_ratio": 0.001}, {"date": "2026-01-11", "total_kwh": 1245.4, "irr": 4.19, "pr": 74.8, "inv10_kwh": 150.6, "inv11_kwh": 137.1, "inv12_kwh": 81.7, "peer_avg_kwh": 103.8, "inv11_ratio": 0.91}, {"date": "2026-01-12", "total_kwh": 712.5, "irr": 2.16, "pr": 82.8, "inv10_kwh": 66.8, "inv11_kwh": 65.3, "inv12_kwh": 54.7, "peer_avg_kwh": 59.4, "inv11_ratio": 0.978}, {"date": "2026-01-13", "total_kwh": 1281.3, "irr": 3.92, "pr": 82.3, "inv10_kwh": 142.9, "inv11_kwh": 129.4, "inv12_kwh": 75.5, "peer_avg_kwh": 106.8, "inv11_ratio": 0.906}, {"date": "2026-01-14", "total_kwh": 1360.4, "irr": 4.17, "pr": 82.1, "inv10_kwh": 145.9, "inv11_kwh": 135.0, "inv12_kwh": 83.6, "peer_avg_kwh": 113.4, "inv11_ratio": 0.925}, {"date": "2026-01-15", "total_kwh": 882.3, "irr": 2.73, "pr": 81.2, "inv10_kwh": 79.6, "inv11_kwh": 78.9, "inv12_kwh": 70.6, "peer_avg_kwh": 73.5, "inv11_ratio": 0.991}, {"date": "2026-01-16", "total_kwh": 790.3, "irr": 2.43, "pr": 81.7, "inv10_kwh": 72.5, "inv11_kwh": 71.3, "inv12_kwh": 63.3, "peer_avg_kwh": 65.9, "inv11_ratio": 0.983}, {"date": "2026-01-17", "total_kwh": 995.0, "irr": 3.09, "pr": 81.1, "inv10_kwh": 98.4, "inv11_kwh": 94.2, "inv12_kwh": 70.2, "peer_avg_kwh": 82.9, "inv11_ratio": 0.957}, {"date": "2026-01-18", "total_kwh": 766.9, "irr": 2.37, "pr": 81.4, "inv10_kwh": 70.1, "inv11_kwh": 68.9, "inv12_kwh": 61.9, "peer_avg_kwh": 63.9, "inv11_ratio": 0.983}, {"date": "2026-01-19", "total_kwh": 1089.4, "irr": 3.36, "pr": 81.4, "inv10_kwh": 124.1, "inv11_kwh": 0.1, "inv12_kwh": 80.6, "peer_avg_kwh": 90.8, "inv11_ratio": 0.001}, {"date": "2026-01-20", "total_kwh": 1386.8, "irr": 4.32, "pr": 80.7, "inv10_kwh": 151.4, "inv11_kwh": 138.8, "inv12_kwh": 84.4, "peer_avg_kwh": 115.6, "inv11_ratio": 0.917}, {"date": "2026-01-21", "total_kwh": 1043.6, "irr": 3.27, "pr": 80.3, "inv10_kwh": 109.2, "inv11_kwh": 101.1, "inv12_kwh": 71.6, "peer_avg_kwh": 87.0, "inv11_ratio": 0.926}, {"date": "2026-01-22", "total_kwh": 683.8, "irr": 2.09, "pr": 82.4, "inv10_kwh": 62.9, "inv11_kwh": 61.9, "inv12_kwh": 53.5, "peer_avg_kwh": 57.0, "inv11_ratio": 0.984}, {"date": "2026-01-23", "total_kwh": 1204.8, "irr": 3.67, "pr": 82.6, "inv10_kwh": 119.7, "inv11_kwh": 115.8, "inv12_kwh": 81.0, "peer_avg_kwh": 100.4, "inv11_ratio": 0.967}, {"date": "2026-01-24", "total_kwh": 1371.4, "irr": 4.27, "pr": 80.9, "inv10_kwh": 145.9, "inv11_kwh": 136.1, "inv12_kwh": 84.9, "peer_avg_kwh": 114.3, "inv11_ratio": 0.933}, {"date": "2026-01-25", "total_kwh": 1221.1, "irr": 3.98, "pr": 77.1, "inv10_kwh": 132.5, "inv11_kwh": 125.0, "inv12_kwh": 85.2, "peer_avg_kwh": 101.8, "inv11_ratio": 0.943}, {"date": "2026-01-26", "total_kwh": 578.5, "irr": 1.83, "pr": 79.4, "inv10_kwh": 51.6, "inv11_kwh": 51.2, "inv12_kwh": 48.6, "peer_avg_kwh": 48.2, "inv11_ratio": 0.992}, {"date": "2026-01-27", "total_kwh": 1096.2, "irr": 3.45, "pr": 79.8, "inv10_kwh": 109.5, "inv11_kwh": 104.3, "inv12_kwh": 76.8, "peer_avg_kwh": 91.4, "inv11_ratio": 0.953}, {"date": "2026-01-28", "total_kwh": 1460.4, "irr": 4.39, "pr": 83.7, "inv10_kwh": 158.4, "inv11_kwh": 144.6, "inv12_kwh": 90.1, "peer_avg_kwh": 121.7, "inv11_ratio": 0.913}, {"date": "2026-01-29", "total_kwh": 1477.8, "irr": 4.47, "pr": 83.1, "inv10_kwh": 150.3, "inv11_kwh": 143.1, "inv12_kwh": 96.5, "peer_avg_kwh": 123.2, "inv11_ratio": 0.952}, {"date": "2026-01-30", "total_kwh": 1016.9, "irr": 3.07, "pr": 83.3, "inv10_kwh": 107.9, "inv11_kwh": 96.5, "inv12_kwh": 72.6, "peer_avg_kwh": 84.7, "inv11_ratio": 0.894}, {"date": "2026-01-31", "total_kwh": 1033.0, "irr": 3.21, "pr": 81.0, "inv10_kwh": 111.5, "inv11_kwh": 100.4, "inv12_kwh": 70.6, "peer_avg_kwh": 86.1, "inv11_ratio": 0.9}, {"date": "2026-02-01", "total_kwh": 661.4, "irr": 2.18, "pr": 76.3, "inv10_kwh": 64.5, "inv11_kwh": 0.0, "inv12_kwh": 61.7, "peer_avg_kwh": 55.1, "inv11_ratio": 0.0}, {"date": "2026-02-02", "total_kwh": 1063.4, "irr": 3.16, "pr": 84.6, "inv10_kwh": 102.2, "inv11_kwh": 98.6, "inv12_kwh": 80.2, "peer_avg_kwh": 88.6, "inv11_ratio": 0.965}, {"date": "2026-02-03", "total_kwh": 1387.9, "irr": 4.16, "pr": 83.9, "inv10_kwh": 136.8, "inv11_kwh": 131.6, "inv12_kwh": 97.8, "peer_avg_kwh": 115.7, "inv11_ratio": 0.962}, {"date": "2026-02-04", "total_kwh": 1508.6, "irr": 4.53, "pr": 83.7, "inv10_kwh": 162.9, "inv11_kwh": 150.2, "inv12_kwh": 94.6, "peer_avg_kwh": 125.7, "inv11_ratio": 0.922}, {"date": "2026-02-05", "total_kwh": 1198.5, "irr": 3.65, "pr": 82.7, "inv10_kwh": 119.5, "inv11_kwh": 112.8, "inv12_kwh": 87.0, "peer_avg_kwh": 99.9, "inv11_ratio": 0.944}, {"date": "2026-02-06", "total_kwh": 679.6, "irr": 2.07, "pr": 82.8, "inv10_kwh": 59.1, "inv11_kwh": 59.4, "inv12_kwh": 59.1, "peer_avg_kwh": 56.6, "inv11_ratio": 1.005}, {"date": "2026-02-07", "total_kwh": 1502.2, "irr": 4.44, "pr": 85.1, "inv10_kwh": 155.5, "inv11_kwh": 148.3, "inv12_kwh": 96.4, "peer_avg_kwh": 125.2, "inv11_ratio": 0.954}, {"date": "2026-02-08", "total_kwh": 637.3, "irr": 2.14, "pr": 74.9, "inv10_kwh": 71.2, "inv11_kwh": 0.0, "inv12_kwh": 55.8, "peer_avg_kwh": 53.1, "inv11_ratio": 0.0}, {"date": "2026-02-09", "total_kwh": 953.5, "irr": 3.12, "pr": 76.9, "inv10_kwh": 96.9, "inv11_kwh": 0.1, "inv12_kwh": 82.2, "peer_avg_kwh": 79.5, "inv11_ratio": 0.001}, {"date": "2026-02-10", "total_kwh": 1440.3, "irr": 4.79, "pr": 75.6, "inv10_kwh": 166.0, "inv11_kwh": 0.3, "inv12_kwh": 106.1, "peer_avg_kwh": 120.0, "inv11_ratio": 0.002}, {"date": "2026-02-11", "total_kwh": 1553.3, "irr": 4.89, "pr": 79.9, "inv10_kwh": 160.2, "inv11_kwh": 150.5, "inv12_kwh": 105.1, "peer_avg_kwh": 129.4, "inv11_ratio": 0.939}, {"date": "2026-02-12", "total_kwh": 1432.2, "irr": 4.68, "pr": 77.0, "inv10_kwh": 163.6, "inv11_kwh": 0.1, "inv12_kwh": 106.8, "peer_avg_kwh": 119.3, "inv11_ratio": 0.001}, {"date": "2026-02-13", "total_kwh": 1614.6, "irr": 4.95, "pr": 82.0, "inv10_kwh": 166.4, "inv11_kwh": 156.4, "inv12_kwh": 108.9, "peer_avg_kwh": 134.6, "inv11_ratio": 0.94}, {"date": "2026-02-14", "total_kwh": 1608.0, "irr": 4.96, "pr": 81.5, "inv10_kwh": 165.2, "inv11_kwh": 156.2, "inv12_kwh": 108.0, "peer_avg_kwh": 134.0, "inv11_ratio": 0.946}, {"date": "2026-02-15", "total_kwh": 1636.7, "irr": 5.07, "pr": 81.2, "inv10_kwh": 164.0, "inv11_kwh": 157.1, "inv12_kwh": 112.6, "peer_avg_kwh": 136.4, "inv11_ratio": 0.958}, {"date": "2026-02-16", "total_kwh": 1552.2, "irr": 4.92, "pr": 79.4, "inv10_kwh": 167.7, "inv11_kwh": 157.7, "inv12_kwh": 105.9, "peer_avg_kwh": 129.4, "inv11_ratio": 0.94}, {"date": "2026-02-17", "total_kwh": 1120.5, "irr": 3.82, "pr": 73.7, "inv10_kwh": 123.1, "inv11_kwh": 115.6, "inv12_kwh": 93.6, "peer_avg_kwh": 93.4, "inv11_ratio": 0.939}, {"date": "2026-02-18", "total_kwh": 1565.7, "irr": 4.83, "pr": 81.5, "inv10_kwh": 163.7, "inv11_kwh": 154.1, "inv12_kwh": 108.8, "peer_avg_kwh": 130.5, "inv11_ratio": 0.941}, {"date": "2026-02-19", "total_kwh": 1540.5, "irr": 4.69, "pr": 82.7, "inv10_kwh": 157.7, "inv11_kwh": 148.9, "inv12_kwh": 103.5, "peer_avg_kwh": 128.4, "inv11_ratio": 0.944}, {"date": "2026-02-20", "total_kwh": 1173.6, "irr": 3.86, "pr": 76.4, "inv10_kwh": 129.8, "inv11_kwh": 121.0, "inv12_kwh": 85.4, "peer_avg_kwh": 97.8, "inv11_ratio": 0.932}, {"date": "2026-02-21", "total_kwh": 1587.2, "irr": 4.9, "pr": 81.5, "inv10_kwh": 154.6, "inv11_kwh": 149.8, "inv12_kwh": 114.2, "peer_avg_kwh": 132.3, "inv11_ratio": 0.969}, {"date": "2026-02-22", "total_kwh": 1638.2, "irr": 5.07, "pr": 81.2, "inv10_kwh": 165.5, "inv11_kwh": 157.3, "inv12_kwh": 115.2, "peer_avg_kwh": 136.5, "inv11_ratio": 0.95}, {"date": "2026-02-23", "total_kwh": 1645.6, "irr": 5.15, "pr": 80.4, "inv10_kwh": 161.9, "inv11_kwh": 155.7, "inv12_kwh": 117.4, "peer_avg_kwh": 137.1, "inv11_ratio": 0.962}, {"date": "2026-02-24", "total_kwh": 926.7, "irr": 2.93, "pr": 79.4, "inv10_kwh": 83.0, "inv11_kwh": 82.3, "inv12_kwh": 76.5, "peer_avg_kwh": 77.2, "inv11_ratio": 0.992}, {"date": "2026-02-25", "total_kwh": 1373.1, "irr": 4.29, "pr": 80.5, "inv10_kwh": 130.5, "inv11_kwh": 126.6, "inv12_kwh": 104.1, "peer_avg_kwh": 114.4, "inv11_ratio": 0.97}, {"date": "2026-02-26", "total_kwh": 1262.5, "irr": 4.0, "pr": 79.5, "inv10_kwh": 114.1, "inv11_kwh": 113.2, "inv12_kwh": 103.6, "peer_avg_kwh": 105.2, "inv11_ratio": 0.992}, {"date": "2026-02-27", "total_kwh": 587.2, "irr": 1.78, "pr": 82.8, "inv10_kwh": 50.9, "inv11_kwh": 50.9, "inv12_kwh": 51.0, "peer_avg_kwh": 48.9, "inv11_ratio": 1.0}, {"date": "2026-02-28", "total_kwh": 623.3, "irr": 1.83, "pr": 85.5, "inv10_kwh": 54.0, "inv11_kwh": 54.3, "inv12_kwh": 54.0, "peer_avg_kwh": 51.9, "inv11_ratio": 1.006}, {"date": "2026-03-01", "total_kwh": 1066.2, "irr": 3.52, "pr": 76.2, "inv10_kwh": 106.3, "inv11_kwh": 105.7, "inv12_kwh": 88.7, "peer_avg_kwh": 88.8, "inv11_ratio": 0.994}, {"date": "2026-03-02", "total_kwh": 1382.6, "irr": 4.31, "pr": 80.6, "inv10_kwh": 133.2, "inv11_kwh": 128.1, "inv12_kwh": 105.7, "peer_avg_kwh": 115.2, "inv11_ratio": 0.962}, {"date": "2026-03-03", "total_kwh": 349.1, "irr": 1.05, "pr": 83.9, "inv10_kwh": 29.7, "inv11_kwh": 30.1, "inv12_kwh": 29.8, "peer_avg_kwh": 29.1, "inv11_ratio": 1.013}, {"date": "2026-03-04", "total_kwh": 605.2, "irr": 1.8, "pr": 84.7, "inv10_kwh": 52.7, "inv11_kwh": 53.0, "inv12_kwh": 51.3, "peer_avg_kwh": 50.4, "inv11_ratio": 1.006}, {"date": "2026-03-05", "total_kwh": 678.1, "irr": 2.0, "pr": 85.3, "inv10_kwh": 57.1, "inv11_kwh": 58.5, "inv12_kwh": 60.4, "peer_avg_kwh": 56.5, "inv11_ratio": 1.025}, {"date": "2026-03-06", "total_kwh": 1872.0, "irr": 5.61, "pr": 83.8, "inv10_kwh": 182.6, "inv11_kwh": 176.7, "inv12_kwh": 132.5, "peer_avg_kwh": 156.0, "inv11_ratio": 0.968}, {"date": "2026-03-07", "total_kwh": 1868.6, "irr": 5.62, "pr": 83.7, "inv10_kwh": 179.2, "inv11_kwh": 175.0, "inv12_kwh": 135.3, "peer_avg_kwh": 155.7, "inv11_ratio": 0.977}, {"date": "2026-03-08", "total_kwh": 1793.2, "irr": 5.51, "pr": 81.9, "inv10_kwh": 172.7, "inv11_kwh": 169.3, "inv12_kwh": 134.2, "peer_avg_kwh": 149.4, "inv11_ratio": 0.98}, {"date": "2026-03-09", "total_kwh": 1302.0, "irr": 3.99, "pr": 82.0, "inv10_kwh": 111.1, "inv11_kwh": 113.5, "inv12_kwh": 111.2, "peer_avg_kwh": 108.5, "inv11_ratio": 1.022}, {"date": "2026-03-10", "total_kwh": 246.9, "irr": 0.83, "pr": 74.7, "inv10_kwh": 22.9, "inv11_kwh": 0.0, "inv12_kwh": 23.2, "peer_avg_kwh": 20.6, "inv11_ratio": 0.0}, {"date": "2026-03-11", "total_kwh": 1934.7, "irr": 5.86, "pr": 83.0, "inv10_kwh": 184.1, "inv11_kwh": 180.3, "inv12_kwh": 142.2, "peer_avg_kwh": 161.2, "inv11_ratio": 0.979}, {"date": "2026-03-12", "total_kwh": 2026.6, "irr": 6.1, "pr": 83.6, "inv10_kwh": 194.9, "inv11_kwh": 189.7, "inv12_kwh": 146.7, "peer_avg_kwh": 168.9, "inv11_ratio": 0.973}, {"date": "2026-03-13", "total_kwh": 2020.2, "irr": 6.12, "pr": 83.0, "inv10_kwh": 189.7, "inv11_kwh": 186.6, "inv12_kwh": 152.1, "peer_avg_kwh": 168.4, "inv11_ratio": 0.984}, {"date": "2026-03-14", "total_kwh": 1744.5, "irr": 5.48, "pr": 80.1, "inv10_kwh": 163.8, "inv11_kwh": 160.0, "inv12_kwh": 135.4, "peer_avg_kwh": 145.4, "inv11_ratio": 0.977}, {"date": "2026-03-15", "total_kwh": 1256.0, "irr": 3.96, "pr": 79.7, "inv10_kwh": 123.4, "inv11_kwh": 120.9, "inv12_kwh": 100.9, "peer_avg_kwh": 104.7, "inv11_ratio": 0.98}, {"date": "2026-03-16", "total_kwh": 1149.5, "irr": 3.55, "pr": 81.4, "inv10_kwh": 98.8, "inv11_kwh": 99.6, "inv12_kwh": 96.5, "peer_avg_kwh": 95.8, "inv11_ratio": 1.008}, {"date": "2026-03-17", "total_kwh": 1898.5, "irr": 5.73, "pr": 83.3, "inv10_kwh": 171.1, "inv11_kwh": 171.1, "inv12_kwh": 147.3, "peer_avg_kwh": 158.2, "inv11_ratio": 1.0}, {"date": "2026-03-18", "total_kwh": 1985.1, "irr": 6.03, "pr": 82.8, "inv10_kwh": 180.7, "inv11_kwh": 181.2, "inv12_kwh": 150.0, "peer_avg_kwh": 165.4, "inv11_ratio": 1.003}, {"date": "2026-03-19", "total_kwh": 1725.3, "irr": 5.28, "pr": 82.1, "inv10_kwh": 153.5, "inv11_kwh": 154.2, "inv12_kwh": 136.9, "peer_avg_kwh": 143.8, "inv11_ratio": 1.005}, {"date": "2026-03-20", "total_kwh": 1701.0, "irr": 5.16, "pr": 82.9, "inv10_kwh": 151.1, "inv11_kwh": 153.3, "inv12_kwh": 130.7, "peer_avg_kwh": 141.8, "inv11_ratio": 1.015}, {"date": "2026-03-21", "total_kwh": 1822.1, "irr": 5.56, "pr": 82.3, "inv10_kwh": 162.3, "inv11_kwh": 163.9, "inv12_kwh": 143.2, "peer_avg_kwh": 151.8, "inv11_ratio": 1.01}, {"date": "2026-03-22", "total_kwh": 1838.1, "irr": 5.88, "pr": 78.7, "inv10_kwh": 173.4, "inv11_kwh": 173.8, "inv12_kwh": 146.6, "peer_avg_kwh": 153.2, "inv11_ratio": 1.002}, {"date": "2026-03-23", "total_kwh": 1810.5, "irr": 5.6, "pr": 81.3, "inv10_kwh": 159.7, "inv11_kwh": 161.9, "inv12_kwh": 142.5, "peer_avg_kwh": 150.9, "inv11_ratio": 1.014}, {"date": "2026-03-24", "total_kwh": 1099.0, "irr": 3.41, "pr": 81.1, "inv10_kwh": 92.4, "inv11_kwh": 95.3, "inv12_kwh": 92.2, "peer_avg_kwh": 91.6, "inv11_ratio": 1.031}, {"date": "2026-03-25", "total_kwh": 1909.9, "irr": 5.94, "pr": 80.8, "inv10_kwh": 174.4, "inv11_kwh": 175.1, "inv12_kwh": 145.2, "peer_avg_kwh": 159.2, "inv11_ratio": 1.004}, {"date": "2026-03-26", "total_kwh": 1489.0, "irr": 4.64, "pr": 80.7, "inv10_kwh": 127.1, "inv11_kwh": 130.7, "inv12_kwh": 121.9, "peer_avg_kwh": 124.1, "inv11_ratio": 1.028}, {"date": "2026-03-27", "total_kwh": 1476.4, "irr": 4.55, "pr": 81.7, "inv10_kwh": 134.3, "inv11_kwh": 133.9, "inv12_kwh": 114.0, "peer_avg_kwh": 123.0, "inv11_ratio": 0.997}, {"date": "2026-03-28", "total_kwh": 1241.2, "irr": 3.79, "pr": 82.4, "inv10_kwh": 111.4, "inv11_kwh": 111.7, "inv12_kwh": 96.4, "peer_avg_kwh": 103.4, "inv11_ratio": 1.003}, {"date": "2026-03-29", "total_kwh": 1243.5, "irr": 3.82, "pr": 81.9, "inv10_kwh": 117.7, "inv11_kwh": 115.2, "inv12_kwh": 90.0, "peer_avg_kwh": 103.6, "inv11_ratio": 0.979}, {"date": "2026-03-30", "total_kwh": 1423.6, "irr": 4.48, "pr": 79.9, "inv10_kwh": 117.8, "inv11_kwh": 122.9, "inv12_kwh": 123.1, "peer_avg_kwh": 118.6, "inv11_ratio": 1.043}, {"date": "2026-03-31", "total_kwh": 1763.0, "irr": 5.57, "pr": 79.5, "inv10_kwh": 159.6, "inv11_kwh": 160.2, "inv12_kwh": 133.3, "peer_avg_kwh": 146.9, "inv11_ratio": 1.004}, {"date": "2026-04-01", "total_kwh": 558.2, "irr": 1.7, "pr": 82.5, "inv10_kwh": 49.3, "inv11_kwh": 48.8, "inv12_kwh": 46.0, "peer_avg_kwh": 46.5, "inv11_ratio": 0.99}, {"date": "2026-04-02", "total_kwh": 1602.7, "irr": 5.07, "pr": 79.5, "inv10_kwh": 133.8, "inv11_kwh": 137.3, "inv12_kwh": 139.0, "peer_avg_kwh": 133.6, "inv11_ratio": 1.026}, {"date": "2026-04-03", "total_kwh": 1197.6, "irr": 3.72, "pr": 80.9, "inv10_kwh": 108.2, "inv11_kwh": 106.4, "inv12_kwh": 94.5, "peer_avg_kwh": 99.8, "inv11_ratio": 0.983}, {"date": "2026-04-04", "total_kwh": 206.3, "irr": 0.68, "pr": 76.6, "inv10_kwh": 17.9, "inv11_kwh": 18.0, "inv12_kwh": 16.7, "peer_avg_kwh": 17.2, "inv11_ratio": 1.006}, {"date": "2026-04-05", "total_kwh": 1337.9, "irr": 4.21, "pr": 79.9, "inv10_kwh": 119.0, "inv11_kwh": 120.3, "inv12_kwh": 112.6, "peer_avg_kwh": 111.5, "inv11_ratio": 1.011}, {"date": "2026-04-06", "total_kwh": 343.3, "irr": 1.06, "pr": 81.1, "inv10_kwh": 29.7, "inv11_kwh": 29.9, "inv12_kwh": 27.9, "peer_avg_kwh": 28.6, "inv11_ratio": 1.007}, {"date": "2026-04-07", "total_kwh": 485.7, "irr": 1.49, "pr": 82.2, "inv10_kwh": 41.4, "inv11_kwh": 42.1, "inv12_kwh": 40.9, "peer_avg_kwh": 40.5, "inv11_ratio": 1.017}, {"date": "2026-04-08", "total_kwh": 703.1, "irr": 2.13, "pr": 83.0, "inv10_kwh": 62.7, "inv11_kwh": 62.3, "inv12_kwh": 55.9, "peer_avg_kwh": 58.6, "inv11_ratio": 0.994}, {"date": "2026-04-09", "total_kwh": 1118.3, "irr": 3.47, "pr": 81.1, "inv10_kwh": 93.1, "inv11_kwh": 95.7, "inv12_kwh": 98.6, "peer_avg_kwh": 93.2, "inv11_ratio": 1.028}, {"date": "2026-04-10", "total_kwh": 1960.9, "irr": 6.2, "pr": 79.5, "inv10_kwh": 173.3, "inv11_kwh": 174.0, "inv12_kwh": 156.7, "peer_avg_kwh": 163.4, "inv11_ratio": 1.004}, {"date": "2026-04-11", "total_kwh": 1879.7, "irr": 5.9, "pr": 80.2, "inv10_kwh": 167.1, "inv11_kwh": 167.9, "inv12_kwh": 148.5, "peer_avg_kwh": 156.6, "inv11_ratio": 1.005}, {"date": "2026-04-12", "total_kwh": 1950.7, "irr": 6.57, "pr": 74.7, "inv10_kwh": 179.8, "inv11_kwh": 182.7, "inv12_kwh": 168.6, "peer_avg_kwh": 162.6, "inv11_ratio": 1.016}, {"date": "2026-04-13", "total_kwh": 2054.6, "irr": 6.58, "pr": 78.5, "inv10_kwh": 178.3, "inv11_kwh": 180.7, "inv12_kwh": 169.3, "peer_avg_kwh": 171.2, "inv11_ratio": 1.013}, {"date": "2026-04-14", "total_kwh": 1895.0, "irr": 6.04, "pr": 78.8, "inv10_kwh": 162.3, "inv11_kwh": 165.6, "inv12_kwh": 159.3, "peer_avg_kwh": 157.9, "inv11_ratio": 1.02}, {"date": "2026-04-15", "total_kwh": 1345.4, "irr": 4.33, "pr": 78.2, "inv10_kwh": 112.4, "inv11_kwh": 115.3, "inv12_kwh": 116.5, "peer_avg_kwh": 112.1, "inv11_ratio": 1.026}, {"date": "2026-04-16", "total_kwh": 549.2, "irr": 1.69, "pr": 81.8, "inv10_kwh": 46.2, "inv11_kwh": 46.9, "inv12_kwh": 47.7, "peer_avg_kwh": 45.8, "inv11_ratio": 1.015}, {"date": "2026-04-17", "total_kwh": 1554.7, "irr": 4.88, "pr": 80.2, "inv10_kwh": 138.2, "inv11_kwh": 137.8, "inv12_kwh": 124.0, "peer_avg_kwh": 129.6, "inv11_ratio": 0.997}, {"date": "2026-04-18", "total_kwh": 1223.4, "irr": 3.79, "pr": 81.2, "inv10_kwh": 108.6, "inv11_kwh": 108.3, "inv12_kwh": 99.3, "peer_avg_kwh": 101.9, "inv11_ratio": 0.997}, {"date": "2026-04-19", "total_kwh": 1731.4, "irr": 5.91, "pr": 73.6, "inv10_kwh": 164.6, "inv11_kwh": 163.5, "inv12_kwh": 146.1, "peer_avg_kwh": 144.3, "inv11_ratio": 0.993}, {"date": "2026-04-20", "total_kwh": 1800.8, "irr": 5.8, "pr": 78.0, "inv10_kwh": 155.4, "inv11_kwh": 157.1, "inv12_kwh": 149.8, "peer_avg_kwh": 150.1, "inv11_ratio": 1.011}, {"date": "2026-04-21", "total_kwh": 1935.1, "irr": 6.29, "pr": 77.4, "inv10_kwh": 164.6, "inv11_kwh": 167.1, "inv12_kwh": 163.3, "peer_avg_kwh": 161.3, "inv11_ratio": 1.015}, {"date": "2026-04-22", "total_kwh": 1851.4, "irr": 5.95, "pr": 78.2, "inv10_kwh": 162.4, "inv11_kwh": 162.6, "inv12_kwh": 151.0, "peer_avg_kwh": 154.3, "inv11_ratio": 1.001}, {"date": "2026-04-23", "total_kwh": 1100.3, "irr": 3.45, "pr": 80.3, "inv10_kwh": 96.4, "inv11_kwh": 96.3, "inv12_kwh": 89.9, "peer_avg_kwh": 91.7, "inv11_ratio": 0.999}, {"date": "2026-04-24", "total_kwh": 218.5, "irr": 0.72, "pr": 75.8, "inv10_kwh": 18.6, "inv11_kwh": 18.7, "inv12_kwh": 18.5, "peer_avg_kwh": 18.2, "inv11_ratio": 1.005}, {"date": "2026-04-25", "total_kwh": 557.1, "irr": 1.67, "pr": 83.8, "inv10_kwh": 47.6, "inv11_kwh": 47.8, "inv12_kwh": 47.6, "peer_avg_kwh": 46.4, "inv11_ratio": 1.004}, {"date": "2026-04-26", "total_kwh": 2117.3, "irr": 7.15, "pr": 74.4, "inv10_kwh": 192.0, "inv11_kwh": 193.2, "inv12_kwh": 179.6, "peer_avg_kwh": 176.4, "inv11_ratio": 1.006}, {"date": "2026-04-27", "total_kwh": 1920.0, "irr": 6.14, "pr": 78.6, "inv10_kwh": 162.4, "inv11_kwh": 165.6, "inv12_kwh": 165.3, "peer_avg_kwh": 160.0, "inv11_ratio": 1.02}, {"date": "2026-04-28", "total_kwh": 1730.0, "irr": 5.51, "pr": 79.0, "inv10_kwh": 147.8, "inv11_kwh": 148.9, "inv12_kwh": 148.1, "peer_avg_kwh": 144.2, "inv11_ratio": 1.007}, {"date": "2026-04-29", "total_kwh": 1096.3, "irr": 3.53, "pr": 78.2, "inv10_kwh": 85.0, "inv11_kwh": 90.0, "inv12_kwh": 106.8, "peer_avg_kwh": 91.4, "inv11_ratio": 1.059}, {"date": "2026-04-30", "total_kwh": 413.5, "irr": 1.27, "pr": 81.7, "inv10_kwh": 35.1, "inv11_kwh": 35.5, "inv12_kwh": 35.3, "peer_avg_kwh": 34.5, "inv11_ratio": 1.011}, {"date": "2026-05-01", "total_kwh": 1470.8, "irr": 4.6, "pr": 80.5, "inv10_kwh": 127.1, "inv11_kwh": 127.6, "inv12_kwh": 123.5, "peer_avg_kwh": 122.6, "inv11_ratio": 1.004}, {"date": "2026-05-02", "total_kwh": 1997.8, "irr": 6.44, "pr": 78.0, "inv10_kwh": 174.3, "inv11_kwh": 174.4, "inv12_kwh": 163.3, "peer_avg_kwh": 166.5, "inv11_ratio": 1.001}, {"date": "2026-05-03", "total_kwh": 1735.0, "irr": 5.82, "pr": 75.0, "inv10_kwh": 149.1, "inv11_kwh": 120.7, "inv12_kwh": 155.8, "peer_avg_kwh": 144.6, "inv11_ratio": 0.81}, {"date": "2026-05-04", "total_kwh": 1294.0, "irr": 4.09, "pr": 79.6, "inv10_kwh": 109.6, "inv11_kwh": 88.8, "inv12_kwh": 117.6, "peer_avg_kwh": 107.8, "inv11_ratio": 0.81}, {"date": "2026-05-05", "total_kwh": 333.7, "irr": 1.03, "pr": 81.8, "inv10_kwh": 28.7, "inv11_kwh": 22.6, "inv12_kwh": 29.3, "peer_avg_kwh": 27.8, "inv11_ratio": 0.787}, {"date": "2026-05-06", "total_kwh": 1724.3, "irr": 5.61, "pr": 77.4, "inv10_kwh": 159.7, "inv11_kwh": 124.6, "inv12_kwh": 133.9, "peer_avg_kwh": 143.7, "inv11_ratio": 0.78}, {"date": "2026-05-07", "total_kwh": 1839.2, "irr": 6.16, "pr": 75.1, "inv10_kwh": 157.5, "inv11_kwh": 127.2, "inv12_kwh": 161.2, "peer_avg_kwh": 153.3, "inv11_ratio": 0.808}, {"date": "2026-05-08", "total_kwh": 1629.4, "irr": 5.37, "pr": 76.3, "inv10_kwh": 143.4, "inv11_kwh": 113.9, "inv12_kwh": 138.9, "peer_avg_kwh": 135.8, "inv11_ratio": 0.794}, {"date": "2026-05-09", "total_kwh": 1683.9, "irr": 5.45, "pr": 77.7, "inv10_kwh": 147.4, "inv11_kwh": 117.5, "inv12_kwh": 144.1, "peer_avg_kwh": 140.3, "inv11_ratio": 0.797}, {"date": "2026-05-10", "total_kwh": 1733.3, "irr": 5.74, "pr": 76.0, "inv10_kwh": 149.5, "inv11_kwh": 121.3, "inv12_kwh": 157.0, "peer_avg_kwh": 144.4, "inv11_ratio": 0.811}, {"date": "2026-05-11", "total_kwh": 1543.2, "irr": 5.03, "pr": 77.2, "inv10_kwh": 138.2, "inv11_kwh": 108.7, "inv12_kwh": 127.8, "peer_avg_kwh": 128.6, "inv11_ratio": 0.787}, {"date": "2026-05-12", "total_kwh": 1385.5, "irr": 4.54, "pr": 76.8, "inv10_kwh": 116.0, "inv11_kwh": 94.3, "inv12_kwh": 128.2, "peer_avg_kwh": 115.5, "inv11_ratio": 0.813}, {"date": "2026-05-13", "total_kwh": 922.2, "irr": 2.8, "pr": 82.8, "inv10_kwh": 80.5, "inv11_kwh": 63.4, "inv12_kwh": 80.6, "peer_avg_kwh": 76.9, "inv11_ratio": 0.788}, {"date": "2026-05-14", "total_kwh": 409.8, "irr": 1.27, "pr": 81.4, "inv10_kwh": 35.4, "inv11_kwh": 27.5, "inv12_kwh": 35.8, "peer_avg_kwh": 34.2, "inv11_ratio": 0.777}, {"date": "2026-05-15", "total_kwh": 1706.8, "irr": 5.59, "pr": 76.8, "inv10_kwh": 148.7, "inv11_kwh": 119.1, "inv12_kwh": 147.2, "peer_avg_kwh": 142.2, "inv11_ratio": 0.801}, {"date": "2026-05-16", "total_kwh": 1664.9, "irr": 5.47, "pr": 76.5, "inv10_kwh": 139.5, "inv11_kwh": 114.5, "inv12_kwh": 152.4, "peer_avg_kwh": 138.7, "inv11_ratio": 0.821}, {"date": "2026-05-17", "total_kwh": 1853.1, "irr": 6.26, "pr": 74.5, "inv10_kwh": 158.2, "inv11_kwh": 128.6, "inv12_kwh": 166.2, "peer_avg_kwh": 154.4, "inv11_ratio": 0.813}, {"date": "2026-05-18", "total_kwh": 1759.9, "irr": 5.98, "pr": 74.0, "inv10_kwh": 151.9, "inv11_kwh": 123.1, "inv12_kwh": 154.5, "peer_avg_kwh": 146.7, "inv11_ratio": 0.81}, {"date": "2026-05-19", "total_kwh": 1449.4, "irr": 4.88, "pr": 74.6, "inv10_kwh": 112.6, "inv11_kwh": 96.4, "inv12_kwh": 144.7, "peer_avg_kwh": 120.8, "inv11_ratio": 0.856}, {"date": "2026-05-20", "total_kwh": 1892.2, "irr": 6.43, "pr": 74.0, "inv10_kwh": 157.4, "inv11_kwh": 129.8, "inv12_kwh": 171.9, "peer_avg_kwh": 157.7, "inv11_ratio": 0.825}, {"date": "2026-05-21", "total_kwh": 1660.2, "irr": 5.57, "pr": 75.0, "inv10_kwh": 133.6, "inv11_kwh": 112.0, "inv12_kwh": 159.7, "peer_avg_kwh": 138.4, "inv11_ratio": 0.838}, {"date": "2026-05-22", "total_kwh": 1552.1, "irr": 5.26, "pr": 74.2, "inv10_kwh": 125.0, "inv11_kwh": 104.9, "inv12_kwh": 148.1, "peer_avg_kwh": 129.3, "inv11_ratio": 0.839}, {"date": "2026-05-23", "total_kwh": 1484.8, "irr": 4.75, "pr": 78.6, "inv10_kwh": 136.9, "inv11_kwh": 106.9, "inv12_kwh": 117.3, "peer_avg_kwh": 123.7, "inv11_ratio": 0.781}, {"date": "2026-05-24", "total_kwh": 1806.7, "irr": 6.03, "pr": 75.3, "inv10_kwh": 157.5, "inv11_kwh": 127.1, "inv12_kwh": 156.5, "peer_avg_kwh": 150.6, "inv11_ratio": 0.807}, {"date": "2026-05-25", "total_kwh": 2033.4, "irr": 6.86, "pr": 74.6, "inv10_kwh": 175.0, "inv11_kwh": 141.3, "inv12_kwh": 176.8, "peer_avg_kwh": 169.4, "inv11_ratio": 0.807}, {"date": "2026-05-26", "total_kwh": 1870.1, "irr": 6.28, "pr": 74.9, "inv10_kwh": 155.6, "inv11_kwh": 127.9, "inv12_kwh": 171.7, "peer_avg_kwh": 155.8, "inv11_ratio": 0.822}, {"date": "2026-05-27", "total_kwh": 2070.0, "irr": 6.97, "pr": 74.6, "inv10_kwh": 181.3, "inv11_kwh": 145.8, "inv12_kwh": 172.5, "peer_avg_kwh": 172.5, "inv11_ratio": 0.804}, {"date": "2026-05-28", "total_kwh": 2206.6, "irr": 7.54, "pr": 73.6, "inv10_kwh": 188.0, "inv11_kwh": 153.1, "inv12_kwh": 194.6, "peer_avg_kwh": 183.9, "inv11_ratio": 0.814}, {"date": "2026-05-29", "total_kwh": 1767.6, "irr": 5.76, "pr": 77.2, "inv10_kwh": 155.8, "inv11_kwh": 123.6, "inv12_kwh": 151.4, "peer_avg_kwh": 147.3, "inv11_ratio": 0.793}, {"date": "2026-05-30", "total_kwh": 1458.9, "irr": 4.77, "pr": 76.9, "inv10_kwh": 130.9, "inv11_kwh": 102.9, "inv12_kwh": 123.4, "peer_avg_kwh": 121.6, "inv11_ratio": 0.786}, {"date": "2026-05-31", "total_kwh": 1739.4, "irr": 5.92, "pr": 73.9, "inv10_kwh": 156.6, "inv11_kwh": 125.2, "inv12_kwh": 155.7, "peer_avg_kwh": 145.0, "inv11_ratio": 0.799}, {"date": "2026-06-01", "total_kwh": 1893.3, "irr": 6.26, "pr": 76.0, "inv10_kwh": 171.4, "inv11_kwh": 134.3, "inv12_kwh": 152.9, "peer_avg_kwh": 157.8, "inv11_ratio": 0.784}, {"date": "2026-06-02", "total_kwh": 2028.0, "irr": 6.92, "pr": 73.8, "inv10_kwh": 173.8, "inv11_kwh": 140.4, "inv12_kwh": 178.2, "peer_avg_kwh": 169.0, "inv11_ratio": 0.808}, {"date": "2026-06-03", "total_kwh": 1983.3, "irr": 6.81, "pr": 73.3, "inv10_kwh": 161.9, "inv11_kwh": 134.3, "inv12_kwh": 185.0, "peer_avg_kwh": 165.3, "inv11_ratio": 0.83}, {"date": "2026-06-04", "total_kwh": 1207.9, "irr": 4.04, "pr": 75.2, "inv10_kwh": 99.1, "inv11_kwh": 81.2, "inv12_kwh": 116.7, "peer_avg_kwh": 100.7, "inv11_ratio": 0.819}, {"date": "2026-06-05", "total_kwh": 993.9, "irr": 3.09, "pr": 80.9, "inv10_kwh": 85.7, "inv11_kwh": 68.2, "inv12_kwh": 88.4, "peer_avg_kwh": 82.8, "inv11_ratio": 0.796}, {"date": "2026-06-06", "total_kwh": 1221.3, "irr": 3.85, "pr": 79.7, "inv10_kwh": 108.6, "inv11_kwh": 85.4, "inv12_kwh": 103.5, "peer_avg_kwh": 101.8, "inv11_ratio": 0.786}, {"date": "2026-06-07", "total_kwh": 1798.2, "irr": 6.09, "pr": 74.3, "inv10_kwh": 149.2, "inv11_kwh": 123.5, "inv12_kwh": 167.4, "peer_avg_kwh": 149.9, "inv11_ratio": 0.828}, {"date": "2026-06-08", "total_kwh": 929.0, "irr": 2.9, "pr": 80.4, "inv10_kwh": 81.1, "inv11_kwh": 64.8, "inv12_kwh": 83.9, "peer_avg_kwh": 77.4, "inv11_ratio": 0.799}, {"date": "2026-06-09", "total_kwh": 435.4, "irr": 1.31, "pr": 83.8, "inv10_kwh": 37.6, "inv11_kwh": 29.8, "inv12_kwh": 37.9, "peer_avg_kwh": 36.3, "inv11_ratio": 0.793}, {"date": "2026-06-10", "total_kwh": 408.5, "irr": 1.28, "pr": 80.3, "inv10_kwh": 35.1, "inv11_kwh": 27.9, "inv12_kwh": 35.9, "peer_avg_kwh": 34.0, "inv11_ratio": 0.795}, {"date": "2026-06-11", "total_kwh": 693.0, "irr": 2.17, "pr": 80.4, "inv10_kwh": 57.0, "inv11_kwh": 48.3, "inv12_kwh": 62.2, "peer_avg_kwh": 57.8, "inv11_ratio": 0.847}, {"date": "2026-06-12", "total_kwh": 855.7, "irr": 2.66, "pr": 80.8, "inv10_kwh": 73.7, "inv11_kwh": 60.2, "inv12_kwh": 76.0, "peer_avg_kwh": 71.3, "inv11_ratio": 0.817}, {"date": "2026-06-13", "total_kwh": 1232.7, "irr": 3.95, "pr": 78.5, "inv10_kwh": 106.4, "inv11_kwh": 86.9, "inv12_kwh": 107.3, "peer_avg_kwh": 102.7, "inv11_ratio": 0.817}, {"date": "2026-06-14", "total_kwh": 402.0, "irr": 1.22, "pr": 82.7, "inv10_kwh": 33.8, "inv11_kwh": 27.8, "inv12_kwh": 37.2, "peer_avg_kwh": 33.5, "inv11_ratio": 0.822}, {"date": "2026-06-15", "total_kwh": 466.3, "irr": 1.36, "pr": 86.2, "inv10_kwh": 39.5, "inv11_kwh": 32.2, "inv12_kwh": 41.4, "peer_avg_kwh": 38.9, "inv11_ratio": 0.815}, {"date": "2026-06-16", "total_kwh": 1004.8, "irr": 3.08, "pr": 82.0, "inv10_kwh": 84.0, "inv11_kwh": 69.7, "inv12_kwh": 93.0, "peer_avg_kwh": 83.7, "inv11_ratio": 0.83}, {"date": "2026-06-17", "total_kwh": 1770.1, "irr": 5.87, "pr": 75.9, "inv10_kwh": 150.6, "inv11_kwh": 124.4, "inv12_kwh": 157.1, "peer_avg_kwh": 147.5, "inv11_ratio": 0.826}, {"date": "2026-06-18", "total_kwh": 1923.4, "irr": 6.45, "pr": 75.0, "inv10_kwh": 156.0, "inv11_kwh": 131.5, "inv12_kwh": 180.7, "peer_avg_kwh": 160.3, "inv11_ratio": 0.843}, {"date": "2026-06-19", "total_kwh": 2152.3, "irr": 7.25, "pr": 74.7, "inv10_kwh": 176.6, "inv11_kwh": 148.9, "inv12_kwh": 199.9, "peer_avg_kwh": 179.4, "inv11_ratio": 0.843}, {"date": "2026-06-20", "total_kwh": 2121.2, "irr": 7.13, "pr": 74.8, "inv10_kwh": 173.7, "inv11_kwh": 146.5, "inv12_kwh": 197.2, "peer_avg_kwh": 176.8, "inv11_ratio": 0.843}, {"date": "2026-06-21", "total_kwh": 2187.0, "irr": 7.35, "pr": 74.8, "inv10_kwh": 180.2, "inv11_kwh": 151.0, "inv12_kwh": 199.7, "peer_avg_kwh": 182.2, "inv11_ratio": 0.838}, {"date": "2026-06-22", "total_kwh": 2128.0, "irr": 7.14, "pr": 74.9, "inv10_kwh": 180.6, "inv11_kwh": 148.1, "inv12_kwh": 186.6, "peer_avg_kwh": 177.3, "inv11_ratio": 0.82}, {"date": "2026-06-23", "total_kwh": 1913.9, "irr": 6.33, "pr": 76.0, "inv10_kwh": 160.8, "inv11_kwh": 132.4, "inv12_kwh": 175.3, "peer_avg_kwh": 159.5, "inv11_ratio": 0.823}, {"date": "2026-06-24", "total_kwh": 1530.9, "irr": 5.21, "pr": 73.9, "inv10_kwh": 127.5, "inv11_kwh": 105.2, "inv12_kwh": 142.8, "peer_avg_kwh": 127.6, "inv11_ratio": 0.825}, {"date": "2026-06-25", "total_kwh": 748.2, "irr": 2.5, "pr": 75.4, "inv10_kwh": 56.7, "inv11_kwh": 49.3, "inv12_kwh": 76.3, "peer_avg_kwh": 62.4, "inv11_ratio": 0.869}, {"date": "2026-06-26", "total_kwh": 692.1, "irr": 2.01, "pr": 86.7, "inv10_kwh": 61.4, "inv11_kwh": 49.0, "inv12_kwh": 58.5, "peer_avg_kwh": 57.7, "inv11_ratio": 0.798}, {"date": "2026-06-27", "total_kwh": 527.9, "irr": 1.64, "pr": 80.8, "inv10_kwh": 45.2, "inv11_kwh": 36.7, "inv12_kwh": 46.6, "peer_avg_kwh": 44.0, "inv11_ratio": 0.812}, {"date": "2026-06-28", "total_kwh": 1344.8, "irr": 4.36, "pr": 77.5, "inv10_kwh": 116.8, "inv11_kwh": 95.1, "inv12_kwh": 117.5, "peer_avg_kwh": 112.1, "inv11_ratio": 0.814}, {"date": "2026-06-29", "total_kwh": 1874.4, "irr": 6.49, "pr": 72.7, "inv10_kwh": 152.1, "inv11_kwh": 128.0, "inv12_kwh": 175.8, "peer_avg_kwh": 156.2, "inv11_ratio": 0.842}, {"date": "2026-06-30", "total_kwh": 2164.8, "irr": 7.44, "pr": 73.1, "inv10_kwh": 178.7, "inv11_kwh": 148.9, "inv12_kwh": 199.3, "peer_avg_kwh": 180.4, "inv11_ratio": 0.833}, {"date": "2026-07-01", "total_kwh": 1886.7, "irr": 6.44, "pr": 73.7, "inv10_kwh": 152.1, "inv11_kwh": 128.9, "inv12_kwh": 182.4, "peer_avg_kwh": 157.2, "inv11_ratio": 0.847}, {"date": "2026-07-02", "total_kwh": 1572.5, "irr": 5.41, "pr": 73.1, "inv10_kwh": 127.2, "inv11_kwh": 107.1, "inv12_kwh": 150.1, "peer_avg_kwh": 131.0, "inv11_ratio": 0.842}, {"date": "2026-07-03", "total_kwh": 1712.3, "irr": 5.98, "pr": 72.0, "inv10_kwh": 133.5, "inv11_kwh": 115.3, "inv12_kwh": 168.5, "peer_avg_kwh": 142.7, "inv11_ratio": 0.864}, {"date": "2026-07-04", "total_kwh": 2067.6, "irr": 7.21, "pr": 72.1, "inv10_kwh": 169.1, "inv11_kwh": 142.3, "inv12_kwh": 190.0, "peer_avg_kwh": 172.3, "inv11_ratio": 0.842}, {"date": "2026-07-05", "total_kwh": 1825.2, "irr": 6.34, "pr": 72.4, "inv10_kwh": 148.0, "inv11_kwh": 124.7, "inv12_kwh": 169.8, "peer_avg_kwh": 152.1, "inv11_ratio": 0.843}, {"date": "2026-07-06", "total_kwh": 1733.9, "irr": 6.02, "pr": 72.4, "inv10_kwh": 145.6, "inv11_kwh": 120.1, "inv12_kwh": 154.3, "peer_avg_kwh": 144.5, "inv11_ratio": 0.825}, {"date": "2026-07-07", "total_kwh": 1553.8, "irr": 5.44, "pr": 71.8, "inv10_kwh": 122.1, "inv11_kwh": 104.1, "inv12_kwh": 151.2, "peer_avg_kwh": 129.5, "inv11_ratio": 0.853}, {"date": "2026-07-08", "total_kwh": 1719.4, "irr": 5.79, "pr": 74.6, "inv10_kwh": 152.8, "inv11_kwh": 121.9, "inv12_kwh": 142.1, "peer_avg_kwh": 143.3, "inv11_ratio": 0.798}, {"date": "2026-07-09", "total_kwh": 1973.9, "irr": 6.73, "pr": 73.8, "inv10_kwh": 167.5, "inv11_kwh": 136.3, "inv12_kwh": 175.4, "peer_avg_kwh": 164.5, "inv11_ratio": 0.814}, {"date": "2026-07-10", "total_kwh": 1735.8, "irr": 5.96, "pr": 73.2, "inv10_kwh": 142.2, "inv11_kwh": 117.3, "inv12_kwh": 163.6, "peer_avg_kwh": 144.6, "inv11_ratio": 0.825}, {"date": "2026-07-11", "total_kwh": 415.9, "irr": 1.43, "pr": 72.9, "inv10_kwh": 1.2, "inv11_kwh": 31.1, "inv12_kwh": 40.6, "peer_avg_kwh": 34.7, "inv11_ratio": 0.0}, {"date": "2026-07-12", "total_kwh": 1836.8, "irr": 6.18, "pr": 74.8, "inv10_kwh": 163.8, "inv11_kwh": 132.8, "inv12_kwh": 158.4, "peer_avg_kwh": 153.1, "inv11_ratio": 0.811}, {"date": "2026-07-13", "total_kwh": 1525.0, "irr": 5.24, "pr": 73.1, "inv10_kwh": 125.7, "inv11_kwh": 104.2, "inv12_kwh": 141.8, "peer_avg_kwh": 127.1, "inv11_ratio": 0.829}, {"date": "2026-07-14", "total_kwh": 1278.0, "irr": 4.37, "pr": 73.5, "inv10_kwh": 101.4, "inv11_kwh": 85.7, "inv12_kwh": 124.8, "peer_avg_kwh": 106.5, "inv11_ratio": 0.845}, {"date": "2026-07-15", "total_kwh": 2166.2, "irr": 7.43, "pr": 73.3, "inv10_kwh": 179.0, "inv11_kwh": 149.9, "inv12_kwh": 199.0, "peer_avg_kwh": 180.5, "inv11_ratio": 0.837}, {"date": "2026-07-16", "total_kwh": 2035.9, "irr": 7.02, "pr": 72.9, "inv10_kwh": 165.3, "inv11_kwh": 139.3, "inv12_kwh": 191.1, "peer_avg_kwh": 169.7, "inv11_ratio": 0.843}, {"date": "2026-07-17", "total_kwh": 2093.1, "irr": 7.12, "pr": 74.0, "inv10_kwh": 173.4, "inv11_kwh": 144.4, "inv12_kwh": 190.8, "peer_avg_kwh": 174.4, "inv11_ratio": 0.833}, {"date": "2026-07-18", "total_kwh": 1520.4, "irr": 5.33, "pr": 71.8, "inv10_kwh": 121.9, "inv11_kwh": 102.9, "inv12_kwh": 145.8, "peer_avg_kwh": 126.7, "inv11_ratio": 0.844}, {"date": "2026-07-19", "total_kwh": 1128.1, "irr": 3.63, "pr": 78.2, "inv10_kwh": 94.6, "inv11_kwh": 78.4, "inv12_kwh": 103.8, "peer_avg_kwh": 94.0, "inv11_ratio": 0.829}, {"date": "2026-07-20", "total_kwh": 2105.9, "irr": 7.15, "pr": 74.1, "inv10_kwh": 179.0, "inv11_kwh": 146.8, "inv12_kwh": 186.2, "peer_avg_kwh": 175.5, "inv11_ratio": 0.82}, {"date": "2026-07-21", "total_kwh": 1671.7, "irr": 5.71, "pr": 73.6, "inv10_kwh": 135.1, "inv11_kwh": 113.6, "inv12_kwh": 155.3, "peer_avg_kwh": 139.3, "inv11_ratio": 0.841}, {"date": "2026-07-22", "total_kwh": 1930.4, "irr": 6.45, "pr": 75.3, "inv10_kwh": 165.5, "inv11_kwh": 134.8, "inv12_kwh": 168.1, "peer_avg_kwh": 160.9, "inv11_ratio": 0.815}, {"date": "2026-07-23", "total_kwh": 1812.3, "irr": 6.09, "pr": 74.8, "inv10_kwh": 155.1, "inv11_kwh": 126.6, "inv12_kwh": 161.1, "peer_avg_kwh": 151.0, "inv11_ratio": 0.816}, {"date": "2026-07-24", "total_kwh": 1565.0, "irr": 5.09, "pr": 77.4, "inv10_kwh": 138.5, "inv11_kwh": 110.7, "inv12_kwh": 132.1, "peer_avg_kwh": 130.4, "inv11_ratio": 0.799}, {"date": "2026-07-25", "total_kwh": 944.8, "irr": 3.11, "pr": 76.4, "inv10_kwh": 81.0, "inv11_kwh": 66.0, "inv12_kwh": 84.2, "peer_avg_kwh": 78.7, "inv11_ratio": 0.815}, {"date": "2026-07-26", "total_kwh": 1299.7, "irr": 4.31, "pr": 75.8, "inv10_kwh": 110.9, "inv11_kwh": 90.6, "inv12_kwh": 115.7, "peer_avg_kwh": 108.3, "inv11_ratio": 0.817}, {"date": "2026-07-27", "total_kwh": 1054.3, "irr": 3.44, "pr": 77.1, "inv10_kwh": 90.2, "inv11_kwh": 73.5, "inv12_kwh": 92.7, "peer_avg_kwh": 87.9, "inv11_ratio": 0.815}, {"date": "2026-07-28", "total_kwh": 1935.3, "irr": 6.64, "pr": 73.3, "inv10_kwh": 157.9, "inv11_kwh": 131.7, "inv12_kwh": 181.9, "peer_avg_kwh": 161.3, "inv11_ratio": 0.834}, {"date": "2026-07-29", "total_kwh": 1343.3, "irr": 4.28, "pr": 78.8, "inv10_kwh": 118.0, "inv11_kwh": 94.7, "inv12_kwh": 116.7, "peer_avg_kwh": 111.9, "inv11_ratio": 0.803}, {"date": "2026-07-30", "total_kwh": 1406.4, "irr": 4.49, "pr": 78.7, "inv10_kwh": 123.3, "inv11_kwh": 99.2, "inv12_kwh": 120.6, "peer_avg_kwh": 117.2, "inv11_ratio": 0.805}, {"date": "2026-07-31", "total_kwh": 1394.4, "irr": 4.42, "pr": 79.3, "inv10_kwh": 121.3, "inv11_kwh": 97.7, "inv12_kwh": 122.2, "peer_avg_kwh": 116.2, "inv11_ratio": 0.805}, {"date": "2026-08-01", "total_kwh": 1415.8, "irr": 4.62, "pr": 77.1, "inv10_kwh": 125.3, "inv11_kwh": 100.2, "inv12_kwh": 122.2, "peer_avg_kwh": 118.0, "inv11_ratio": 0.8}, {"date": "2026-08-02", "total_kwh": 1604.3, "irr": 5.22, "pr": 77.3, "inv10_kwh": 141.2, "inv11_kwh": 113.7, "inv12_kwh": 138.3, "peer_avg_kwh": 133.7, "inv11_ratio": 0.805}, {"date": "2026-08-03", "total_kwh": 1842.7, "irr": 5.99, "pr": 77.4, "inv10_kwh": 158.5, "inv11_kwh": 128.6, "inv12_kwh": 164.8, "peer_avg_kwh": 153.6, "inv11_ratio": 0.811}, {"date": "2026-08-04", "total_kwh": 1659.8, "irr": 5.47, "pr": 76.3, "inv10_kwh": 147.0, "inv11_kwh": 117.7, "inv12_kwh": 141.7, "peer_avg_kwh": 138.3, "inv11_ratio": 0.801}, {"date": "2026-08-05", "total_kwh": 1791.6, "irr": 5.6, "pr": 80.5, "inv10_kwh": 155.6, "inv11_kwh": 126.1, "inv12_kwh": 159.9, "peer_avg_kwh": 149.3, "inv11_ratio": 0.81}, {"date": "2026-08-06", "total_kwh": 1629.3, "irr": 5.41, "pr": 75.7, "inv10_kwh": 142.7, "inv11_kwh": 114.9, "inv12_kwh": 144.3, "peer_avg_kwh": 135.8, "inv11_ratio": 0.805}, {"date": "2026-08-07", "total_kwh": 1814.2, "irr": 6.0, "pr": 76.1, "inv10_kwh": 163.5, "inv11_kwh": 130.2, "inv12_kwh": 151.5, "peer_avg_kwh": 151.2, "inv11_ratio": 0.796}, {"date": "2026-08-08", "total_kwh": 1811.5, "irr": 6.04, "pr": 75.5, "inv10_kwh": 159.7, "inv11_kwh": 128.1, "inv12_kwh": 154.6, "peer_avg_kwh": 151.0, "inv11_ratio": 0.802}, {"date": "2026-08-09", "total_kwh": 399.4, "irr": 1.28, "pr": 78.6, "inv10_kwh": 29.5, "inv11_kwh": 28.0, "inv12_kwh": 35.3, "peer_avg_kwh": 33.3, "inv11_ratio": 0.949}, {"date": "2026-08-10", "total_kwh": 1211.0, "irr": 3.87, "pr": 78.7, "inv10_kwh": 107.9, "inv11_kwh": 86.4, "inv12_kwh": 102.2, "peer_avg_kwh": 100.9, "inv11_ratio": 0.801}, {"date": "2026-08-11", "total_kwh": 1872.1, "irr": 6.27, "pr": 75.1, "inv10_kwh": 164.5, "inv11_kwh": 133.8, "inv12_kwh": 160.9, "peer_avg_kwh": 156.0, "inv11_ratio": 0.813}, {"date": "2026-08-12", "total_kwh": 1806.7, "irr": 6.14, "pr": 74.0, "inv10_kwh": 157.2, "inv11_kwh": 128.2, "inv12_kwh": 159.6, "peer_avg_kwh": 150.6, "inv11_ratio": 0.816}, {"date": "2026-08-13", "total_kwh": 1686.1, "irr": 5.61, "pr": 75.5, "inv10_kwh": 151.9, "inv11_kwh": 121.9, "inv12_kwh": 139.3, "peer_avg_kwh": 140.5, "inv11_ratio": 0.802}, {"date": "2026-08-14", "total_kwh": 1531.5, "irr": 4.96, "pr": 77.7, "inv10_kwh": 142.8, "inv11_kwh": 112.3, "inv12_kwh": 123.1, "peer_avg_kwh": 127.6, "inv11_ratio": 0.786}, {"date": "2026-08-15", "total_kwh": 1165.1, "irr": 3.8, "pr": 77.1, "inv10_kwh": 102.5, "inv11_kwh": 82.3, "inv12_kwh": 102.1, "peer_avg_kwh": 97.1, "inv11_ratio": 0.803}, {"date": "2026-08-16", "total_kwh": 1379.7, "irr": 4.77, "pr": 72.7, "inv10_kwh": 111.5, "inv11_kwh": 94.6, "inv12_kwh": 133.9, "peer_avg_kwh": 115.0, "inv11_ratio": 0.849}, {"date": "2026-08-17", "total_kwh": 1902.3, "irr": 6.45, "pr": 74.2, "inv10_kwh": 168.4, "inv11_kwh": 135.2, "inv12_kwh": 164.3, "peer_avg_kwh": 158.5, "inv11_ratio": 0.803}, {"date": "2026-08-18", "total_kwh": 1685.6, "irr": 5.67, "pr": 74.7, "inv10_kwh": 145.2, "inv11_kwh": 118.7, "inv12_kwh": 151.0, "peer_avg_kwh": 140.5, "inv11_ratio": 0.817}, {"date": "2026-08-19", "total_kwh": 1150.2, "irr": 3.66, "pr": 79.1, "inv10_kwh": 99.1, "inv11_kwh": 80.8, "inv12_kwh": 103.1, "peer_avg_kwh": 95.9, "inv11_ratio": 0.815}, {"date": "2026-08-20", "total_kwh": 1288.1, "irr": 4.21, "pr": 77.0, "inv10_kwh": 107.3, "inv11_kwh": 89.2, "inv12_kwh": 121.5, "peer_avg_kwh": 107.3, "inv11_ratio": 0.831}, {"date": "2026-08-21", "total_kwh": 1418.5, "irr": 4.59, "pr": 77.7, "inv10_kwh": 123.4, "inv11_kwh": 99.9, "inv12_kwh": 126.1, "peer_avg_kwh": 118.2, "inv11_ratio": 0.81}, {"date": "2026-08-22", "total_kwh": 864.7, "irr": 2.67, "pr": 81.3, "inv10_kwh": 75.4, "inv11_kwh": 60.9, "inv12_kwh": 74.8, "peer_avg_kwh": 72.1, "inv11_ratio": 0.808}, {"date": "2026-08-23", "total_kwh": 794.7, "irr": 2.51, "pr": 79.6, "inv10_kwh": 63.5, "inv11_kwh": 53.6, "inv12_kwh": 80.1, "peer_avg_kwh": 66.2, "inv11_ratio": 0.845}, {"date": "2026-08-24", "total_kwh": 581.4, "irr": 1.76, "pr": 83.3, "inv10_kwh": 49.7, "inv11_kwh": 40.2, "inv12_kwh": 51.8, "peer_avg_kwh": 48.4, "inv11_ratio": 0.809}, {"date": "2026-08-25", "total_kwh": 370.2, "irr": 1.14, "pr": 81.4, "inv10_kwh": 30.9, "inv11_kwh": 25.4, "inv12_kwh": 33.6, "peer_avg_kwh": 30.9, "inv11_ratio": 0.822}, {"date": "2026-08-26", "total_kwh": 1195.5, "irr": 4.06, "pr": 74.0, "inv10_kwh": 102.7, "inv11_kwh": 84.1, "inv12_kwh": 106.5, "peer_avg_kwh": 99.6, "inv11_ratio": 0.819}, {"date": "2026-08-27", "total_kwh": 772.5, "irr": 2.54, "pr": 76.3, "inv10_kwh": 72.2, "inv11_kwh": 57.1, "inv12_kwh": 63.0, "peer_avg_kwh": 64.4, "inv11_ratio": 0.791}, {"date": "2026-08-28", "total_kwh": 563.2, "irr": 1.91, "pr": 74.3, "inv10_kwh": 49.0, "inv11_kwh": 40.2, "inv12_kwh": 49.6, "peer_avg_kwh": 46.9, "inv11_ratio": 0.821}, {"date": "2026-08-29", "total_kwh": 1772.5, "irr": 6.07, "pr": 73.4, "inv10_kwh": 154.5, "inv11_kwh": 127.2, "inv12_kwh": 156.4, "peer_avg_kwh": 147.7, "inv11_ratio": 0.823}, {"date": "2026-08-30", "total_kwh": 966.9, "irr": 3.31, "pr": 73.4, "inv10_kwh": 77.7, "inv11_kwh": 66.0, "inv12_kwh": 95.5, "peer_avg_kwh": 80.6, "inv11_ratio": 0.849}, {"date": "2026-08-31", "total_kwh": 687.4, "irr": 2.23, "pr": 77.7, "inv10_kwh": 58.1, "inv11_kwh": 48.1, "inv12_kwh": 63.2, "peer_avg_kwh": 57.3, "inv11_ratio": 0.828}, {"date": "2026-09-01", "total_kwh": 891.2, "irr": 2.85, "pr": 78.8, "inv10_kwh": 77.1, "inv11_kwh": 63.5, "inv12_kwh": 79.1, "peer_avg_kwh": 74.3, "inv11_ratio": 0.824}, {"date": "2026-09-02", "total_kwh": 1343.5, "irr": 4.48, "pr": 75.4, "inv10_kwh": 118.9, "inv11_kwh": 96.0, "inv12_kwh": 113.9, "peer_avg_kwh": 112.0, "inv11_ratio": 0.807}, {"date": "2026-09-03", "total_kwh": 705.6, "irr": 2.26, "pr": 78.4, "inv10_kwh": 59.2, "inv11_kwh": 49.3, "inv12_kwh": 65.0, "peer_avg_kwh": 58.8, "inv11_ratio": 0.833}, {"date": "2026-09-04", "total_kwh": 746.0, "irr": 2.47, "pr": 76.1, "inv10_kwh": 61.7, "inv11_kwh": 51.6, "inv12_kwh": 70.0, "peer_avg_kwh": 62.2, "inv11_ratio": 0.837}, {"date": "2026-09-05", "total_kwh": 1265.6, "irr": 4.19, "pr": 76.0, "inv10_kwh": 122.7, "inv11_kwh": 95.9, "inv12_kwh": 96.5, "peer_avg_kwh": 105.5, "inv11_ratio": 0.782}, {"date": "2026-09-06", "total_kwh": 1976.4, "irr": 6.79, "pr": 73.2, "inv10_kwh": 180.5, "inv11_kwh": 146.1, "inv12_kwh": 169.0, "peer_avg_kwh": 164.7, "inv11_ratio": 0.809}, {"date": "2026-09-07", "total_kwh": 1511.8, "irr": 4.97, "pr": 76.5, "inv10_kwh": 139.3, "inv11_kwh": 111.3, "inv12_kwh": 125.1, "peer_avg_kwh": 126.0, "inv11_ratio": 0.799}, {"date": "2026-09-08", "total_kwh": 1924.8, "irr": 6.46, "pr": 75.0, "inv10_kwh": 175.5, "inv11_kwh": 141.2, "inv12_kwh": 160.3, "peer_avg_kwh": 160.4, "inv11_ratio": 0.805}, {"date": "2026-09-09", "total_kwh": 1364.9, "irr": 4.55, "pr": 75.4, "inv10_kwh": 121.5, "inv11_kwh": 98.0, "inv12_kwh": 116.7, "peer_avg_kwh": 113.7, "inv11_ratio": 0.807}, {"date": "2026-09-10", "total_kwh": 1863.4, "irr": 6.29, "pr": 74.5, "inv10_kwh": 169.3, "inv11_kwh": 135.8, "inv12_kwh": 152.8, "peer_avg_kwh": 155.3, "inv11_ratio": 0.802}, {"date": "2026-09-11", "total_kwh": 1421.3, "irr": 4.76, "pr": 75.1, "inv10_kwh": 125.4, "inv11_kwh": 100.9, "inv12_kwh": 123.6, "peer_avg_kwh": 118.4, "inv11_ratio": 0.805}, {"date": "2026-09-12", "total_kwh": 1642.7, "irr": 5.49, "pr": 75.2, "inv10_kwh": 146.6, "inv11_kwh": 119.6, "inv12_kwh": 140.1, "peer_avg_kwh": 136.9, "inv11_ratio": 0.816}, {"date": "2026-09-13", "total_kwh": 1770.6, "irr": 6.0, "pr": 74.3, "inv10_kwh": 160.9, "inv11_kwh": 129.3, "inv12_kwh": 146.3, "peer_avg_kwh": 147.6, "inv11_ratio": 0.804}, {"date": "2026-09-14", "total_kwh": 1338.9, "irr": 4.33, "pr": 77.7, "inv10_kwh": 125.2, "inv11_kwh": 98.7, "inv12_kwh": 107.5, "peer_avg_kwh": 111.6, "inv11_ratio": 0.788}, {"date": "2026-09-15", "total_kwh": 1346.1, "irr": 4.44, "pr": 76.3, "inv10_kwh": 117.0, "inv11_kwh": 94.6, "inv12_kwh": 118.1, "peer_avg_kwh": 112.2, "inv11_ratio": 0.809}, {"date": "2026-09-16", "total_kwh": 1839.4, "irr": 6.13, "pr": 75.4, "inv10_kwh": 173.3, "inv11_kwh": 135.2, "inv12_kwh": 139.6, "peer_avg_kwh": 153.3, "inv11_ratio": 0.78}, {"date": "2026-09-17", "total_kwh": 1659.0, "irr": 5.52, "pr": 75.6, "inv10_kwh": 154.2, "inv11_kwh": 120.9, "inv12_kwh": 130.7, "peer_avg_kwh": 138.2, "inv11_ratio": 0.784}, {"date": "2026-09-18", "total_kwh": 1269.5, "irr": 4.21, "pr": 75.9, "inv10_kwh": 117.4, "inv11_kwh": 92.2, "inv12_kwh": 100.9, "peer_avg_kwh": 105.8, "inv11_ratio": 0.785}, {"date": "2026-09-19", "total_kwh": 1358.9, "irr": 4.48, "pr": 76.2, "inv10_kwh": 125.5, "inv11_kwh": 99.8, "inv12_kwh": 107.3, "peer_avg_kwh": 113.2, "inv11_ratio": 0.795}, {"date": "2026-09-20", "total_kwh": 1641.8, "irr": 5.45, "pr": 75.8, "inv10_kwh": 156.7, "inv11_kwh": 122.5, "inv12_kwh": 126.2, "peer_avg_kwh": 136.8, "inv11_ratio": 0.782}, {"date": "2026-09-21", "total_kwh": 1509.6, "irr": 4.89, "pr": 77.6, "inv10_kwh": 144.8, "inv11_kwh": 112.2, "inv12_kwh": 114.6, "peer_avg_kwh": 125.8, "inv11_ratio": 0.775}, {"date": "2026-09-22", "total_kwh": 1402.4, "irr": 4.68, "pr": 75.3, "inv10_kwh": 130.2, "inv11_kwh": 101.1, "inv12_kwh": 108.0, "peer_avg_kwh": 116.9, "inv11_ratio": 0.777}];
 
 function populateRawTable() {
   const tbody = document.getElementById('rawDataTableBody');
   if (!tbody || !rawDailyData || !rawDailyData.length) return;
   tbody.innerHTML = rawDailyData.map(r => {
-    const isAnomaly = r.inv11_ratio < 0.85;
+    const isAnomaly = r.inv11_ratio > 0.05 && r.inv11_ratio < 0.85;
     const statusTag = isAnomaly
       ? '<span class="sev P1">INV-11 單串斷路</span>'
-      : '<span class="sev P3">發電正常</span>';
+      : (r.inv11_ratio >= 0.85 ? '<span class="sev P3">發電正常</span>' : '<span class="sev P4">低發電/無日照</span>');
     return `
       <tr>
-        <td style="font-family:var(--mono); font-weight:700;">{r.date}</td>
-        <td class="num">{r.total_kwh.toFixed(1)}</td>
-        <td class="num">{r.irr.toFixed(2)}</td>
-        <td class="num">{r.pr.toFixed(1)}%</td>
-        <td class="num" style="color:var(--teal-d); font-weight:700;">{r.inv10_kwh.toFixed(1)}</td>
-        <td class="num" style="font-weight:800; color:{isAnomaly ? 'var(--coral)' : 'var(--ink)'};">{r.inv11_kwh.toFixed(1)}</td>
-        <td class="num">{r.peer_avg_kwh.toFixed(1)}</td>
-        <td class="num" style="font-weight:700; color:{isAnomaly ? 'var(--coral)' : 'var(--green)'};">{(r.inv11_ratio * 100).toFixed(1)}%</td>
-        <td>{statusTag}</td>
+        <td style="font-family:var(--mono); font-weight:700;">${r.date}</td>
+        <td class="num">${r.total_kwh.toFixed(1)}</td>
+        <td class="num">${r.irr.toFixed(2)}</td>
+        <td class="num">${r.pr.toFixed(1)}%</td>
+        <td class="num" style="color:var(--teal-d); font-weight:700;">${r.inv10_kwh.toFixed(1)}</td>
+        <td class="num" style="font-weight:800; color:${isAnomaly ? 'var(--coral)' : 'var(--ink)'};">${r.inv11_kwh.toFixed(1)}</td>
+        <td class="num">${r.peer_avg_kwh.toFixed(1)}</td>
+        <td class="num" style="font-weight:700; color:${isAnomaly ? 'var(--coral)' : 'var(--green)'};">${(r.inv11_ratio * 100).toFixed(1)}%</td>
+        <td>${statusTag}</td>
       </tr>
     `;
   }).join('');
@@ -1500,7 +1455,7 @@ function exportRawCsv() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'Solar_8D_RawData_Tungyu_PV-2026-NT01.csv';
+  a.download = 'Solar_8D_RawData_Tungyu_367Days.csv';
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1511,7 +1466,7 @@ function copyRawTable() {
     text += r.date + "\t" + r.total_kwh + "\t" + r.irr + "\t" + r.pr + "%\t" + r.inv10_kwh + "\t" + r.inv11_kwh + "\t" + r.peer_avg_kwh + "\t" + (r.inv11_ratio*100).toFixed(1) + "%\n";
   });
   navigator.clipboard.writeText(text).then(() => {
-    alert("✅ 原始發電數據已成功複製到剪貼簿！可直接貼上至 Excel 進行審計。");
+    alert("✅ 367天原始發電數據已成功複製到剪貼簿！可直接貼上至 Excel 進行審計。");
   });
 }
 
@@ -1542,7 +1497,7 @@ function initPlantMap() {
 
 // --- ECharts Init ---
 function initCharts() {
-  // 1. Trend Chart
+  // 1. Trend Chart (Full 367-Day Trend)
   const trendEl = document.getElementById('trendChart');
   if (trendEl && rawDailyData.length) {
     window.trendChartInstance = echarts.init(trendEl);
@@ -1554,7 +1509,8 @@ function initCharts() {
     const option = {
       tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
       legend: { data: ['基準標竿 (INV-10)', '同儕均值 (12台)', '異常設備 (INV-11)'], top: '0%' },
-      grid: { left: '3%', right: '4%', bottom: '8%', top: '16%', containLabel: true },
+      grid: { left: '3%', right: '4%', bottom: '10%', top: '16%', containLabel: true },
+      dataZoom: [{ type: 'inside', start: 60, end: 100 }, { type: 'slider', bottom: '0%', height: 20 }],
       xAxis: { type: 'category', boundaryGap: false, data: dates },
       yAxis: { type: 'value', name: '日發電量 (kWh)' },
       series: [
@@ -1564,7 +1520,7 @@ function initCharts() {
           data: inv010,
           smooth: true,
           itemStyle: { color: '#1BB1BF' },
-          lineStyle: { width: 2, type: 'dashed' }
+          lineStyle: { width: 1.5, type: 'dashed' }
         },
         {
           name: '同儕均值 (12台)',
@@ -1572,7 +1528,7 @@ function initCharts() {
           data: peerAvg,
           smooth: true,
           itemStyle: { color: '#1968AD' },
-          lineStyle: { width: 2.5 }
+          lineStyle: { width: 2 }
         },
         {
           name: '異常設備 (INV-11)',
@@ -1580,12 +1536,11 @@ function initCharts() {
           data: inv011,
           smooth: true,
           itemStyle: { color: '#D95F45' },
-          lineStyle: { width: 3 },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: 'rgba(217, 95, 69, 0.25)' },
-              { offset: 1, color: 'rgba(217, 95, 69, 0.0)' }
-            ])
+          lineStyle: { width: 2.5 },
+          markPoint: {
+            data: [
+              { name: '熔斷日', value: '5/3 突變', coord: ['2026-05-03', 120] }
+            ]
           }
         }
       ]
@@ -1597,16 +1552,16 @@ function initCharts() {
   const dcfEl = document.getElementById('dcfChart');
   if (dcfEl) {
     window.dcfChartInstance = echarts.init(dcfEl);
-    const years = Array.from({ length: 20 }, (_, i) => `Y{i + 1}`);
+    const years = Array.from({ length: 20 }, (_, i) => `Y${i + 1}`);
     const cumulativeBenefit = [];
-    let sum = -3.5; // Capex (NT 3.5 萬)
+    let sum = -3.5; // Capex (NT$ 3.5 萬)
     for (let i = 1; i <= 20; i++) {
       sum += (34.9 / Math.pow(1.045, i)); // 34.9 萬年增益，4.5% 折現率
       cumulativeBenefit.push(parseFloat(sum.toFixed(1)));
     }
 
     const dcfOption = {
-      tooltip: { trigger: 'axis', formatter: '{b}: 累計 NPV 淨現值 NT {c} 萬元' },
+      tooltip: { trigger: 'axis', formatter: '{b}: 累計 NPV 淨現值 NT$ {c} 萬元' },
       grid: { left: '3%', right: '4%', bottom: '8%', top: '12%', containLabel: true },
       xAxis: { type: 'category', data: years },
       yAxis: { type: 'value', name: '累計 NPV 增量 (萬元)' },
