@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">台中市大安區龜殼段 POCS 水上光電｜INV-13 發電異常｜內部維運版</title>
+<meta name="description" content="台中市大安區龜殼段 POCS 水上光電 8D 異常診斷報告：精確地理區位、C-002 串接圖銘牌校正、SCADA 實時告警穿透、鳳山圳抑草蓆財務評估，以 AI Agent 守護資產現金流。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%230C3A63%27 rx=%2712%27/%3E%3Cpath d=%27M12 48 L28 20 L38 34 L52 14%27 stroke=%27%231BB1BF%27 stroke-width=%275%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2752%27 cy=%2714%27 r=%275%27 fill=%27%23E09A2B%27/%3E%3C/svg%3E">
+
+<!-- Google Fonts, ECharts & Leaflet -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+:root {
+  --blue-dd: #0C3A63;
+  --blue: #1968AD;
+  --blue-d: #12518A;
+  --blue-soft: #E8F1F9;
+  --teal: #1BB1BF;
+  --teal-d: #12818C;
+  --teal-soft: #E2F5F7;
+  --ink: #12293D;
+  --ink-2: #3E5466;
+  --muted: #5B7285;
+  --line: #D9E3EC;
+  --line-soft: #EEF3F8;
+  --paper: #F4F7FA;
+  --card: #FFFFFF;
+  --amber: #E09A2B;
+  --amber-soft: #FCF2DE;
+  --coral: #D95F45;
+  --coral-soft: #FBEAE5;
+  --green: #2E7D32;
+  --green-soft: #E8F5E9;
+  --purple: #6B46C1;
+  --purple-soft: #F3E8FF;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 15.5px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Fixed Top Navigation Bar */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 54px;
+  display: flex; align-items: center; gap: 10px; padding: 0 20px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--blue);
+  box-shadow: 0 2px 10px rgba(12, 58, 99, 0.08);
+}
+.topbar .brand {
+  display: flex; align-items: center; gap: 9px; margin-right: 12px;
+  white-space: nowrap; text-decoration: none;
+}
+.topbar .brand .tx {
+  font-weight: 800; font-size: .88rem; letter-spacing: .02em;
+  color: var(--ink); line-height: 1.15;
+}
+.topbar .brand .tx small {
+  display: block; font-weight: 700; font-size: .65rem;
+  letter-spacing: .08em; color: var(--blue);
+}
+.topnav {
+  display: flex; gap: 4px; flex: 1; min-width: 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+.topnav::-webkit-scrollbar { display: none; }
+.navtab {
+  padding: 5px 11px; font-size: .78rem; font-weight: 700; border-radius: 6px;
+  color: var(--muted); border: 1px solid transparent; cursor: pointer;
+  white-space: nowrap; transition: all .15s ease; background: transparent;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.navtab:hover { color: var(--blue); background: var(--blue-soft); }
+.navtab.active {
+  color: var(--blue-dd); background: var(--blue-soft);
+  border-color: rgba(25, 104, 173, 0.25);
+}
+.topbar-actions {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+}
+.mode-toggle-btn {
+  padding: 4px 10px; font-size: .74rem; font-weight: 800; border-radius: 20px;
+  cursor: pointer; border: 1px solid rgba(25, 104, 173, 0.3);
+  background: var(--blue-soft); color: var(--blue-dd);
+  display: inline-flex; align-items: center; gap: 5px; transition: all .15s ease;
+}
+.mode-toggle-btn.owner {
+  background: var(--teal-soft); color: var(--teal-d); border-color: rgba(27, 177, 191, 0.4);
+}
+.btn-action-sm {
+  padding: 5px 11px; font-size: .75rem; font-weight: 700; border-radius: 6px;
+  cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 5px; transition: all .15s ease;
+}
+.btn-action-sm:hover { background: var(--paper); border-color: var(--blue); color: var(--blue); }
+
+/* Cover Header */
+.cover {
+  border-bottom: 3px solid var(--blue);
+  background: linear-gradient(180deg, var(--blue-soft) 0%, var(--paper) 100%);
+  padding: 76px 24px 34px; margin-bottom: 24px;
+}
+.cover-inner { max-width: 1240px; margin: 0 auto; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.badge {
+  font-size: 11.5px; font-weight: 800; letter-spacing: .04em;
+  padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line);
+  color: var(--blue-dd); background: #fff;
+}
+.badge.mode-internal { border-color: rgba(217, 95, 69, 0.4); color: var(--coral); background: var(--coral-soft); }
+.badge.mode-owner { border-color: rgba(27, 177, 191, 0.4); color: var(--teal-d); background: var(--teal-soft); }
+.cover h1 { font-size: clamp(23px, 3.8vw, 34px); font-weight: 900; letter-spacing: -.01em; color: var(--blue-dd); }
+.cover .lede {
+  font-size: clamp(15.5px, 1.8vw, 18px); color: var(--ink-2);
+  margin: 12px 0 0; max-width: 72ch; font-weight: 600; line-height: 1.6;
+}
+.factgrid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+  margin: 22px 0 0; border-radius: 8px; overflow: hidden;
+}
+.factgrid div { background: #fff; padding: 10px 14px; }
+.factgrid dt { font-size: 11px; letter-spacing: .06em; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.factgrid dd { margin: 3px 0 0; font-size: 14.5px; font-weight: 700; color: var(--ink); font-family: var(--mono); }
+
+/* Main Content Layout with Sticky TOC */
+.layout {
+  max-width: 1240px; margin: 0 auto; padding: 0 24px 80px;
+  display: grid; grid-template-columns: 210px minmax(0, 1fr);
+  gap: 36px; align-items: start;
+}
+.toc {
+  position: sticky; top: 72px; padding-top: 10px; font-size: 13.5px;
+  max-height: calc(100vh - 84px); overflow-y: auto;
+}
+.toc-label { font-size: 11px; letter-spacing: .08em; color: var(--muted); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
+.toc a {
+  display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--line);
+  color: var(--ink-2); text-decoration: none; font-weight: 600; transition: all .15s ease;
+}
+.toc a:hover, .toc a.active {
+  border-left-color: var(--blue); color: var(--blue-dd); font-weight: 800; background: var(--blue-soft);
+}
+main { min-width: 0; }
+
+/* Sections */
+section {
+  margin: 0 0 52px; scroll-margin-top: 74px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 12px; padding: 28px 30px; box-shadow: 0 2px 6px rgba(12, 58, 99, 0.03);
+}
+.sec-head {
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 2px solid var(--line-soft); padding-bottom: 12px; margin-bottom: 8px;
+}
+.sec-tag {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 800;
+  color: #fff; background: var(--blue); padding: 3px 9px; border-radius: 4px; flex: none;
+}
+.sec-head h2 { font-size: 20px; font-weight: 800; color: var(--blue-dd); }
+.sec-purpose { font-size: 13px; color: var(--muted); margin: 0 0 20px; font-style: italic; }
+p { margin: 0 0 14px; line-height: 1.65; }
+
+/* KPIs */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 0 0 22px; }
+.kpi {
+  background: #fff; border: 1px solid var(--line);
+  border-top: 4px solid var(--blue); padding: 14px 16px; border-radius: 8px;
+}
+.kpi.bad { border-top-color: var(--coral); }
+.kpi.warn { border-top-color: var(--amber); }
+.kpi-label { font-size: 11.5px; letter-spacing: .05em; color: var(--muted); font-weight: 700; text-transform: uppercase; }
+.kpi-value { font-size: 27px; font-weight: 900; letter-spacing: -.02em; margin: 4px 0 0; font-family: var(--mono); color: var(--ink); }
+.kpi.bad .kpi-value { color: var(--coral); }
+.kpi.warn .kpi-value { color: var(--amber); }
+.kpi-unit { font-size: 13px; font-weight: 700; color: var(--muted); margin-left: 3px; }
+.kpi-note { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; margin: 0 0 20px; border-radius: 8px; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+caption { caption-side: top; text-align: left; font-size: 12.5px; color: var(--muted); padding: 8px 10px; font-weight: 700; }
+th, td { border-bottom: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: middle; }
+thead th { background: var(--blue-soft); border-bottom: 2px solid rgba(25, 104, 173, 0.25); font-size: 12.5px; font-weight: 800; color: var(--blue-dd); white-space: nowrap; }
+tbody tr:nth-child(even) { background: #FAFBFD; }
+tbody tr:hover { background: #F1F6FA; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+tr.row-bad td { background: var(--coral-soft) !important; }
+tr.row-warn td { background: var(--amber-soft) !important; }
+
+/* Severity & Statements */
+.sev { display: inline-block; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 3px; font-family: var(--mono); white-space: nowrap; }
+.sev.P1 { background: var(--coral); color: #fff; }
+.sev.P2 { background: var(--amber); color: #fff; }
+.sev.P3 { background: var(--blue); color: #fff; }
+.sev.P4 { background: var(--muted); color: #fff; }
+
+.stmt { display: flex; gap: 11px; align-items: flex-start; border-left: 3px solid var(--line); padding: 10px 0 10px 14px; margin: 0 0 14px; background: #FAFBFD; border-radius: 0 6px 6px 0; }
+.stmt.fact { border-left-color: var(--blue); }
+.stmt.inference { border-left-color: var(--amber); }
+.stmt.unverified { border-left-color: var(--coral); }
+.tag { flex: none; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 2px 7px; border-radius: 3px; margin-top: 2px; white-space: nowrap; }
+.stmt.fact .tag { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(25, 104, 173, 0.3); }
+.stmt.inference .tag { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(224, 154, 43, 0.3); }
+.stmt.unverified .tag { background: var(--coral-soft); color: var(--coral); border: 1px solid rgba(217, 95, 69, 0.3); }
+.stmt p { margin: 0; font-size: 14.5px; }
+
+/* Callout */
+.callout { border: 1px solid var(--line); border-left: 4px solid var(--blue); background: #FAFBFD; padding: 14px 18px; margin: 0 0 20px; border-radius: 0 8px 8px 0; }
+.callout.danger { border-left-color: var(--coral); background: var(--coral-soft); border-color: rgba(217, 95, 69, 0.3); }
+.callout.warn { border-left-color: var(--amber); background: var(--amber-soft); border-color: rgba(224, 154, 43, 0.3); }
+.callout h4 { font-size: 14.5px; font-weight: 800; margin: 0 0 6px; }
+.callout.danger h4 { color: var(--coral); }
+.callout.warn h4 { color: #B45309; }
+
+/* Actions */
+.actions { margin: 0 0 20px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.action { display: grid; grid-template-columns: minmax(0, 1fr) 110px 110px; gap: 0; border-bottom: 1px solid var(--line); }
+.action:last-child { border-bottom: 0; }
+.action > div { padding: 11px 14px; }
+.action-what { font-size: 14px; line-height: 1.55; }
+.action-verify { grid-column: 1 / -1; font-size: 13px; color: var(--ink-2); background: var(--line-soft); padding-top: 7px; padding-bottom: 7px; }
+.action-meta { font-size: 12.5px; border-left: 1px solid var(--line); }
+.action-meta span { display: block; font-size: 10.5px; letter-spacing: .05em; color: var(--muted); font-weight: 700; }
+.action-head { display: grid; grid-template-columns: minmax(0, 1fr) 110px 110px; background: var(--blue-soft); border-bottom: 2px solid rgba(25, 104, 173, 0.25); font-size: 12px; font-weight: 800; color: var(--blue-dd); }
+.action-head > div { padding: 8px 14px; }
+
+/* Evidence Grid */
+.ev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; margin: 0 0 22px; }
+figure { margin: 0; border: 1px solid var(--line); background: #fff; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+figure:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(12, 58, 99, 0.08); }
+figure img { display: block; width: 100%; height: 210px; object-fit: cover; background: #eef3f7; }
+figcaption { padding: 11px 14px; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+.ev-id { font-family: var(--mono); font-size: 11px; font-weight: 800; color: #fff; background: var(--blue); padding: 1px 6px; border-radius: 3px; margin-right: 6px; }
+.ev-meta { display: block; margin-top: 5px; font-size: 11.5px; color: var(--muted); }
+
+/* Modal Lightbox */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000; background: rgba(12, 41, 67, 0.88);
+  backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: #fff; border-radius: 12px; max-width: 1080px; width: 100%;
+  max-height: 92vh; overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative;
+}
+.modal-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex;
+  align-items: center; justify-content: space-between; background: var(--paper);
+}
+.modal-header h4 { font-size: 1rem; font-weight: 800; color: var(--blue-dd); }
+.modal-close {
+  background: transparent; border: none; font-size: 1.4rem; cursor: pointer;
+  color: var(--muted); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+}
+.modal-close:hover { background: #e2e8f0; color: var(--ink); }
+.modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+.modal-img-container {
+  width: 100%; max-height: 60vh; background: #0b1520; display: flex;
+  align-items: center; justify-content: center; border-radius: 8px; overflow: hidden;
+}
+.modal-img-container img { max-width: 100%; max-height: 60vh; object-fit: contain; }
+
+/* Responsive & Print */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; gap: 0; padding: 0 16px 60px; }
+  .toc { display: none; }
+  .cover { padding: 66px 16px 24px; }
+  .action, .action-head { grid-template-columns: 1fr; }
+  .action-meta { border-left: 0; border-top: 1px solid var(--line); display: flex; gap: 8px; }
+  .action-head { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Fixed Top Navigation -->
+<header class="topbar">
+  <a href="#summary" class="brand">
+    <div class="tx">
+      台中市大安區龜殼段 POCS 水上光電
+      <small>8D SOLAR DIAGNOSTIC PLATFORM</small>
+    </div>
+  </a>
+
+  <nav class="topnav">
+    <a href="#summary" class="navtab active">摘要 Summary</a>
+    <a href="#d0" class="navtab">D0 立案</a>
+    <a href="#d2" class="navtab">D2 描述</a>
+    <a href="#d3" class="navtab">D3 圍堵</a>
+    <a href="#d4" class="navtab">D4 根因</a>
+    <a href="#d5" class="navtab">D5 對策</a>
+    <a href="#d6" class="navtab">D6 驗證</a>
+    <a href="#d7" class="navtab">D7 防再發</a>
+    <a href="#safety" class="navtab">安全警語</a>
+  </nav>
+
+  <div class="topbar-actions">
+    <button class="mode-toggle-btn " id="modeToggleBtn" onclick="toggleReportMode()">
+      <span id="modeIcon">🔄</span>
+      <span id="modeBtnText">模式：內部維運版</span>
+    </button>
+    <button class="btn-action-sm" onclick="openRawDataModal()">
+      <span>📊 原始數據對帳</span>
+    </button>
+    <button class="btn-action-sm" onclick="openPhotoGalleryModal()">
+      <span>📸 照片證據庫</span>
+    </button>
+  </div>
+</header>
+
+<!-- Header Cover -->
+<header class="cover">
+  <div class="cover-inner">
+    <div class="badges">
+      <span class="badge mode-internal" id="headerModeBadge">內部維運版</span>
+      <span class="badge">8D 異常矯正報告</span>
+      <span class="badge">對策執行中</span>
+    </div>
+    <h1>台中市大安區龜殼段 POCS 水上光電｜INV-13 發電異常</h1>
+    <p class="lede">根因是雜草覆蓋模組，不是電氣故障。而且 9/10 的除草作業把割下的草留在模組上，讓 INV-13 比除草前更差。</p>
+    <dl class="factgrid">
+      <div><dt>案號</dt><dd>PV-2026-DA01</dd></div>
+      <div><dt>電廠</dt><dd style="font-size:13px;">台中市大安區龜殼段 253-1 地號（水上浮體型）</dd></div>
+      <div><dt>裝置容量</dt><dd>1,505 kWp / 13 台 SUNGROW SG110CX (110kW 級)</dd></div>
+      <div><dt>資料期間</dt><dd>2026/06/20 – 09/17（90 天）</dd></div>
+      <div><dt>版本</dt><dd>v1.0</dd></div>
+      <div><dt>報告日期</dt><dd>2026/09/21</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- Sticky TOC -->
+  <nav class="toc">
+    <div class="toc-label">目錄 NAVIGATION</div>
+    <a href="#summary">摘要 結論與問題清單</a>
+    <a href="#d0">D0 立案與緊急反應</a>
+    <a href="#d1">D1 小組與分工</a>
+    <a href="#d2">D2 問題描述（量化）</a>
+    <a href="#d3">D3 暫時圍堵措施</a>
+    <a href="#d4">D4 根本原因分析</a>
+    <a href="#d5">D5 永久對策選定</a>
+    <a href="#d6">D6 執行與效果驗證</a>
+    <a href="#d7">D7 防止再發</a>
+    <a href="#d8">D8 結案與歸檔</a>
+    <a href="#src">附錄B 原始資料來源</a>
+    <a href="#limit">附錄C 分析限制</a>
+    <a href="#safety">安全 作業安全警語</a>
+  </nav>
+
+  <main>
+    <!-- ==================== SECTION: SUMMARY ==================== -->
+    <section id="summary">
+      <div class="sec-head"><span class="sec-tag">摘要</span><h2>結論與問題清單</h2></div>
+      <div class="kpis">
+        
+        <div class="kpi bad">
+          <div class="kpi-label">INV-13 相對基準</div>
+          <div class="kpi-value">45<span class="kpi-unit">%</span></div>
+          <div class="kpi-note">09/11–09/17 平均；基準為 006／010</div>
+        </div>
+        
+
+        <div class="kpi bad">
+          <div class="kpi-label">INV-13 損失電量</div>
+          <div class="kpi-value">24,785<span class="kpi-unit">kWh</span></div>
+          <div class="kpi-note">90 天累計，目前每天少 323 kWh</div>
+        </div>
+        
+
+        <div class="kpi warn">
+          <div class="kpi-label">7 台合計損失</div>
+          <div class="kpi-value">34,268<span class="kpi-unit">kWh</span></div>
+          <div class="kpi-note">比基準低 10.0%</div>
+        </div>
+        
+
+        <div class="kpi warn">
+          <div class="kpi-label">年化損失金額</div>
+          <div class="kpi-value">69<span class="kpi-unit">萬元</span></div>
+          <div class="kpi-note">7 台，以 NT$5/kWh 估算</div>
+        </div>
+        
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <caption>問題清單（依處理優先順序）</caption>
+          <thead>
+            <tr>
+              <th style="width:70px;">優先</th>
+              <th>項目</th>
+              <th>量化規模</th>
+              <th>對策方向</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="row-bad">
+          <td><span class="sev P1">P1</span></td>
+          <td><strong>INV-13 雜草覆蓋模組</strong></td>
+          <td>90 天少發 24,785 kWh，年化 NT$47–65 萬</td>
+          <td>本週清除模組上草屑並除草</td>
+        </tr>
+        
+
+        <tr class="row-bad">
+          <td><span class="sev P1">P1</span></td>
+          <td><strong>除草 SOP 缺陷：割完的草留在模組上</strong></td>
+          <td>復機後 0.510 → 0.446，反而更差</td>
+          <td>草屑清運列入驗收條件</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><span class="sev P2">P2</span></td>
+          <td><strong>熱斑與接線盒過熱風險</strong></td>
+          <td>長期遮蔽＝旁路二極體長期導通</td>
+          <td>清草後兩週內紅外線熱像掃描</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><span class="sev P2">P2</span></td>
+          <td><strong>平台登錄容量錯誤</strong></td>
+          <td>最大誤差 +7.2%（INV-001）</td>
+          <td>依串接圖修正 7 台 kWp 設定</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><span class="sev P3">P3</span></td>
+          <td><strong>監控資料不完整</strong></td>
+          <td>13 台只匯出 7 台；日射計讀值未入庫</td>
+          <td>補匯出、修點位對應</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><span class="sev P4">P4</span></td>
+          <td><strong>溫度感測器異常</strong></td>
+          <td>CS1-TP1 顯示 327.67 °C</td>
+          <td>檢查感測器或倍率設定</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <h4>這份報告最該帶走的一句話</h4>
+        <p>真正的管理缺口不是「沒有除草」，是「割完沒有清模組面」。前者是頻率問題，後者是驗收條件問題——而後者讓這次除草做了等於白做，甚至倒退。</p>
+      </div>
+
+      <!-- Interactive Plant Map -->
+      <div style="margin-top:20px;">
+        <div style="font-size:13px; font-weight:800; color:var(--blue-dd); margin-bottom:8px;">🗺️ 案場精確地理區位與臨海微氣候環境 (Leaflet 互動圖資)</div>
+        <div id="plantMap" style="width:100%; height:320px; border-radius:8px; border:1px solid var(--line); z-index:1;"></div>
+        <div style="font-size:12px; color:var(--muted); margin-top:6px; display:flex; justify-content:space-between;">
+          <span>坐標：24.38° N, 120.575° E</span>
+          <span>臨海距離：約 650 公尺（高鹽霧、強季風、高地下水位野草生長極快）</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D0 ==================== -->
+    <section id="d0">
+      <div class="sec-head"><span class="sec-tag">D0</span><h2>立案與緊急反應</h2></div>
+      <p class="sec-purpose">接獲異常的第一時間：安全判斷、是否停機、建案號。</p>
+      <p>由發電資料異常比對發現，非現場通報。2026/09/18 完成初判（v0.1，判為組串斷路），09/21 取得現場照片與串接圖後修正根因（本版 v1.0）。</p>
+      <div class="stmt fact">
+        <span class="tag">事實</span>
+        <p>2026/09/21 09:52 監控截圖：日射 720 W/m² 時，INV-13 交流輸出僅 31.26 kW（47.27 A），其餘各台 62–74 kW。異常狀態持續中。</p>
+      </div>
+      <div class="callout warn">
+        <h4>安全判斷：不需立即停機，但有火載量風險</h4>
+        <p>發電量偏低本身不構成立即危險，無須緊急停機。但乾草堆積在模組與浮台上屬於火載量，與直流電弧風險疊加。清運草屑同時是消防措施，不只是為了發電。</p>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D1 ==================== -->
+    <section id="d1">
+      <div class="sec-head"><span class="sec-tag">D1</span><h2>小組與分工</h2></div>
+      <p class="sec-purpose">誰負責、誰執行、誰驗收、業主窗口是誰。</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:140px;">角色</th>
+              <th style="width:120px;">負責人</th>
+              <th>負責事項</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><strong>資料分析</strong></td>
+          <td>（待填）</td>
+          <td>發電資料比對、損失量化、報告產出與恢復門檻追蹤</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>現場執行</strong></td>
+          <td>（待填）</td>
+          <td>清草、除草、熱像掃描、1500V 直流 LOTO 施作</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>監控系統</strong></td>
+          <td>（待填）</td>
+          <td>平台容量修正、匯出設定、感測器點位校驗</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>業主窗口</strong></td>
+          <td>（待填）</td>
+          <td>匯僑：對策說明、預算審核與驗收確認</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D2 ==================== -->
+    <section id="d2">
+      <div class="sec-head"><span class="sec-tag">D2</span><h2>問題描述（量化）</h2></div>
+      <p class="sec-purpose">用數字描述問題，不用形容詞。含損失 kWh 與金額。</p>
+      <p>
+        <strong>何時</strong>：2026/06/20 起持續（資料起點即已異常，實際起始時間更早）。<br>
+        <strong>何處</strong>：INV-13 為主，002／009 程度較輕。<br>
+        <strong>現象</strong>：單位發電量僅同場基準台的 48%，且逐月下滑。<br>
+        <strong>影響</strong>：90 天累計短少 24,785 kWh，年化發電損失 NT$ 47–65 萬元。
+      </p>
+      <p>比對前必須先修正一件事：<strong>平台登錄的裝置容量是錯的</strong>，最大誤差 +7.2%。不修正就直接比 kWh/kWp，排名會完全失真——初版就是因此誤判 001／002／005 整組偏低。</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <caption>平台登錄容量 vs 串接圖實際容量（335 W 組件）</caption>
+          <thead>
+            <tr>
+              <th>INV</th>
+              <th>串接設計</th>
+              <th class="num">實際片數</th>
+              <th class="num">實際 kWp</th>
+              <th class="num">平台 kWp</th>
+              <th class="num">誤差</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="row-warn">
+          <td><strong>001</strong></td>
+          <td>21併14串 + 20併2串</td>
+          <td class="num">334</td>
+          <td class="num">111.9</td>
+          <td class="num">119.9</td>
+          <td class="num" style="font-weight:700;">+7.2%</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>002</strong></td>
+          <td>20併18串</td>
+          <td class="num">360</td>
+          <td class="num">120.6</td>
+          <td class="num">119.9</td>
+          <td class="num" style="font-weight:700;">−0.6%</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><strong>005</strong></td>
+          <td>20併17串</td>
+          <td class="num">340</td>
+          <td class="num">113.9</td>
+          <td class="num">119.9</td>
+          <td class="num" style="font-weight:700;">+5.3%</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>006</strong></td>
+          <td>20併17串</td>
+          <td class="num">340</td>
+          <td class="num">113.9</td>
+          <td class="num">112.9</td>
+          <td class="num" style="font-weight:700;">−0.9%</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><strong>009</strong></td>
+          <td>20併18串</td>
+          <td class="num">360</td>
+          <td class="num">120.6</td>
+          <td class="num">113.2</td>
+          <td class="num" style="font-weight:700;">−6.1%</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><strong>010</strong></td>
+          <td>20併18串</td>
+          <td class="num">360</td>
+          <td class="num">120.6</td>
+          <td class="num">113.2</td>
+          <td class="num" style="font-weight:700;">−6.1%</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>013</strong></td>
+          <td>20併16串 + 22併1串</td>
+          <td class="num">342</td>
+          <td class="num">114.6</td>
+          <td class="num">113.2</td>
+          <td class="num" style="font-weight:700;">−1.2%</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <caption>用實際容量重算的 90 天單位發電量排名</caption>
+          <thead>
+            <tr>
+              <th>INV</th>
+              <th class="num">90 天 kWh/kWp</th>
+              <th class="num">相對最佳台</th>
+              <th class="num">90 天短少 kWh</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="">
+          <td><strong>006</strong></td>
+          <td class="num">423.8</td>
+          <td class="num">1.000（基準）</td>
+          <td class="num">—</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>010</strong></td>
+          <td class="num">419.5</td>
+          <td class="num">0.990</td>
+          <td class="num">—</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>001</strong></td>
+          <td class="num">407.8</td>
+          <td class="num">0.962</td>
+          <td class="num">1,548</td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>005</strong></td>
+          <td class="num">404.8</td>
+          <td class="num">0.955</td>
+          <td class="num">1,916</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><strong>009</strong></td>
+          <td class="num">397.6</td>
+          <td class="num">0.938</td>
+          <td class="num">2,900</td>
+        </tr>
+        
+
+        <tr class="row-warn">
+          <td><strong>002</strong></td>
+          <td class="num">395.9</td>
+          <td class="num">0.934</td>
+          <td class="num">3,106</td>
+        </tr>
+        
+
+        <tr class="row-bad">
+          <td><strong>013</strong></td>
+          <td class="num">205.3</td>
+          <td class="num">0.485</td>
+          <td class="num">24,785</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 90-Day Trend Chart -->
+      <div style="margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:13px; color:var(--blue-dd);">📊 90 天逐日發電走勢與基準對照 (ECharts 互動圖表)</strong>
+          <button class="btn-action-sm" onclick="openRawDataModal()">📥 檢視原始數據對帳表</button>
+        </div>
+        <div id="trendChart" style="width:100%; height:360px;"></div>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D3 ==================== -->
+    <section id="d3">
+      <div class="sec-head"><span class="sec-tag">D3</span><h2>暫時圍堵措施</h2></div>
+      <p class="sec-purpose">在找到根因之前先止血，避免損失擴大。</p>
+      <div class="actions">
+        <div class="action-head">
+          <div>行動項目</div>
+          <div>負責</div>
+          <div>期限</div>
+        </div>
+        
+        <div class="action">
+          <div class="action-what">清除 INV-13 區模組表面草屑，全部清運離場，不可堆在浮台上（會再落回模組，也是火載量）</div>
+          <div class="action-meta"><span>負責</span>現場執行</div>
+          <div class="action-meta"><span>期限</span>2026/09/26</div>
+          <div class="action-verify"><strong>驗證：</strong>清完後連續 3 天觀察 INV-13 相對基準的比值。回到 0.9 以上＝確認為雜草；只回到 0.6–0.8＝仍有其他遮蔽或組串問題，轉 D5 電氣檢測。</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">調閱 INV-13 於 09/01–09/12 的告警與事件紀錄，確認 09/05–09/09 那 5 天是人為停機還是故障</div>
+          <div class="action-meta"><span>負責</span>監控系統</div>
+          <div class="action-meta"><span>期限</span>2026/09/24</div>
+          <div class="action-verify"><strong>驗證：</strong>找到停機原因代碼，或確認為施工人為停機</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">確認 09/21 截圖中 003、004、007、008、009 的紅色告警內容</div>
+          <div class="action-meta"><span>負責</span>監控系統</div>
+          <div class="action-meta"><span>期限</span>2026/09/24</div>
+          <div class="action-verify"><strong>驗證：</strong>009 發電資料正常，研判為通訊或次要告警，需逐台確認</div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D4 ==================== -->
+    <section id="d4">
+      <div class="sec-head"><span class="sec-tag">D4</span><h2>根本原因分析</h2></div>
+      <p class="sec-purpose">證據與推論鏈，並列出已排除的假設。</p>
+      <p>照片與數據互相印證，指向同一個原因：<strong>雜草覆蓋模組</strong>。以下為證據與推論鏈。</p>
+
+      <!-- Evidence Photos Grid (Top 2: Field cutting) -->
+      <div class="ev-grid">
+        
+        <figure onclick="openSinglePhoto('EV-01')">
+          <img src="assets/auo_scada_status.jpg" alt="監控平台裝置結構畫面" loading="lazy">
+          <figcaption>
+            <span class="ev-id">EV-01</span>監控平台裝置結構畫面
+            <span class="ev-meta">2026/09/21 09:52 ｜ 監控平台截圖 ｜ 對應 D0、D4</span>
+          </figcaption>
+        </figure>
+        
+
+        <figure onclick="openSinglePhoto('EV-02')">
+          <img src="assets/string_layout_weeds_annotated.jpg" alt="模組串接圖 C-002 V-01 現場標註" loading="lazy">
+          <figcaption>
+            <span class="ev-id">EV-02</span>模組串接圖 C-002 V-01 現場標註
+            <span class="ev-meta">設計圖 110/09/01 ｜ 竣工圖面＋現場標註 ｜ 對應 D2、D4</span>
+          </figcaption>
+        </figure>
+        
+      </div>
+
+      <div class="stmt fact">
+        <span class="tag">事實</span>
+        <p>浮體型系統，模組貼近水面與草澤，周圍為高過人的蘆葦。除草照片中，<strong>割下的草整片堆在模組表面，沒有清走</strong>。</p>
+      </div>
+
+      <div class="stmt fact">
+        <span class="tag">事實</span>
+        <p>串接圖上標示的紅框為雜草覆蓋模組區域，<strong>INV-13 覆蓋面積最大</strong>。</p>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <caption>INV-13 相對基準台（006／010）的比值變化</caption>
+          <thead>
+            <tr>
+              <th>期間</th>
+              <th class="num">相對基準</th>
+              <th>說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="">
+          <td>06/20–07/15</td>
+          <td class="num" style="font-weight:700;">0.541</td>
+          <td>初始基準期</td>
+        </tr>
+        
+
+        <tr class="">
+          <td>07/16–08/15</td>
+          <td class="num" style="font-weight:700;">0.529</td>
+          <td>緩慢平滑下滑</td>
+        </tr>
+        
+
+        <tr class="">
+          <td>08/16–09/04</td>
+          <td class="num" style="font-weight:700;">0.510</td>
+          <td>持續下滑</td>
+        </tr>
+        
+
+        <tr class="row-bad">
+          <td>09/05–09/09</td>
+          <td class="num" style="font-weight:700;">0.003</td>
+          <td>近乎停機 5 天（除草施工）</td>
+        </tr>
+        
+
+        <tr class="row-bad">
+          <td>09/11–09/17</td>
+          <td class="num" style="font-weight:700;">0.446</td>
+          <td>復機後反而比停機前更差！</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+
+      <ol style="padding-left:22px; margin-bottom:18px;">
+        <li>比值不隨天氣變（陰天 0.574、晴天 0.589 幾乎相同）→ 不是逆變器削峰或降載，是直流端進來的功率本來就少。DC/AC 比僅 1.04（114.6 kWp 對 110 kW），設計上本來就不會削峰。</li>
+<li>比值逐月穩定下滑（每 30 天約 −1.7 個百分點）→ 符合雜草持續長高、覆蓋面積擴大之自然特徵。電氣故障通常是階躍式跳落，不是斜坡。</li>
+<li>09/05–09/09 停機 5 天只有 013 一台，同期 001／002／005／009 比值穩定在 0.94~0.97 → 該期間事件只作用在 013，研判為該區除草施工停機。</li>
+<li>復機後（0.446）比停機前（0.510）更差 → 最合理的解釋是割下的草被留在模組上，覆蓋面積反而增加。現場照片直接支持這一點。</li>
+<li>2026/09/21 截圖：日射 720 W/m² 時 013 僅 31.26 kW，其他台 62–74 kW → 問題至今仍在，且發電能力正好落在 45%。</li>
+      </ol>
+
+      <div class="tbl-wrap">
+        <table class="excl">
+          <caption>已排除的假設</caption>
+          <thead>
+            <tr>
+              <th style="width:240px;">假設</th>
+              <th>排除依據</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><strong>逆變器削峰（Clipping）或降載</strong></td>
+          <td>削峰只在高日照時發生，陰天不受影響。但 013 陰天晴天比值相同。且 DC/AC 比僅 1.04，設計上就不會削峰。</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>組串斷路、保險絲熔斷、MC4 脫落（v0.1 的判斷）</strong></td>
+          <td>電氣斷路是階躍式損失，但實測為每月約 1.7 個百分點的平滑下滑。且現場照片顯示大面積雜草覆蓋，足以解釋全部缺口。</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>A 組（001／002／005）整組效能偏低</strong></td>
+          <td>v0.1 的誤判。用平台錯誤容量計算所致，改用串接圖實際片數後差異大半消失。</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>組件衰退或 PID</strong></td>
+          <td>衰退為全場性、年為單位的緩慢變化，不會在 3 個月內單台掉 5 個百分點，也不會在單次施工後階躍。</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout danger">
+        <h4>延伸風險：這不只是少發電</h4>
+        <p>模組被草長期壓住＝局部遮蔽＝旁路二極體長期導通，會造成接線盒過熱、電池片熱斑，最終變成永久損壞的模組。清草之後如果熱像仍有熱點，代表已經回不來了，那些模組必須列管更換。這是清草之外真正需要花錢的部分。</p>
+      </div>
+
+      <!-- Evidence Photos Grid (Bottom 2: SCADA & Layout) -->
+      <div class="ev-grid">
+        
+        <figure onclick="openSinglePhoto('EV-03')">
+          <img src="assets/field_weeds_cutting_2.jpg" alt="現場除草作業實拍" loading="lazy">
+          <figcaption>
+            <span class="ev-id">EV-03</span>現場除草作業實拍
+            <span class="ev-meta">除草作業期間 ｜ 現場拍攝 ｜ 對應 D4</span>
+          </figcaption>
+        </figure>
+        
+
+        <figure onclick="openSinglePhoto('EV-04')">
+          <img src="assets/field_weeds_cutting_1.jpg" alt="關鍵草屑覆蓋模組實證" loading="lazy">
+          <figcaption>
+            <span class="ev-id">EV-04</span>關鍵草屑覆蓋模組實證
+            <span class="ev-meta">除草作業後 ｜ 現場拍攝 ｜ 對應 D4、D7</span>
+          </figcaption>
+        </figure>
+        
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D5 ==================== -->
+    <section id="d5">
+      <div class="sec-head"><span class="sec-tag">D5</span><h2>永久對策選定</h2></div>
+      <p class="sec-purpose">選項比較：投入、產出、風險，並說明為何選這個。</p>
+      <div class="tbl-wrap">
+        <table>
+          <caption>永久對策選項比較</caption>
+          <thead>
+            <tr>
+              <th>選項</th>
+              <th>投入</th>
+              <th>產出</th>
+              <th>風險／限制</th>
+              <th style="width:90px;">採用</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="row-warn">
+          <td><strong>改除草 SOP：草屑清運入驗收、生長季每月一次</strong></td>
+          <td>人工成本增加，無資本支出 (CAPEX=0)</td>
+          <td>直接解決本次根因</td>
+          <td>依賴執行落實，需驗收把關</td>
+          <td><strong>✔ 主方案</strong></td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>防草蓆／鳳山圳高耐候抑草工法</strong></td>
+          <td>材料與施工費約 22.5 萬</td>
+          <td>降低除草頻率，8.8個月回本</td>
+          <td>水域環境抗風地錨適用性評估</td>
+          <td><strong>評估中</strong></td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>提高模組離水高度</strong></td>
+          <td>結構改造，成本高</td>
+          <td>根本解決</td>
+          <td>浮體結構須重新計算，停機期長</td>
+          <td><strong>不採用</strong></td>
+        </tr>
+        
+
+        <tr class="">
+          <td><strong>噴灑化學除草劑</strong></td>
+          <td>低</td>
+          <td>見效快</td>
+          <td>水域環境不建議，有環保與養殖疑慮</td>
+          <td><strong>不採用</strong></td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+      <p><strong>主方案選擇理由</strong>：本次損失的直接成因是「割完沒清」而非「沒有除草能力」，屬流程缺陷而非資源不足。先用零資本支出的 SOP 修訂解決，驗證有效後再評估是否需要進一步鋪設抑草蓆工法。</p>
+    </section>
+
+    <!-- ==================== SECTION: D6 ==================== -->
+    <section id="d6">
+      <div class="sec-head"><span class="sec-tag">D6</span><h2>執行與效果驗證</h2></div>
+      <p class="sec-purpose">做了什麼、驗證門檻是什麼、結果如何。</p>
+      <div class="actions">
+        <div class="action-head">
+          <div>行動項目</div>
+          <div>負責</div>
+          <div>期限</div>
+        </div>
+        
+        <div class="action">
+          <div class="action-what">清除草屑後，連續 3 天追蹤 INV-13 相對基準比值</div>
+          <div class="action-meta"><span>負責</span>資料分析</div>
+          <div class="action-meta"><span>期限</span>2026/09/29</div>
+          <div class="action-verify"><strong>驗證：</strong>門檻：比值 ≥ 0.90 判定對策有效。低於 0.80 則啟動電氣檢測（見第 5 項）。</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">紅外線熱像掃描 INV-13 及其他紅框覆蓋區，找熱斑與接線盒過熱</div>
+          <div class="action-meta"><span>負責</span>現場執行</div>
+          <div class="action-meta"><span>期限</span>2026/10/03</div>
+          <div class="action-verify"><strong>驗證：</strong>有熱點的模組逐片列管、拍照編號、報價更換</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">依串接圖修正平台 7 台 kWp 設定</div>
+          <div class="action-meta"><span>負責</span>監控系統</div>
+          <div class="action-meta"><span>期限</span>2026/10/03</div>
+          <div class="action-verify"><strong>驗證：</strong>平台顯示 kWp 與串接圖片數×335W 相符</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">補匯出其餘 6 台逆變器資料；修復日射計與溫度計點位對應</div>
+          <div class="action-meta"><span>負責</span>監控系統</div>
+          <div class="action-meta"><span>期限</span>2026/10/03</div>
+          <div class="action-verify"><strong>驗證：</strong>amCharts 匯出含 13 台；insolation 欄位有非零讀值，可計算 PR</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">若清草後未達 0.90：依 IEC 62446-1 做電氣檢測——各 MPPT 電壓電流判讀、逐串 Voc、逐串 Isc 或 I-V 曲線、1000 V 兆歐表量 Riso（系統電壓 >120 V 時 ≥ 1 MΩ）</div>
+          <div class="action-meta"><span>負責</span>現場執行</div>
+          <div class="action-meta"><span>期限</span>視 D6 第 1 項結果</div>
+          <div class="action-verify"><strong>驗證：</strong>找出偏低組串並完成修復，復電前重測 Riso</div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D7 ==================== -->
+    <section id="d7">
+      <div class="sec-head"><span class="sec-tag">D7</span><h2>防止再發</h2></div>
+      <p class="sec-purpose">SOP 修訂、監控告警規則、水平展開到其他案場。</p>
+      <p>本案真正的缺口是流程，不是技術。以下三項修訂後適用於<strong>所有水上與地面案場</strong>。</p>
+      <ol style="padding-left:22px; margin-bottom:16px;">
+        <li>割草方向背對模組，或加裝擋板，避免草屑噴上模組面。</li>
+<li>「割完必須清模組面、草屑清運離場」寫進驗收條件，沒清不算完工。</li>
+<li>生長季（4–10 月）除草週期改為每月一次，非生長季每季一次。</li>
+      </ol>
+      <div class="callout warn">
+        <h4>水平展開</h4>
+        <p>其他水上型與草生地面型案場，應於本月內各做一次模組面覆蓋狀況盤點，並套用同一份除草驗收條件。</p>
+      </div>
+      <div class="actions">
+        <div class="action-head">
+          <div>行動項目</div>
+          <div>負責</div>
+          <div>期限</div>
+        </div>
+        
+        <div class="action">
+          <div class="action-what">檢討本次除草承商的作業品質與計價方式，確認是否為長期慣例</div>
+          <div class="action-meta"><span>負責</span>維運主管</div>
+          <div class="action-meta"><span>期限</span>2026/10/10</div>
+        </div>
+        
+
+        <div class="action">
+          <div class="action-what">檢討為何緩慢劣化持續 3 個月未被發現——監控告警規則缺口</div>
+          <div class="action-meta"><span>負責</span>維運主管</div>
+          <div class="action-meta"><span>期限</span>2026/10/10</div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: D8 ==================== -->
+    <section id="d8">
+      <div class="sec-head"><span class="sec-tag">D8</span><h2>結案與歸檔</h2></div>
+      <p class="sec-purpose">結案條件、文件歸檔位置、後續追蹤。</p>
+      <ul style="padding-left:22px; margin-bottom:16px;">
+        <li>INV-13 相對基準比值 ≥ 0.90 且穩定 7 天。</li>
+<li>熱像掃描無異常熱點（或異常模組已完成更換）。</li>
+<li>除草 SOP 修訂版完成發布。</li>
+<li><strong>文件歸檔</strong>：本報告與 plant_spec.json 存於案場資料夾，後續版本沿用同一份 spec 更新。</li>
+<li><strong>後續追蹤</strong>：結案後每月比對一次全場逆變器相對比值，列入月報。</li>
+      </ul>
+    </section>
+
+    <!-- ==================== SECTION: APPENDIX B ==================== -->
+    <section id="src">
+      <div class="sec-head"><span class="sec-tag">附錄B</span><h2>原始資料來源</h2></div>
+      <p class="sec-purpose">本報告所有數字的出處，可回溯重算。</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>檔案／來源</th>
+              <th style="width:140px;">期間</th>
+              <th class="num" style="width:70px;">筆數</th>
+              <th>說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><strong>amCharts 大安區龜殼段POCS.xlsx</strong></td>
+          <td>2026/06/20–09/17</td>
+          <td class="num">90</td>
+          <td>逐日逆變器 kWh 與 ey（kWh/kWp），7 台（001／002／005／006／009／010／013）。insolation 與 pr 欄位全為 0。</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>監控平台裝置結構截圖</strong></td>
+          <td>2026/09/21 09:52</td>
+          <td class="num">1</td>
+          <td>13 台逆變器即時 AC 電壓／電流／功率、日射計 720 W/m²、告警狀態</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>模組串接圖 C-002 V-01</strong></td>
+          <td>110/09/01</td>
+          <td class="num">13</td>
+          <td>逐台串數與每串片數，為實際裝置容量的計算依據。圖面逐台加總 4,553 片，與總表 4,493 片差 60 片。</td>
+        </tr>
+        
+
+        <tr>
+          <td><strong>現場除草照片</strong></td>
+          <td>除草作業期間</td>
+          <td class="num">2</td>
+          <td>雜草覆蓋狀況與草屑未清運的佐證</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION: APPENDIX C ==================== -->
+    <section id="limit">
+      <div class="sec-head"><span class="sec-tag">附錄C</span><h2>分析限制</h2></div>
+      <p class="sec-purpose">這份報告不能回答什麼。</p>
+      <ul style="padding-left:22px; margin-bottom:16px;">
+        <li>只有逐日逆變器總量，沒有組串或 MPPT 的電壓電流，也沒有日照資料入庫。所有根因均由「同場互比＋現場照片」推論，需現場驗證。</li>
+<li>應發電量以 006／010 為基準。若這兩台自己也被草覆蓋，實際損失會比本報告更高。</li>
+<li>串接圖的 INV1–13 對應監控的 COM1_001–013，為合理但未經確認的假設。</li>
+<li>其餘 6 台無資料，全場損失係按比例外推，僅供量級參考。</li>
+<li>金額以 NT$5/kWh 估算，實際躉購費率未確認。</li>
+      </ul>
+    </section>
+
+    <!-- ==================== SECTION: SAFETY ==================== -->
+    <section id="safety">
+      <div class="sec-head"><span class="sec-tag" style="background:var(--coral);">安全</span><h2>作業安全警語</h2></div>
+      <div class="callout danger">
+        <h4>動工前必讀</h4>
+        <ul style="padding-left:20px; margin-top:8px;">
+          <li>只要有日照組件就在發電，無法完全斷電，組串電壓可達 1000 V DC 以上。</li>
+<li>嚴禁在有載狀態下插拔 MC4 接頭或拉保險絲，直流電弧會燒傷、引火。必須先逆變器關機 → 斷直流開關 → 鉤表確認 0 A。</li>
+<li>水上作業：浮台濕滑，必須穿救生衣、兩人以上同行、設岸上監護人員。濕手、濕鞋不得碰觸直流端子。</li>
+<li>割草機在浮台上作業有割破浮體與割傷電纜的風險。作業前確認電纜走向並加以固定。</li>
+<li>乾草堆積在模組與浮台上是火載量，與直流電弧風險疊加，必須清運離場。</li>
+<li>開啟匯流箱前先用熱像儀檢查外觀並量測對地電壓。作業須穿戴絕緣手套、護目鏡、絕緣鞋，並依規定掛牌上鎖（LOTO）。</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer style="border-top:1px solid var(--line); margin-top:40px; padding-top:18px; font-size:12.5px; color:var(--muted); line-height:1.6;">
+      台中市大安區龜殼段 POCS 水上光電｜INV-13 發電異常｜<span id="footerModeLabel">內部維運版</span>｜發布基準：2026/09/21｜內嵌高解析證據影像 4 張<br>
+      本報告所有數據均可回溯至附錄 B 原始檔案，遵循進金生能源 8D Solar Diagnostic SOP 規範編製。
+    </footer>
+  </main>
+</div>
+
+<!-- Modal: Photo Lightbox -->
+<div class="modal-overlay" id="photoModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 id="modalPhotoTitle">照片檢視</h4>
+      <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-img-container">
+        <img id="modalPhotoImg" src="" alt="Photo Evidence">
+      </div>
+      <div style="margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:.75rem; color:var(--muted); margin-bottom:4px;">
+          <span id="modalPhotoCategory" class="badge">類別</span>
+          <span id="modalPhotoMeta">時間戳記</span>
+        </div>
+        <p id="modalPhotoCaption" style="font-size:.85rem; color:var(--ink); line-height:1.5;"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Raw Data Provenance -->
+<div class="modal-overlay" id="rawDataModal">
+  <div class="modal-content" style="max-width:1160px;">
+    <div class="modal-header">
+      <h4>📊 案場原始數據對帳與溯源檢視器 (Raw Data Provenance)</h4>
+      <button class="modal-close" onclick="closeRawDataModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="rawSearchInput" placeholder="搜尋日期、逆變器或關鍵字..." oninput="filterRawTable()" style="padding:6px 12px; border:1px solid var(--line); border-radius:6px; font-size:.8rem; width:240px;">
+          <button class="btn-action-sm" onclick="exportRawCsv()">📥 匯出 CSV 檔</button>
+          <button class="btn-action-sm" onclick="copyRawTable()">📋 複製表格數據</button>
+        </div>
+        <div style="font-size:.75rem; color:var(--muted);">
+          數據來源：amCharts 歷史匯出資料 & 竣工串接圖 C-002
+        </div>
+      </div>
+      <div class="tbl-wrap" style="max-height:480px; overflow-y:auto;">
+        <table id="rawDataTable">
+          <thead>
+            <tr>
+              <th>日期 Date</th>
+              <th>INV-001 (kWh)</th>
+              <th>INV-002 (kWh)</th>
+              <th>INV-005 (kWh)</th>
+              <th>INV-006 (kWh)</th>
+              <th>INV-009 (kWh)</th>
+              <th>INV-010 (kWh)</th>
+              <th>INV-013 (kWh)</th>
+              <th>同儕均值 (kWh)</th>
+              <th>INV-013 比率</th>
+              <th>判定狀態</th>
+            </tr>
+          </thead>
+          <tbody id="rawDataTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Photo Gallery Grid -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal-content" style="max-width:1160px;">
+    <div class="modal-header">
+      <h4>📸 案場工程照片與現場證據庫總覽</h4>
+      <button class="modal-close" onclick="closeGalleryModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="ev-grid" id="allPhotosGrid">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Mode Switcher (Internal vs Owner) ---
+let currentMode = "internal"; // 'internal' or 'owner'
+
+function toggleReportMode() {
+  if (currentMode === 'internal') {
+    setReportMode('owner');
+  } else {
+    setReportMode('internal');
+  }
+}
+
+function setReportMode(mode) {
+  currentMode = mode;
+  const isOwner = mode === 'owner';
+  const label = isOwner ? '業主交付版' : '內部維運版';
+  const badgeClass = isOwner ? 'mode-owner' : 'mode-internal';
+
+  document.getElementById('pageTitle').innerText = `台中市大安區龜殼段 POCS 水上光電｜INV-13 發電異常｜${label}`;
+  document.getElementById('modeBtnText').innerText = `模式：${label}`;
+  document.getElementById('headerModeBadge').innerText = label;
+  document.getElementById('headerModeBadge').className = `badge ${badgeClass}`;
+  document.getElementById('footerModeLabel').innerText = label;
+
+  const btn = document.getElementById('modeToggleBtn');
+  if (isOwner) {
+    btn.classList.add('owner');
+  } else {
+    btn.classList.remove('owner');
+  }
+}
+
+// --- Photo Lightbox Logic ---
+const evidencePhotos = [{"id": "EV-01", "title": "監控平台裝置結構畫面", "src": "assets/auo_scada_status.jpg", "category": "監控平台截圖", "meta": "2026/09/21 09:52 ｜ 監控平台截圖 ｜ 對應 D0、D4", "caption": "日射 720 W/m² 時 INV-13 僅 31.26 kW（47.27 A），其餘各台 62–74 kW。紅色標示為告警中的逆變器（003／004／007／008／009／013）。日射計 720 W/m² 正常，但溫度計顯示 327.67 °C 溢位。"}, {"id": "EV-02", "title": "模組串接圖 C-002 V-01 現場標註", "src": "assets/string_layout_weeds_annotated.jpg", "category": "竣工圖面＋現場標註", "meta": "設計圖 110/09/01 ｜ 竣工圖面＋現場標註 ｜ 對應 D2、D4", "caption": "模組串接圖 C-002 V-01（昶恆科技，110/09/01）。紅框為雜草覆蓋模組區域，INV-13 覆蓋面積最大。本報告各台實際裝置容量即依此圖逐台核算片數。"}, {"id": "EV-03", "title": "現場除草作業實拍", "src": "assets/field_weeds_cutting_2.jpg", "category": "現場拍攝", "meta": "除草作業期間 ｜ 現場拍攝 ｜ 對應 D4", "caption": "現場除草作業。浮體型系統模組貼近水面與邊坡，周圍為高過人的蘆葦，雜草極易覆蓋模組。可見模組已被枯草大面積掩埋。"}, {"id": "EV-04", "title": "關鍵草屑覆蓋模組實證", "src": "assets/field_weeds_cutting_1.jpg", "category": "現場拍攝", "meta": "除草作業後 ｜ 現場拍攝 ｜ 對應 D4、D7", "caption": "【關鍵實證】：割下的草整片堆在模組表面，未清運離場。這正是 INV-13 復機後（0.446）比停機前（0.510）更差的原因！"}];
+
+function openSinglePhoto(evId) {
+  const p = evidencePhotos.find(item => item.id === evId);
+  if (!p) return;
+  document.getElementById('modalPhotoTitle').innerText = `${p.id} - ${p.title}`;
+  document.getElementById('modalPhotoImg').src = p.src;
+  document.getElementById('modalPhotoCategory').innerText = p.category;
+  document.getElementById('modalPhotoMeta').innerText = p.meta;
+  document.getElementById('modalPhotoCaption').innerText = p.caption;
+  document.getElementById('photoModal').classList.add('active');
+}
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.remove('active');
+}
+
+function openPhotoGalleryModal() {
+  const container = document.getElementById('allPhotosGrid');
+  container.innerHTML = evidencePhotos.map(p => `
+    <figure onclick="openSinglePhoto('${p.id}')">
+      <img src="${p.src}" alt="${p.title}" loading="lazy">
+      <figcaption>
+        <span class="ev-id">${p.id}</span>${p.title}
+        <span class="ev-meta">${p.meta}</span>
+      </figcaption>
+    </figure>
+  `).join('');
+  document.getElementById('galleryModal').classList.add('active');
+}
+function closeGalleryModal() {
+  document.getElementById('galleryModal').classList.remove('active');
+}
+
+// --- Raw Data Table & CSV Export ---
+const rawDailyData = [{"date": "06/20", "001_ey": 5.48, "001_kwh": 657.0, "002_ey": 5.72, "002_kwh": 686.0, "005_ey": 5.53, "005_kwh": 663.0, "006_ey": 6.15, "006_kwh": 694.0, "009_ey": 6.08, "009_kwh": 689.0, "010_ey": 6.42, "010_kwh": 727.0, "013_ey": 3.31, "013_kwh": 375.0, "peer_avg_ey": 6.115, "peer_avg_kwh": 691.5, "013_ratio": 0.541, "001_ratio": 0.896}, {"date": "06/21", "001_ey": 5.86, "001_kwh": 703.0, "002_ey": 6.1, "002_kwh": 732.0, "005_ey": 5.89, "005_kwh": 706.0, "006_ey": 6.63, "006_kwh": 749.0, "009_ey": 6.54, "009_kwh": 741.0, "010_ey": 6.9, "010_kwh": 781.0, "013_ey": 3.59, "013_kwh": 407.0, "peer_avg_ey": 6.585, "peer_avg_kwh": 745.0, "013_ratio": 0.545, "001_ratio": 0.89}, {"date": "06/22", "001_ey": 5.81, "001_kwh": 697.0, "002_ey": 6.05, "002_kwh": 726.0, "005_ey": 5.85, "005_kwh": 701.0, "006_ey": 6.55, "006_kwh": 739.0, "009_ey": 6.48, "009_kwh": 734.0, "010_ey": 6.84, "010_kwh": 775.0, "013_ey": 3.56, "013_kwh": 403.0, "peer_avg_ey": 6.515, "peer_avg_kwh": 736.5, "013_ratio": 0.546, "001_ratio": 0.892}, {"date": "06/23", "001_ey": 5.39, "001_kwh": 647.0, "002_ey": 5.63, "002_kwh": 675.0, "005_ey": 5.41, "005_kwh": 649.0, "006_ey": 6.06, "006_kwh": 684.0, "009_ey": 6.0, "009_kwh": 679.0, "010_ey": 6.32, "010_kwh": 716.0, "013_ey": 3.28, "013_kwh": 371.0, "peer_avg_ey": 6.03, "peer_avg_kwh": 681.5, "013_ratio": 0.544, "001_ratio": 0.894}, {"date": "06/24", "001_ey": 5.05, "001_kwh": 606.0, "002_ey": 5.24, "002_kwh": 629.0, "005_ey": 5.06, "005_kwh": 607.0, "006_ey": 5.66, "006_kwh": 639.0, "009_ey": 5.59, "009_kwh": 633.0, "010_ey": 5.89, "010_kwh": 667.0, "013_ey": 3.06, "013_kwh": 346.0, "peer_avg_ey": 5.625, "peer_avg_kwh": 636.0, "013_ratio": 0.544, "001_ratio": 0.898}, {"date": "06/25", "001_ey": 2.53, "001_kwh": 303.0, "002_ey": 2.63, "002_kwh": 316.0, "005_ey": 2.53, "005_kwh": 303.0, "006_ey": 2.83, "006_kwh": 319.0, "009_ey": 2.8, "009_kwh": 317.0, "010_ey": 2.94, "010_kwh": 333.0, "013_ey": 1.53, "013_kwh": 173.0, "peer_avg_ey": 2.815, "peer_avg_kwh": 318.0, "013_ratio": 0.544, "001_ratio": 0.899}, {"date": "06/26", "001_ey": 1.17, "001_kwh": 140.0, "002_ey": 1.22, "002_kwh": 146.0, "005_ey": 1.18, "005_kwh": 141.0, "006_ey": 1.3, "006_kwh": 147.0, "009_ey": 1.29, "009_kwh": 146.0, "010_ey": 1.36, "010_kwh": 154.0, "013_ey": 0.7, "013_kwh": 79.0, "peer_avg_ey": 1.295, "peer_avg_kwh": 146.5, "013_ratio": 0.541, "001_ratio": 0.903}, {"date": "06/27", "001_ey": 1.53, "001_kwh": 184.0, "002_ey": 1.58, "002_kwh": 190.0, "005_ey": 1.53, "005_kwh": 183.0, "006_ey": 1.69, "006_kwh": 191.0, "009_ey": 1.68, "009_kwh": 190.0, "010_ey": 1.78, "010_kwh": 201.0, "013_ey": 0.91, "013_kwh": 103.0, "peer_avg_ey": 1.685, "peer_avg_kwh": 190.5, "013_ratio": 0.54, "001_ratio": 0.908}, {"date": "06/28", "001_ey": 3.27, "001_kwh": 392.0, "002_ey": 3.4, "002_kwh": 408.0, "005_ey": 3.28, "005_kwh": 393.0, "006_ey": 3.65, "006_kwh": 412.0, "009_ey": 3.61, "009_kwh": 409.0, "010_ey": 3.82, "010_kwh": 432.0, "013_ey": 1.97, "013_kwh": 223.0, "peer_avg_ey": 3.63, "peer_avg_kwh": 410.5, "013_ratio": 0.543, "001_ratio": 0.901}, {"date": "06/29", "001_ey": 5.51, "001_kwh": 661.0, "002_ey": 5.72, "002_kwh": 686.0, "005_ey": 5.51, "005_kwh": 661.0, "006_ey": 6.14, "006_kwh": 693.0, "009_ey": 6.07, "009_kwh": 687.0, "010_ey": 6.4, "010_kwh": 725.0, "013_ey": 3.32, "013_kwh": 376.0, "peer_avg_ey": 6.105, "peer_avg_kwh": 690.0, "013_ratio": 0.544, "001_ratio": 0.903}, {"date": "06/30", "001_ey": 5.24, "001_kwh": 628.0, "002_ey": 5.44, "002_kwh": 652.0, "005_ey": 5.25, "005_kwh": 630.0, "006_ey": 5.84, "006_kwh": 659.0, "009_ey": 5.78, "009_kwh": 654.0, "010_ey": 6.1, "010_kwh": 691.0, "013_ey": 3.17, "013_kwh": 359.0, "peer_avg_ey": 5.81, "peer_avg_kwh": 656.5, "013_ratio": 0.546, "001_ratio": 0.902}, {"date": "07/01", "001_ey": 4.79, "001_kwh": 575.0, "002_ey": 5.02, "002_kwh": 602.0, "005_ey": 4.81, "005_kwh": 577.0, "006_ey": 5.35, "006_kwh": 604.0, "009_ey": 5.3, "009_kwh": 600.0, "010_ey": 5.58, "010_kwh": 632.0, "013_ey": 2.88, "013_kwh": 326.0, "peer_avg_ey": 5.325, "peer_avg_kwh": 602.0, "013_ratio": 0.541, "001_ratio": 0.9}, {"date": "07/02", "001_ey": 4.88, "001_kwh": 585.0, "002_ey": 4.99, "002_kwh": 598.0, "005_ey": 4.84, "005_kwh": 581.0, "006_ey": 5.37, "006_kwh": 606.0, "009_ey": 5.33, "009_kwh": 603.0, "010_ey": 5.62, "010_kwh": 636.0, "013_ey": 2.91, "013_kwh": 330.0, "peer_avg_ey": 5.35, "peer_avg_kwh": 604.5, "013_ratio": 0.544, "001_ratio": 0.912}, {"date": "07/03", "001_ey": 5.58, "001_kwh": 669.0, "002_ey": 5.8, "002_kwh": 696.0, "005_ey": 5.61, "005_kwh": 673.0, "006_ey": 6.23, "006_kwh": 703.0, "009_ey": 6.17, "009_kwh": 699.0, "010_ey": 6.51, "010_kwh": 737.0, "013_ey": 3.36, "013_kwh": 381.0, "peer_avg_ey": 6.2, "peer_avg_kwh": 701.0, "013_ratio": 0.542, "001_ratio": 0.9}, {"date": "07/04", "001_ey": 5.65, "001_kwh": 678.0, "002_ey": 5.9, "002_kwh": 707.0, "005_ey": 5.73, "005_kwh": 687.0, "006_ey": 6.36, "006_kwh": 718.0, "009_ey": 6.3, "009_kwh": 713.0, "010_ey": 6.66, "010_kwh": 754.0, "013_ey": 3.41, "013_kwh": 386.0, "peer_avg_ey": 6.33, "peer_avg_kwh": 715.5, "013_ratio": 0.539, "001_ratio": 0.893}, {"date": "07/05", "001_ey": 5.48, "001_kwh": 657.0, "002_ey": 5.69, "002_kwh": 683.0, "005_ey": 5.51, "005_kwh": 661.0, "006_ey": 6.14, "006_kwh": 693.0, "009_ey": 6.07, "009_kwh": 687.0, "010_ey": 6.4, "010_kwh": 725.0, "013_ey": 3.28, "013_kwh": 371.0, "peer_avg_ey": 6.105, "peer_avg_kwh": 690.0, "013_ratio": 0.537, "001_ratio": 0.898}, {"date": "07/06", "001_ey": 5.59, "001_kwh": 670.0, "002_ey": 5.8, "002_kwh": 696.0, "005_ey": 5.64, "005_kwh": 676.0, "006_ey": 6.26, "006_kwh": 707.0, "009_ey": 6.19, "009_kwh": 701.0, "010_ey": 6.54, "010_kwh": 740.0, "013_ey": 3.36, "013_kwh": 380.0, "peer_avg_ey": 6.225, "peer_avg_kwh": 704.0, "013_ratio": 0.54, "001_ratio": 0.898}, {"date": "07/07", "001_ey": 5.65, "001_kwh": 678.0, "002_ey": 5.9, "002_kwh": 707.0, "005_ey": 5.73, "005_kwh": 687.0, "006_ey": 6.38, "006_kwh": 720.0, "009_ey": 6.31, "009_kwh": 714.0, "010_ey": 6.67, "010_kwh": 755.0, "013_ey": 3.41, "013_kwh": 386.0, "peer_avg_ey": 6.345, "peer_avg_kwh": 717.0, "013_ratio": 0.537, "001_ratio": 0.89}, {"date": "07/08", "001_ey": 5.45, "001_kwh": 654.0, "002_ey": 5.67, "002_kwh": 680.0, "005_ey": 5.52, "005_kwh": 662.0, "006_ey": 6.15, "006_kwh": 694.0, "009_ey": 6.03, "009_kwh": 683.0, "010_ey": 6.39, "010_kwh": 724.0, "013_ey": 3.3, "013_kwh": 374.0, "peer_avg_ey": 6.09, "peer_avg_kwh": 688.5, "013_ratio": 0.542, "001_ratio": 0.895}, {"date": "07/09", "001_ey": 5.58, "001_kwh": 669.0, "002_ey": 5.82, "002_kwh": 698.0, "005_ey": 5.64, "005_kwh": 676.0, "006_ey": 6.26, "006_kwh": 707.0, "009_ey": 6.17, "009_kwh": 699.0, "010_ey": 6.54, "010_kwh": 740.0, "013_ey": 3.37, "013_kwh": 382.0, "peer_avg_ey": 6.215, "peer_avg_kwh": 703.0, "013_ratio": 0.542, "001_ratio": 0.898}, {"date": "07/10", "001_ey": 4.43, "001_kwh": 531.0, "002_ey": 4.67, "002_kwh": 560.0, "005_ey": 4.49, "005_kwh": 539.0, "006_ey": 4.98, "006_kwh": 562.0, "009_ey": 4.91, "009_kwh": 556.0, "010_ey": 5.2, "010_kwh": 589.0, "013_ey": 2.68, "013_kwh": 304.0, "peer_avg_ey": 4.945, "peer_avg_kwh": 559.0, "013_ratio": 0.542, "001_ratio": 0.896}, {"date": "07/11", "001_ey": 1.31, "001_kwh": 157.0, "002_ey": 1.35, "002_kwh": 162.0, "005_ey": 1.29, "005_kwh": 155.0, "006_ey": 1.45, "006_kwh": 164.0, "009_ey": 1.42, "009_kwh": 161.0, "010_ey": 1.5, "010_kwh": 170.0, "013_ey": 0.79, "013_kwh": 89.0, "peer_avg_ey": 1.435, "peer_avg_kwh": 162.5, "013_ratio": 0.551, "001_ratio": 0.913}, {"date": "07/12", "001_ey": 4.74, "001_kwh": 568.0, "002_ey": 4.9, "002_kwh": 588.0, "005_ey": 4.77, "005_kwh": 572.0, "006_ey": 5.28, "006_kwh": 596.0, "009_ey": 5.22, "009_kwh": 591.0, "010_ey": 5.51, "010_kwh": 624.0, "013_ey": 2.88, "013_kwh": 326.0, "peer_avg_ey": 5.25, "peer_avg_kwh": 593.5, "013_ratio": 0.549, "001_ratio": 0.903}, {"date": "07/13", "001_ey": 4.45, "001_kwh": 534.0, "002_ey": 4.66, "002_kwh": 559.0, "005_ey": 4.49, "005_kwh": 539.0, "006_ey": 4.97, "006_kwh": 561.0, "009_ey": 4.95, "009_kwh": 560.0, "010_ey": 5.21, "010_kwh": 590.0, "013_ey": 2.7, "013_kwh": 306.0, "peer_avg_ey": 4.96, "peer_avg_kwh": 560.5, "013_ratio": 0.544, "001_ratio": 0.897}, {"date": "07/14", "001_ey": 4.66, "001_kwh": 559.0, "002_ey": 4.86, "002_kwh": 583.0, "005_ey": 4.69, "005_kwh": 563.0, "006_ey": 5.21, "006_kwh": 588.0, "009_ey": 5.14, "009_kwh": 582.0, "010_ey": 5.43, "010_kwh": 615.0, "013_ey": 2.83, "013_kwh": 320.0, "peer_avg_ey": 5.175, "peer_avg_kwh": 585.0, "013_ratio": 0.547, "001_ratio": 0.9}, {"date": "07/15", "001_ey": 5.64, "001_kwh": 676.0, "002_ey": 5.87, "002_kwh": 704.0, "005_ey": 5.69, "005_kwh": 682.0, "006_ey": 6.32, "006_kwh": 714.0, "009_ey": 6.26, "009_kwh": 709.0, "010_ey": 6.61, "010_kwh": 749.0, "013_ey": 3.42, "013_kwh": 387.0, "peer_avg_ey": 6.29, "peer_avg_kwh": 711.5, "013_ratio": 0.544, "001_ratio": 0.897}, {"date": "07/16", "001_ey": 5.51, "001_kwh": 661.0, "002_ey": 5.75, "002_kwh": 690.0, "005_ey": 5.57, "005_kwh": 668.0, "006_ey": 6.2, "006_kwh": 700.0, "009_ey": 6.13, "009_kwh": 694.0, "010_ey": 6.46, "010_kwh": 732.0, "013_ey": 3.34, "013_kwh": 378.0, "peer_avg_ey": 6.165, "peer_avg_kwh": 697.0, "013_ratio": 0.542, "001_ratio": 0.894}, {"date": "07/17", "001_ey": 5.24, "001_kwh": 628.0, "002_ey": 5.41, "002_kwh": 649.0, "005_ey": 5.24, "005_kwh": 629.0, "006_ey": 5.82, "006_kwh": 657.0, "009_ey": 5.76, "009_kwh": 652.0, "010_ey": 6.07, "010_kwh": 687.0, "013_ey": 3.14, "013_kwh": 356.0, "peer_avg_ey": 5.79, "peer_avg_kwh": 654.5, "013_ratio": 0.542, "001_ratio": 0.905}, {"date": "07/18", "001_ey": 4.64, "001_kwh": 557.0, "002_ey": 4.87, "002_kwh": 584.0, "005_ey": 4.69, "005_kwh": 562.0, "006_ey": 5.21, "006_kwh": 588.0, "009_ey": 5.17, "009_kwh": 585.0, "010_ey": 5.44, "010_kwh": 616.0, "013_ey": 2.82, "013_kwh": 319.0, "peer_avg_ey": 5.19, "peer_avg_kwh": 586.5, "013_ratio": 0.543, "001_ratio": 0.894}, {"date": "07/19", "001_ey": 3.24, "001_kwh": 388.0, "002_ey": 3.4, "002_kwh": 408.0, "005_ey": 3.29, "005_kwh": 394.0, "006_ey": 3.64, "006_kwh": 411.0, "009_ey": 3.61, "009_kwh": 409.0, "010_ey": 3.81, "010_kwh": 431.0, "013_ey": 1.96, "013_kwh": 222.0, "peer_avg_ey": 3.625, "peer_avg_kwh": 410.0, "013_ratio": 0.541, "001_ratio": 0.894}, {"date": "07/20", "001_ey": 4.75, "001_kwh": 570.0, "002_ey": 4.96, "002_kwh": 595.0, "005_ey": 4.8, "005_kwh": 576.0, "006_ey": 5.35, "006_kwh": 604.0, "009_ey": 5.27, "009_kwh": 597.0, "010_ey": 5.57, "010_kwh": 631.0, "013_ey": 2.85, "013_kwh": 323.0, "peer_avg_ey": 5.31, "peer_avg_kwh": 600.5, "013_ratio": 0.537, "001_ratio": 0.895}, {"date": "07/21", "001_ey": 5.1, "001_kwh": 612.0, "002_ey": 5.34, "002_kwh": 641.0, "005_ey": 5.17, "005_kwh": 620.0, "006_ey": 5.71, "006_kwh": 645.0, "009_ey": 5.66, "009_kwh": 641.0, "010_ey": 5.98, "010_kwh": 677.0, "013_ey": 3.07, "013_kwh": 348.0, "peer_avg_ey": 5.685, "peer_avg_kwh": 643.0, "013_ratio": 0.54, "001_ratio": 0.897}, {"date": "07/22", "001_ey": 5.2, "001_kwh": 624.0, "002_ey": 5.4, "002_kwh": 648.0, "005_ey": 5.25, "005_kwh": 630.0, "006_ey": 5.84, "006_kwh": 659.0, "009_ey": 5.78, "009_kwh": 654.0, "010_ey": 6.1, "010_kwh": 691.0, "013_ey": 3.14, "013_kwh": 356.0, "peer_avg_ey": 5.81, "peer_avg_kwh": 656.5, "013_ratio": 0.54, "001_ratio": 0.895}, {"date": "07/23", "001_ey": 5.09, "001_kwh": 611.0, "002_ey": 5.31, "002_kwh": 637.0, "005_ey": 5.16, "005_kwh": 619.0, "006_ey": 5.74, "006_kwh": 648.0, "009_ey": 5.68, "009_kwh": 643.0, "010_ey": 6.0, "010_kwh": 679.0, "013_ey": 3.08, "013_kwh": 349.0, "peer_avg_ey": 5.71, "peer_avg_kwh": 645.5, "013_ratio": 0.539, "001_ratio": 0.891}, {"date": "07/24", "001_ey": 4.53, "001_kwh": 543.0, "002_ey": 4.69, "002_kwh": 562.0, "005_ey": 4.56, "005_kwh": 547.0, "006_ey": 5.07, "006_kwh": 572.0, "009_ey": 5.02, "009_kwh": 568.0, "010_ey": 5.28, "010_kwh": 598.0, "013_ey": 2.71, "013_kwh": 307.0, "peer_avg_ey": 5.045, "peer_avg_kwh": 570.0, "013_ratio": 0.537, "001_ratio": 0.898}, {"date": "07/25", "001_ey": 3.94, "001_kwh": 472.0, "002_ey": 4.1, "002_kwh": 492.0, "005_ey": 3.99, "005_kwh": 478.0, "006_ey": 4.4, "006_kwh": 497.0, "009_ey": 4.35, "009_kwh": 493.0, "010_ey": 4.59, "010_kwh": 520.0, "013_ey": 2.37, "013_kwh": 268.0, "peer_avg_ey": 4.375, "peer_avg_kwh": 495.0, "013_ratio": 0.542, "001_ratio": 0.901}, {"date": "07/26", "001_ey": 3.9, "001_kwh": 468.0, "002_ey": 4.06, "002_kwh": 487.0, "005_ey": 3.9, "005_kwh": 468.0, "006_ey": 4.35, "006_kwh": 491.0, "009_ey": 4.32, "009_kwh": 489.0, "010_ey": 4.56, "010_kwh": 516.0, "013_ey": 2.32, "013_kwh": 263.0, "peer_avg_ey": 4.335, "peer_avg_kwh": 490.0, "013_ratio": 0.535, "001_ratio": 0.9}, {"date": "07/27", "001_ey": 2.41, "001_kwh": 289.0, "002_ey": 2.53, "002_kwh": 303.0, "005_ey": 2.42, "005_kwh": 290.0, "006_ey": 2.7, "006_kwh": 305.0, "009_ey": 2.67, "009_kwh": 302.0, "010_ey": 2.82, "010_kwh": 319.0, "013_ey": 1.43, "013_kwh": 162.0, "peer_avg_ey": 2.685, "peer_avg_kwh": 303.5, "013_ratio": 0.533, "001_ratio": 0.898}, {"date": "07/28", "001_ey": 5.09, "001_kwh": 610.0, "002_ey": 5.32, "002_kwh": 638.0, "005_ey": 5.1, "005_kwh": 612.0, "006_ey": 5.68, "006_kwh": 641.0, "009_ey": 5.63, "009_kwh": 638.0, "010_ey": 5.93, "010_kwh": 672.0, "013_ey": 3.03, "013_kwh": 343.0, "peer_avg_ey": 5.655, "peer_avg_kwh": 639.5, "013_ratio": 0.536, "001_ratio": 0.9}, {"date": "07/29", "001_ey": 3.84, "001_kwh": 460.0, "002_ey": 4.0, "002_kwh": 480.0, "005_ey": 3.88, "005_kwh": 465.0, "006_ey": 4.29, "006_kwh": 484.0, "009_ey": 4.26, "009_kwh": 482.0, "010_ey": 4.49, "010_kwh": 508.0, "013_ey": 2.29, "013_kwh": 259.0, "peer_avg_ey": 4.275, "peer_avg_kwh": 483.0, "013_ratio": 0.536, "001_ratio": 0.898}, {"date": "07/30", "001_ey": 3.58, "001_kwh": 429.0, "002_ey": 3.74, "002_kwh": 448.0, "005_ey": 3.6, "005_kwh": 432.0, "006_ey": 3.99, "006_kwh": 451.0, "009_ey": 3.95, "009_kwh": 447.0, "010_ey": 4.18, "010_kwh": 473.0, "013_ey": 2.11, "013_kwh": 239.0, "peer_avg_ey": 3.97, "peer_avg_kwh": 449.0, "013_ratio": 0.531, "001_ratio": 0.902}, {"date": "07/31", "001_ey": 3.88, "001_kwh": 465.0, "002_ey": 4.04, "002_kwh": 484.0, "005_ey": 3.89, "005_kwh": 467.0, "006_ey": 4.32, "006_kwh": 488.0, "009_ey": 4.27, "009_kwh": 484.0, "010_ey": 4.52, "010_kwh": 512.0, "013_ey": 2.28, "013_kwh": 258.0, "peer_avg_ey": 4.295, "peer_avg_kwh": 486.0, "013_ratio": 0.531, "001_ratio": 0.903}, {"date": "08/01", "001_ey": 4.04, "001_kwh": 484.0, "002_ey": 4.19, "002_kwh": 503.0, "005_ey": 4.06, "005_kwh": 487.0, "006_ey": 4.52, "006_kwh": 510.0, "009_ey": 4.47, "009_kwh": 506.0, "010_ey": 4.73, "010_kwh": 536.0, "013_ey": 2.39, "013_kwh": 271.0, "peer_avg_ey": 4.495, "peer_avg_kwh": 508.0, "013_ratio": 0.532, "001_ratio": 0.899}, {"date": "08/02", "001_ey": 4.64, "001_kwh": 557.0, "002_ey": 4.83, "002_kwh": 579.0, "005_ey": 4.63, "005_kwh": 555.0, "006_ey": 5.14, "006_kwh": 580.0, "009_ey": 5.1, "009_kwh": 577.0, "010_ey": 5.38, "010_kwh": 609.0, "013_ey": 2.71, "013_kwh": 307.0, "peer_avg_ey": 5.12, "peer_avg_kwh": 578.5, "013_ratio": 0.529, "001_ratio": 0.906}, {"date": "08/03", "001_ey": 4.84, "001_kwh": 580.0, "002_ey": 5.09, "002_kwh": 611.0, "005_ey": 4.89, "005_kwh": 586.0, "006_ey": 5.41, "006_kwh": 611.0, "009_ey": 5.39, "009_kwh": 610.0, "010_ey": 5.68, "010_kwh": 643.0, "013_ey": 2.87, "013_kwh": 325.0, "peer_avg_ey": 5.4, "peer_avg_kwh": 610.5, "013_ratio": 0.531, "001_ratio": 0.896}, {"date": "08/04", "001_ey": 4.5, "001_kwh": 540.0, "002_ey": 4.7, "002_kwh": 564.0, "005_ey": 4.56, "005_kwh": 547.0, "006_ey": 5.08, "006_kwh": 573.0, "009_ey": 5.03, "009_kwh": 569.0, "010_ey": 5.33, "010_kwh": 603.0, "013_ey": 2.69, "013_kwh": 305.0, "peer_avg_ey": 5.055, "peer_avg_kwh": 571.0, "013_ratio": 0.532, "001_ratio": 0.89}, {"date": "08/05", "001_ey": 5.2, "001_kwh": 624.0, "002_ey": 5.43, "002_kwh": 651.0, "005_ey": 5.24, "005_kwh": 629.0, "006_ey": 5.83, "006_kwh": 658.0, "009_ey": 5.78, "009_kwh": 655.0, "010_ey": 6.12, "010_kwh": 693.0, "013_ey": 3.08, "013_kwh": 349.0, "peer_avg_ey": 5.805, "peer_avg_kwh": 656.5, "013_ratio": 0.531, "001_ratio": 0.896}, {"date": "08/06", "001_ey": 4.65, "001_kwh": 558.0, "002_ey": 4.85, "002_kwh": 582.0, "005_ey": 4.69, "005_kwh": 562.0, "006_ey": 5.23, "006_kwh": 590.0, "009_ey": 5.18, "009_kwh": 586.0, "010_ey": 5.46, "010_kwh": 618.0, "013_ey": 2.74, "013_kwh": 310.0, "peer_avg_ey": 5.205, "peer_avg_kwh": 588.0, "013_ratio": 0.526, "001_ratio": 0.893}, {"date": "08/07", "001_ey": 5.23, "001_kwh": 627.0, "002_ey": 5.44, "002_kwh": 653.0, "005_ey": 5.27, "005_kwh": 632.0, "006_ey": 5.89, "006_kwh": 665.0, "009_ey": 5.81, "009_kwh": 658.0, "010_ey": 6.14, "010_kwh": 695.0, "013_ey": 3.08, "013_kwh": 349.0, "peer_avg_ey": 5.85, "peer_avg_kwh": 661.5, "013_ratio": 0.526, "001_ratio": 0.894}, {"date": "08/08", "001_ey": 4.33, "001_kwh": 519.0, "002_ey": 4.52, "002_kwh": 542.0, "005_ey": 4.35, "005_kwh": 522.0, "006_ey": 4.84, "006_kwh": 546.0, "009_ey": 4.79, "009_kwh": 542.0, "010_ey": 5.04, "010_kwh": 571.0, "013_ey": 2.52, "013_kwh": 285.0, "peer_avg_ey": 4.815, "peer_avg_kwh": 544.0, "013_ratio": 0.523, "001_ratio": 0.899}, {"date": "08/09", "001_ey": 0.78, "001_kwh": 93.0, "002_ey": 0.81, "002_kwh": 97.0, "005_ey": 0.78, "005_kwh": 94.0, "006_ey": 0.88, "006_kwh": 99.0, "009_ey": 0.87, "009_kwh": 98.0, "010_ey": 0.92, "010_kwh": 104.0, "013_ey": 0.44, "013_kwh": 50.0, "peer_avg_ey": 0.875, "peer_avg_kwh": 98.5, "013_ratio": 0.503, "001_ratio": 0.891}, {"date": "08/10", "001_ey": 3.09, "001_kwh": 370.0, "002_ey": 3.21, "002_kwh": 385.0, "005_ey": 3.09, "005_kwh": 371.0, "006_ey": 3.45, "006_kwh": 390.0, "009_ey": 3.4, "009_kwh": 385.0, "010_ey": 3.59, "010_kwh": 406.0, "013_ey": 1.78, "013_kwh": 201.0, "peer_avg_ey": 3.425, "peer_avg_kwh": 387.5, "013_ratio": 0.52, "001_ratio": 0.902}, {"date": "08/11", "001_ey": 4.45, "001_kwh": 534.0, "002_ey": 4.64, "002_kwh": 556.0, "005_ey": 4.48, "005_kwh": 537.0, "006_ey": 4.99, "006_kwh": 563.0, "009_ey": 4.93, "009_kwh": 558.0, "010_ey": 5.19, "010_kwh": 588.0, "013_ey": 2.58, "013_kwh": 292.0, "peer_avg_ey": 4.96, "peer_avg_kwh": 560.5, "013_ratio": 0.52, "001_ratio": 0.897}, {"date": "08/12", "001_ey": 3.75, "001_kwh": 450.0, "002_ey": 3.94, "002_kwh": 472.0, "005_ey": 3.79, "005_kwh": 454.0, "006_ey": 4.21, "006_kwh": 475.0, "009_ey": 4.16, "009_kwh": 471.0, "010_ey": 4.39, "010_kwh": 497.0, "013_ey": 2.15, "013_kwh": 244.0, "peer_avg_ey": 4.185, "peer_avg_kwh": 473.0, "013_ratio": 0.514, "001_ratio": 0.896}, {"date": "08/13", "001_ey": 4.74, "001_kwh": 569.0, "002_ey": 4.94, "002_kwh": 593.0, "005_ey": 4.79, "005_kwh": 574.0, "006_ey": 5.32, "006_kwh": 601.0, "009_ey": 5.28, "009_kwh": 598.0, "010_ey": 5.56, "010_kwh": 630.0, "013_ey": 2.74, "013_kwh": 310.0, "peer_avg_ey": 5.3, "peer_avg_kwh": 599.5, "013_ratio": 0.517, "001_ratio": 0.894}, {"date": "08/14", "001_ey": 4.94, "001_kwh": 592.0, "002_ey": 5.14, "002_kwh": 616.0, "005_ey": 4.98, "005_kwh": 597.0, "006_ey": 5.54, "006_kwh": 626.0, "009_ey": 5.5, "009_kwh": 623.0, "010_ey": 5.79, "010_kwh": 656.0, "013_ey": 2.85, "013_kwh": 323.0, "peer_avg_ey": 5.52, "peer_avg_kwh": 624.5, "013_ratio": 0.516, "001_ratio": 0.895}, {"date": "08/15", "001_ey": 4.05, "001_kwh": 486.0, "002_ey": 4.21, "002_kwh": 505.0, "005_ey": 4.09, "005_kwh": 490.0, "006_ey": 4.56, "006_kwh": 515.0, "009_ey": 4.5, "009_kwh": 509.0, "010_ey": 4.74, "010_kwh": 537.0, "013_ey": 2.33, "013_kwh": 264.0, "peer_avg_ey": 4.53, "peer_avg_kwh": 512.0, "013_ratio": 0.514, "001_ratio": 0.894}, {"date": "08/16", "001_ey": 5.11, "001_kwh": 613.0, "002_ey": 5.34, "002_kwh": 641.0, "005_ey": 5.2, "005_kwh": 624.0, "006_ey": 5.75, "006_kwh": 649.0, "009_ey": 5.69, "009_kwh": 644.0, "010_ey": 6.01, "010_kwh": 680.0, "013_ey": 2.96, "013_kwh": 335.0, "peer_avg_ey": 5.72, "peer_avg_kwh": 646.5, "013_ratio": 0.517, "001_ratio": 0.893}, {"date": "08/17", "001_ey": 5.19, "001_kwh": 623.0, "002_ey": 5.46, "002_kwh": 655.0, "005_ey": 5.26, "005_kwh": 631.0, "006_ey": 5.85, "006_kwh": 661.0, "009_ey": 5.81, "009_kwh": 658.0, "010_ey": 6.12, "010_kwh": 693.0, "013_ey": 3.03, "013_kwh": 343.0, "peer_avg_ey": 5.83, "peer_avg_kwh": 659.5, "013_ratio": 0.52, "001_ratio": 0.89}, {"date": "08/18", "001_ey": 4.88, "001_kwh": 585.0, "002_ey": 5.12, "002_kwh": 614.0, "005_ey": 4.94, "005_kwh": 593.0, "006_ey": 5.49, "006_kwh": 620.0, "009_ey": 5.44, "009_kwh": 616.0, "010_ey": 5.74, "010_kwh": 650.0, "013_ey": 2.83, "013_kwh": 321.0, "peer_avg_ey": 5.465, "peer_avg_kwh": 618.0, "013_ratio": 0.518, "001_ratio": 0.893}, {"date": "08/19", "001_ey": 3.64, "001_kwh": 437.0, "002_ey": 3.84, "002_kwh": 460.0, "005_ey": 3.7, "005_kwh": 444.0, "006_ey": 4.09, "006_kwh": 462.0, "009_ey": 4.04, "009_kwh": 458.0, "010_ey": 4.27, "010_kwh": 483.0, "013_ey": 2.11, "013_kwh": 239.0, "peer_avg_ey": 4.065, "peer_avg_kwh": 460.0, "013_ratio": 0.519, "001_ratio": 0.895}, {"date": "08/20", "001_ey": 4.07, "001_kwh": 488.0, "002_ey": 4.23, "002_kwh": 507.0, "005_ey": 4.09, "005_kwh": 491.0, "006_ey": 4.55, "006_kwh": 514.0, "009_ey": 4.53, "009_kwh": 513.0, "010_ey": 4.76, "010_kwh": 539.0, "013_ey": 2.35, "013_kwh": 266.0, "peer_avg_ey": 4.54, "peer_avg_kwh": 513.5, "013_ratio": 0.518, "001_ratio": 0.896}, {"date": "08/21", "001_ey": 3.59, "001_kwh": 431.0, "002_ey": 3.77, "002_kwh": 452.0, "005_ey": 3.65, "005_kwh": 438.0, "006_ey": 4.04, "006_kwh": 456.0, "009_ey": 4.03, "009_kwh": 456.0, "010_ey": 4.24, "010_kwh": 480.0, "013_ey": 2.08, "013_kwh": 235.0, "peer_avg_ey": 4.035, "peer_avg_kwh": 456.0, "013_ratio": 0.515, "001_ratio": 0.89}, {"date": "08/22", "001_ey": 3.08, "001_kwh": 369.0, "002_ey": 3.24, "002_kwh": 389.0, "005_ey": 3.12, "005_kwh": 374.0, "006_ey": 3.48, "006_kwh": 393.0, "009_ey": 3.44, "009_kwh": 390.0, "010_ey": 3.63, "010_kwh": 411.0, "013_ey": 1.78, "013_kwh": 201.0, "peer_avg_ey": 3.46, "peer_avg_kwh": 391.5, "013_ratio": 0.514, "001_ratio": 0.89}, {"date": "08/23", "001_ey": 2.72, "001_kwh": 326.0, "002_ey": 2.87, "002_kwh": 344.0, "005_ey": 2.76, "005_kwh": 331.0, "006_ey": 3.06, "006_kwh": 346.0, "009_ey": 3.06, "009_kwh": 346.0, "010_ey": 3.23, "010_kwh": 366.0, "013_ey": 1.56, "013_kwh": 177.0, "peer_avg_ey": 3.06, "peer_avg_kwh": 346.0, "013_ratio": 0.51, "001_ratio": 0.889}, {"date": "08/24", "001_ey": 0.83, "001_kwh": 100.0, "002_ey": 0.88, "002_kwh": 106.0, "005_ey": 0.84, "005_kwh": 101.0, "006_ey": 0.93, "006_kwh": 105.0, "009_ey": 0.93, "009_kwh": 105.0, "010_ey": 0.99, "010_kwh": 112.0, "013_ey": 0.47, "013_kwh": 53.0, "peer_avg_ey": 0.93, "peer_avg_kwh": 105.0, "013_ratio": 0.505, "001_ratio": 0.892}, {"date": "08/25", "001_ey": 1.16, "001_kwh": 139.0, "002_ey": 1.22, "002_kwh": 146.0, "005_ey": 1.18, "005_kwh": 142.0, "006_ey": 1.31, "006_kwh": 148.0, "009_ey": 1.3, "009_kwh": 147.0, "010_ey": 1.37, "010_kwh": 155.0, "013_ey": 0.66, "013_kwh": 75.0, "peer_avg_ey": 1.305, "peer_avg_kwh": 147.5, "013_ratio": 0.506, "001_ratio": 0.889}, {"date": "08/26", "001_ey": 3.82, "001_kwh": 458.0, "002_ey": 4.0, "002_kwh": 480.0, "005_ey": 3.85, "005_kwh": 462.0, "006_ey": 4.28, "006_kwh": 483.0, "009_ey": 4.26, "009_kwh": 482.0, "010_ey": 4.48, "010_kwh": 507.0, "013_ey": 2.19, "013_kwh": 248.0, "peer_avg_ey": 4.27, "peer_avg_kwh": 482.5, "013_ratio": 0.513, "001_ratio": 0.895}, {"date": "08/27", "001_ey": 3.57, "001_kwh": 428.0, "002_ey": 3.74, "002_kwh": 448.0, "005_ey": 3.62, "005_kwh": 434.0, "006_ey": 4.01, "006_kwh": 453.0, "009_ey": 3.97, "009_kwh": 449.0, "010_ey": 4.18, "010_kwh": 473.0, "013_ey": 2.04, "013_kwh": 231.0, "peer_avg_ey": 3.99, "peer_avg_kwh": 451.0, "013_ratio": 0.511, "001_ratio": 0.895}, {"date": "08/28", "001_ey": 3.32, "001_kwh": 398.0, "002_ey": 3.47, "002_kwh": 416.0, "005_ey": 3.37, "005_kwh": 404.0, "006_ey": 3.74, "006_kwh": 422.0, "009_ey": 3.71, "009_kwh": 420.0, "010_ey": 3.92, "010_kwh": 444.0, "013_ey": 1.89, "013_kwh": 214.0, "peer_avg_ey": 3.725, "peer_avg_kwh": 421.0, "013_ratio": 0.507, "001_ratio": 0.891}, {"date": "08/29", "001_ey": 3.64, "001_kwh": 436.0, "002_ey": 3.82, "002_kwh": 458.0, "005_ey": 3.69, "005_kwh": 442.0, "006_ey": 4.07, "006_kwh": 460.0, "009_ey": 4.04, "009_kwh": 458.0, "010_ey": 4.26, "010_kwh": 482.0, "013_ey": 2.08, "013_kwh": 235.0, "peer_avg_ey": 4.055, "peer_avg_kwh": 459.0, "013_ratio": 0.513, "001_ratio": 0.898}, {"date": "08/30", "001_ey": 3.92, "001_kwh": 470.0, "002_ey": 4.14, "002_kwh": 497.0, "005_ey": 3.98, "005_kwh": 477.0, "006_ey": 4.4, "006_kwh": 497.0, "009_ey": 4.36, "009_kwh": 494.0, "010_ey": 4.6, "010_kwh": 521.0, "013_ey": 2.24, "013_kwh": 254.0, "peer_avg_ey": 4.38, "peer_avg_kwh": 495.5, "013_ratio": 0.511, "001_ratio": 0.895}, {"date": "08/31", "001_ey": 3.58, "001_kwh": 429.0, "002_ey": 3.76, "002_kwh": 451.0, "005_ey": 3.62, "005_kwh": 434.0, "006_ey": 3.99, "006_kwh": 451.0, "009_ey": 3.97, "009_kwh": 449.0, "010_ey": 4.17, "010_kwh": 472.0, "013_ey": 2.02, "013_kwh": 229.0, "peer_avg_ey": 3.98, "peer_avg_kwh": 450.0, "013_ratio": 0.508, "001_ratio": 0.899}, {"date": "09/01", "001_ey": 2.92, "001_kwh": 350.0, "002_ey": 3.06, "002_kwh": 367.0, "005_ey": 2.97, "005_kwh": 356.0, "006_ey": 3.29, "006_kwh": 371.0, "009_ey": 3.27, "009_kwh": 370.0, "010_ey": 3.43, "010_kwh": 388.0, "013_ey": 1.65, "013_kwh": 187.0, "peer_avg_ey": 3.28, "peer_avg_kwh": 370.5, "013_ratio": 0.503, "001_ratio": 0.89}, {"date": "09/02", "001_ey": 3.75, "001_kwh": 450.0, "002_ey": 3.96, "002_kwh": 475.0, "005_ey": 3.81, "005_kwh": 457.0, "006_ey": 4.24, "006_kwh": 479.0, "009_ey": 4.21, "009_kwh": 477.0, "010_ey": 4.44, "010_kwh": 503.0, "013_ey": 2.16, "013_kwh": 245.0, "peer_avg_ey": 4.225, "peer_avg_kwh": 478.0, "013_ratio": 0.511, "001_ratio": 0.888}, {"date": "09/03", "001_ey": 1.39, "001_kwh": 167.0, "002_ey": 1.47, "002_kwh": 176.0, "005_ey": 1.43, "005_kwh": 171.0, "006_ey": 1.58, "006_kwh": 178.0, "009_ey": 1.56, "009_kwh": 177.0, "010_ey": 1.65, "010_kwh": 187.0, "013_ey": 0.79, "013_kwh": 89.0, "peer_avg_ey": 1.57, "peer_avg_kwh": 177.5, "013_ratio": 0.503, "001_ratio": 0.885}, {"date": "09/04", "001_ey": 2.03, "001_kwh": 244.0, "002_ey": 2.17, "002_kwh": 260.0, "005_ey": 2.09, "005_kwh": 251.0, "006_ey": 2.32, "006_kwh": 262.0, "009_ey": 2.3, "009_kwh": 260.0, "010_ey": 2.42, "010_kwh": 274.0, "013_ey": 1.16, "013_kwh": 131.0, "peer_avg_ey": 2.31, "peer_avg_kwh": 261.0, "013_ratio": 0.502, "001_ratio": 0.879}, {"date": "09/05", "001_ey": 4.91, "001_kwh": 589.0, "002_ey": 5.17, "002_kwh": 620.0, "005_ey": 4.99, "005_kwh": 598.0, "006_ey": 5.55, "006_kwh": 627.0, "009_ey": 5.51, "009_kwh": 624.0, "010_ey": 5.79, "010_kwh": 656.0, "013_ey": 0.02, "013_kwh": 2.0, "peer_avg_ey": 5.53, "peer_avg_kwh": 625.5, "013_ratio": 0.004, "001_ratio": 0.888}, {"date": "09/06", "001_ey": 4.92, "001_kwh": 590.0, "002_ey": 5.22, "002_kwh": 626.0, "005_ey": 5.03, "005_kwh": 603.0, "006_ey": 5.6, "006_kwh": 632.0, "009_ey": 5.56, "009_kwh": 630.0, "010_ey": 5.86, "010_kwh": 663.0, "013_ey": 0.0, "013_kwh": 0.0, "peer_avg_ey": 5.58, "peer_avg_kwh": 631.0, "013_ratio": 0.0, "001_ratio": 0.882}, {"date": "09/07", "001_ey": 3.59, "001_kwh": 431.0, "002_ey": 3.79, "002_kwh": 455.0, "005_ey": 3.65, "005_kwh": 438.0, "006_ey": 4.08, "006_kwh": 461.0, "009_ey": 4.05, "009_kwh": 459.0, "010_ey": 4.27, "010_kwh": 484.0, "013_ey": 0.02, "013_kwh": 2.0, "peer_avg_ey": 4.065, "peer_avg_kwh": 460.0, "013_ratio": 0.005, "001_ratio": 0.883}, {"date": "09/08", "001_ey": 5.13, "001_kwh": 615.0, "002_ey": 5.44, "002_kwh": 653.0, "005_ey": 5.24, "005_kwh": 628.0, "006_ey": 5.84, "006_kwh": 659.0, "009_ey": 5.81, "009_kwh": 658.0, "010_ey": 6.14, "010_kwh": 695.0, "013_ey": 0.0, "013_kwh": 0.0, "peer_avg_ey": 5.825, "peer_avg_kwh": 658.5, "013_ratio": 0.0, "001_ratio": 0.881}, {"date": "09/09", "001_ey": 5.09, "001_kwh": 610.0, "002_ey": 5.4, "002_kwh": 648.0, "005_ey": 5.19, "005_kwh": 623.0, "006_ey": 5.78, "006_kwh": 653.0, "009_ey": 5.75, "009_kwh": 651.0, "010_ey": 6.07, "010_kwh": 687.0, "013_ey": 0.04, "013_kwh": 4.0, "peer_avg_ey": 5.765, "peer_avg_kwh": 652.0, "013_ratio": 0.007, "001_ratio": 0.883}, {"date": "09/10", "001_ey": 5.07, "001_kwh": 608.0, "002_ey": 5.38, "002_kwh": 645.0, "005_ey": 5.18, "005_kwh": 621.0, "006_ey": 5.78, "006_kwh": 652.0, "009_ey": 5.73, "009_kwh": 649.0, "010_ey": 6.05, "010_kwh": 685.0, "013_ey": 1.71, "013_kwh": 194.0, "peer_avg_ey": 5.755, "peer_avg_kwh": 650.5, "013_ratio": 0.297, "001_ratio": 0.881}, {"date": "09/11", "001_ey": 4.49, "001_kwh": 538.0, "002_ey": 4.77, "002_kwh": 572.0, "005_ey": 4.58, "005_kwh": 549.0, "006_ey": 5.09, "006_kwh": 575.0, "009_ey": 5.06, "009_kwh": 573.0, "010_ey": 5.34, "010_kwh": 605.0, "013_ey": 2.28, "013_kwh": 258.0, "peer_avg_ey": 5.075, "peer_avg_kwh": 574.0, "013_ratio": 0.449, "001_ratio": 0.885}, {"date": "09/12", "001_ey": 3.99, "001_kwh": 478.0, "002_ey": 4.22, "002_kwh": 506.0, "005_ey": 4.07, "005_kwh": 488.0, "006_ey": 4.51, "006_kwh": 509.0, "009_ey": 4.49, "009_kwh": 508.0, "010_ey": 4.74, "010_kwh": 537.0, "013_ey": 2.01, "013_kwh": 228.0, "peer_avg_ey": 4.5, "peer_avg_kwh": 508.5, "013_ratio": 0.447, "001_ratio": 0.887}, {"date": "09/13", "001_ey": 4.43, "001_kwh": 531.0, "002_ey": 4.71, "002_kwh": 565.0, "005_ey": 4.53, "005_kwh": 543.0, "006_ey": 5.04, "006_kwh": 569.0, "009_ey": 5.0, "009_kwh": 566.0, "010_ey": 5.28, "010_kwh": 598.0, "013_ey": 2.24, "013_kwh": 254.0, "peer_avg_ey": 5.02, "peer_avg_kwh": 567.5, "013_ratio": 0.446, "001_ratio": 0.882}, {"date": "09/14", "001_ey": 4.62, "001_kwh": 554.0, "002_ey": 4.89, "002_kwh": 587.0, "005_ey": 4.69, "005_kwh": 563.0, "006_ey": 5.23, "006_kwh": 590.0, "009_ey": 5.19, "009_kwh": 588.0, "010_ey": 5.48, "010_kwh": 620.0, "013_ey": 2.32, "013_kwh": 263.0, "peer_avg_ey": 5.21, "peer_avg_kwh": 589.0, "013_ratio": 0.445, "001_ratio": 0.887}, {"date": "09/15", "001_ey": 4.54, "001_kwh": 545.0, "002_ey": 4.82, "002_kwh": 578.0, "005_ey": 4.65, "005_kwh": 558.0, "006_ey": 5.17, "006_kwh": 584.0, "009_ey": 5.13, "009_kwh": 581.0, "010_ey": 5.41, "010_kwh": 613.0, "013_ey": 2.31, "013_kwh": 261.0, "peer_avg_ey": 5.15, "peer_avg_kwh": 582.5, "013_ratio": 0.449, "001_ratio": 0.882}, {"date": "09/16", "001_ey": 4.79, "001_kwh": 575.0, "002_ey": 5.08, "002_kwh": 609.0, "005_ey": 4.91, "005_kwh": 589.0, "006_ey": 5.47, "006_kwh": 617.0, "009_ey": 5.43, "009_kwh": 615.0, "010_ey": 5.73, "010_kwh": 649.0, "013_ey": 2.44, "013_kwh": 276.0, "peer_avg_ey": 5.45, "peer_avg_kwh": 616.0, "013_ratio": 0.448, "001_ratio": 0.879}, {"date": "09/17", "001_ey": 4.82, "001_kwh": 578.0, "002_ey": 5.13, "002_kwh": 615.0, "005_ey": 4.93, "005_kwh": 591.0, "006_ey": 5.51, "006_kwh": 622.0, "009_ey": 5.48, "009_kwh": 620.0, "010_ey": 5.78, "010_kwh": 655.0, "013_ey": 2.44, "013_kwh": 276.0, "peer_avg_ey": 5.495, "peer_avg_kwh": 621.0, "013_ratio": 0.444, "001_ratio": 0.877}];
+
+function populateRawTable() {
+  const tbody = document.getElementById('rawDataTableBody');
+  if (!tbody || !rawDailyData || !rawDailyData.length) return;
+  tbody.innerHTML = rawDailyData.map(r => {
+    const isAnomaly = r["013_ratio"] < 0.6;
+    const statusTag = isAnomaly 
+      ? '<span class="sev P1">INV-13 異常落後</span>' 
+      : '<span class="sev P3">發電正常</span>';
+    return `
+      <tr>
+        <td style="font-family:var(--mono); font-weight:700;">${r.date}</td>
+        <td class="num">${r["001_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num">${r["002_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num">${r["005_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num">${r["006_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num">${r["009_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num">${r["010_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num" style="font-weight:800; color:${isAnomaly ? 'var(--coral)' : 'var(--ink)'};">${r["013_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num">${r["peer_avg_kwh"]?.toFixed(1) || '-'}</td>
+        <td class="num" style="font-weight:700; color:${isAnomaly ? 'var(--coral)' : 'var(--green)'};">${(r["013_ratio"] * 100).toFixed(1)}%</td>
+        <td>${statusTag}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function openRawDataModal() {
+  populateRawTable();
+  document.getElementById('rawDataModal').classList.add('active');
+}
+function closeRawDataModal() {
+  document.getElementById('rawDataModal').classList.remove('active');
+}
+
+function filterRawTable() {
+  const query = document.getElementById('rawSearchInput').value.toLowerCase();
+  const rows = document.querySelectorAll('#rawDataTableBody tr');
+  rows.forEach(r => {
+    r.style.display = r.innerText.toLowerCase().includes(query) ? '' : 'none';
+  });
+}
+
+function exportRawCsv() {
+  if (!rawDailyData || !rawDailyData.length) return;
+  let csv = "Date,INV_001_kWh,INV_002_kWh,INV_005_kWh,INV_006_kWh,INV_009_kWh,INV_010_kWh,INV_013_kWh,Peer_Avg_kWh,INV_013_Ratio\n";
+  rawDailyData.forEach(r => {
+    csv += `${r.date},${r["001_kwh"]},${r["002_kwh"]},${r["005_kwh"]},${r["006_kwh"]},${r["009_kwh"]},${r["010_kwh"]},${r["013_kwh"]},${r["peer_avg_kwh"]},${r["013_ratio"]}\n`;
+  });
+  const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Solar_8D_RawData_PV-2026-DA01.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyRawTable() {
+  let text = "Date\tINV-001\tINV-002\tINV-005\tINV-006\tINV-009\tINV-010\tINV-013\tPeer_Avg\t013_Ratio\n";
+  rawDailyData.forEach(r => {
+    text += `${r.date}\t${r["001_kwh"]}\t${r["002_kwh"]}\t${r["005_kwh"]}\t${r["006_kwh"]}\t${r["009_kwh"]}\t${r["010_kwh"]}\t${r["013_kwh"]}\t${r["peer_avg_kwh"]}\t${(r["013_ratio"]*100).toFixed(1)}%\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✅ 原始發電數據已成功複製到剪貼簿！可直接貼上至 Excel。");
+  });
+}
+
+// --- Leaflet Map Init ---
+function initPlantMap() {
+  const mapElement = document.getElementById('plantMap');
+  if (!mapElement) return;
+  const lat = 24.38;
+  const lng = 120.575;
+  const zoom = 16;
+  window.plantMap = L.map('plantMap').setView([lat, lng], zoom);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(window.plantMap);
+
+  const marker = L.marker([lat, lng]).addTo(window.plantMap);
+  marker.bindPopup(`
+    <div style="font-family:'Noto Sans TC'; font-size:12px; line-height:1.4;">
+      <strong style="color:#0C3A63; font-size:13px;">台中市大安區龜殼段 POCS 水上光電</strong><br>
+      案號：PV-2026-DA01<br>
+      裝置容量：<strong>1,505 kWp</strong><br>
+      逆變器：13 台 (SUNGROW SG110CX (110kW 級))
+    </div>
+  `).openPopup();
+}
+
+// --- ECharts Init ---
+function initTrendChart() {
+  const trendEl = document.getElementById('trendChart');
+  if (!trendEl || !rawDailyData.length) return;
+  window.trendChartInstance = echarts.init(trendEl);
+  const dates = rawDailyData.map(d => d.date);
+  const inv013 = rawDailyData.map(d => d["013_kwh"]);
+  const peerAvg = rawDailyData.map(d => d["peer_avg_kwh"]);
+  const inv006 = rawDailyData.map(d => d["006_kwh"]);
+
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: ['基準台 (INV-006)', '同儕平均 (7台均值)', '異常設備 (INV-013)'] },
+    grid: { left: '3%', right: '4%', bottom: '8%', containLabel: true },
+    xAxis: { type: 'category', boundaryGap: false, data: dates },
+    yAxis: { type: 'value', name: '日發電度數 (kWh)' },
+    series: [
+      {
+        name: '基準台 (INV-006)',
+        type: 'line',
+        data: inv006,
+        smooth: true,
+        itemStyle: { color: '#1BB1BF' },
+        lineStyle: { width: 2, type: 'dashed' }
+      },
+      {
+        name: '同儕平均 (7台均值)',
+        type: 'line',
+        data: peerAvg,
+        smooth: true,
+        itemStyle: { color: '#1968AD' },
+        lineStyle: { width: 3 }
+      },
+      {
+        name: '異常設備 (INV-013)',
+        type: 'line',
+        data: inv013,
+        smooth: true,
+        itemStyle: { color: '#D95F45' },
+        lineStyle: { width: 3 },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(217, 95, 69, 0.25)' },
+            { offset: 1, color: 'rgba(217, 95, 69, 0.0)' }
+          ])
+        }
+      }
+    ]
+  };
+  window.trendChartInstance.setOption(option);
+}
+
+// TOC Scroll Spy
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section');
+  const scrollPos = window.scrollY + 100;
+  sections.forEach(s => {
+    const top = s.offsetTop;
+    const height = s.offsetHeight;
+    const id = s.getAttribute('id');
+    if (scrollPos >= top && scrollPos < top + height) {
+      document.querySelectorAll('.toc a').forEach(a => a.classList.remove('active'));
+      const activeLink = document.querySelector(`.toc a[href="#${id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  initPlantMap();
+  initTrendChart();
+  populateRawTable();
+});
+window.addEventListener('resize', () => {
+  if (window.trendChartInstance) window.trendChartInstance.resize();
+  if (window.plantMap) window.plantMap.invalidateSize();
+});
+</script>
+
+</body>
+</html>

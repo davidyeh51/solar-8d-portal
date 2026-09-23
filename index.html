@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>太陽光電電廠 8D 異常診斷決策管理門戶｜Solar 8D Diagnostic Hub</title>
+<meta name="description" content="太陽光電電廠 8D 異常診斷、根因排查、雜草治理暨標準化決策平台管理門戶。支援每年 100+ 份報告之多維檢索、Supabase 資料庫整合與相片文字直傳。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%230C3A63%27 rx=%2712%27/%3E%3Cpath d=%27M12 48 L28 20 L38 34 L52 14%27 stroke=%27%231BB1BF%27 stroke-width=%275%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2752%27 cy=%2714%27 r=%275%27 fill=%27%23E09A2B%27/%3E%3C/svg%3E">
+
+<!-- Google Fonts, Leaflet & Supabase JS SDK -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  /* 品牌主色系 Primary & Neutral (嚴格依據 architecture_guideline.md) */
+  --blue-dd: #0C3A63;      /* 極深標題藍 / 頂部主色 */
+  --blue: #1968AD;         /* 品牌核心主藍 / 邊框強調 */
+  --blue-d: #12518A;       /* 深藍 Hover */
+  --blue-soft: #E8F1F9;    /* 淺藍背景 / 選中高亮 */
+  --teal: #1BB1BF;         /* 綠松石綠 / 副強調色 / 業主徽章 */
+  --teal-d: #12818C;       /* 深松石綠 */
+  --teal-soft: #E2F5F7;    /* 淺松石綠 */
+  --ink: #12293D;          /* 內文主要文字墨黑 */
+  --ink-2: #3E5466;        /* 次要文字色 */
+  --muted: #5B7285;        /* 說明色 / 註記灰 */
+  --line: #D9E3EC;         /* 邊框分割線色 */
+  --line-soft: #EEF3F8;    /* 淺分割線色 */
+  --paper: #F4F7FA;        /* 全站背景淡灰紙色 */
+  --card: #FFFFFF;         --card-hover: #FCFDFF;
+  
+  /* 語意化告警與狀態色 Semantic Status */
+  --amber: #E09A2B;        /* 警告橘黃 (P2 告警 / 推論標籤) */
+  --amber-soft: #FCF2DE;   /* 淺警告底色 */
+  --coral: #D95F45;        /* 嚴重告警珊瑚紅 (P1 故障 / 內部版徽章) */
+  --coral-soft: #FBEAE5;   /* 淺告警底色 */
+  --green: #2E7D32;        /* 成功綠色 (改善對策 / 正常同儕) */
+  --green-soft: #E8F5E9;   /* 淺成功底色 */
+  --purple: #6B46C1;
+  --purple-soft: #F3E8FF;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* 頂部固定導航列 */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 60px;
+  display: flex; align-items: center; gap: 14px; padding: 0 24px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--blue);
+  box-shadow: 0 2px 12px rgba(12, 58, 99, 0.08);
+}
+.brand {
+  display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer;
+}
+.brand-icon {
+  width: 38px; height: 38px; border-radius: 8px; background: var(--blue-dd);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(12, 58, 99, 0.25);
+}
+.brand-text h1 {
+  font-size: 1.05rem; font-weight: 800; color: var(--blue-dd); line-height: 1.2;
+  letter-spacing: .02em; display: flex; align-items: center; gap: 8px;
+}
+.brand-text small {
+  font-size: 0.7rem; font-weight: 700; color: var(--blue); letter-spacing: .08em;
+  text-transform: uppercase; font-family: var(--mono);
+}
+.conn-pill {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px; font-family: var(--mono); margin-left: 10px;
+}
+.conn-pill.online { background: var(--green-soft); color: var(--green); border: 1px solid rgba(46,125,50,0.3); }
+.conn-pill.local { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(224,154,43,0.3); }
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+/* 頂部搜尋列 */
+.top-search-wrap {
+  flex: 1; max-width: 480px; margin: 0 16px; position: relative;
+}
+.top-search-input {
+  width: 100%; height: 38px; padding: 0 14px 0 38px; border-radius: 20px;
+  border: 1px solid var(--line); background: var(--paper); font-size: 0.88rem;
+  color: var(--ink); outline: none; transition: all .2s; font-family: inherit;
+}
+.top-search-input:focus {
+  border-color: var(--blue); background: #fff; box-shadow: 0 0 0 3px rgba(25, 104, 173, 0.15);
+}
+.top-search-icon {
+  position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); pointer-events: none;
+}
+
+/* 頂部動作按鈕 */
+.top-actions {
+  display: flex; align-items: center; gap: 10px; margin-left: auto;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; transition: all .15s ease; border: 1px solid transparent;
+  text-decoration: none; font-family: inherit; line-height: 1.3;
+}
+.btn-primary {
+  background: var(--blue); color: #fff; border-color: var(--blue);
+  box-shadow: 0 2px 6px rgba(25, 104, 173, 0.25);
+}
+.btn-primary:hover { background: var(--blue-d); transform: translateY(-1px); }
+.btn-secondary {
+  background: #fff; color: var(--ink-2); border-color: var(--line);
+}
+.btn-secondary:hover { background: var(--paper); border-color: var(--muted); color: var(--blue-dd); }
+.btn-outline {
+  background: transparent; color: var(--blue); border-color: rgba(25, 104, 173, 0.35);
+}
+.btn-outline:hover { background: var(--blue-soft); }
+.btn-sm { padding: 4px 10px; font-size: 0.78rem; border-radius: 6px; }
+
+/* 主容器 */
+.app-container {
+  max-width: 1440px; margin: 0 auto; padding: 84px 24px 60px;
+}
+
+/* 戰情室總覽 (Cockpit / KPIs) */
+.cockpit-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;
+}
+.cockpit-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px 20px; box-shadow: 0 2px 6px rgba(12, 58, 99, 0.03);
+  position: relative; overflow: hidden;
+}
+.cockpit-card::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--blue);
+}
+.cockpit-card.coral::before { background: var(--coral); }
+.cockpit-card.amber::before { background: var(--amber); }
+.cockpit-card.green::before { background: var(--green); }
+.cockpit-card.teal::before { background: var(--teal); }
+
+.cockpit-card .card-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
+}
+.cockpit-card .card-label {
+  font-size: 0.8rem; font-weight: 700; color: var(--muted); letter-spacing: .02em;
+}
+.cockpit-card .card-val {
+  font-family: var(--mono); font-size: 1.85rem; font-weight: 800; color: var(--blue-dd);
+  line-height: 1.1; margin-bottom: 4px;
+}
+.cockpit-card.coral .card-val { color: var(--coral); }
+.cockpit-card.amber .card-val { color: var(--amber); }
+.cockpit-card.green .card-val { color: var(--green); }
+.cockpit-card .card-sub {
+  font-size: 0.74rem; color: var(--muted);
+}
+
+/* 財務量化橫幅 (Financial Impact Banner) */
+.impact-banner {
+  background: linear-gradient(135deg, var(--blue-dd) 0%, #154e7d 100%);
+  color: #fff; border-radius: 12px; padding: 18px 24px; margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  box-shadow: 0 4px 16px rgba(12, 58, 99, 0.15);
+}
+.impact-info {
+  display: flex; align-items: center; gap: 14px;
+}
+.impact-icon {
+  width: 46px; height: 46px; border-radius: 10px; background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+}
+.impact-text h3 {
+  font-size: 1.05rem; font-weight: 800; letter-spacing: .02em; margin-bottom: 2px;
+}
+.impact-text p {
+  font-size: 0.8rem; color: rgba(255,255,255,0.85);
+}
+.impact-metrics {
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.impact-metric-item {
+  text-align: right; border-left: 1px solid rgba(255,255,255,0.18); padding-left: 20px;
+}
+.impact-metric-label {
+  font-size: 0.74rem; color: rgba(255,255,255,0.75); margin-bottom: 2px;
+}
+.impact-metric-num {
+  font-family: var(--mono); font-size: 1.45rem; font-weight: 800; color: #fff;
+}
+.impact-metric-num small { font-size: 0.78rem; font-weight: 600; margin-left: 3px; }
+
+/* 多維篩選與工具列 (Filter & Controls) */
+.filter-bar {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 18px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;
+}
+.filter-row {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.filter-pills {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.filter-pill {
+  padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+  background: var(--paper); color: var(--ink-2); border: 1px solid var(--line);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.filter-pill:hover { border-color: var(--blue); color: var(--blue); }
+.filter-pill.active {
+  background: var(--blue-dd); color: #fff; border-color: var(--blue-dd);
+}
+.filter-selects {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.filter-select {
+  padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line);
+  background: #fff; font-size: 0.8rem; font-weight: 600; color: var(--ink-2);
+  outline: none; cursor: pointer; font-family: inherit;
+}
+.view-switch {
+  display: inline-flex; background: var(--paper); border-radius: 8px; padding: 2px;
+  border: 1px solid var(--line);
+}
+.view-btn {
+  padding: 4px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 6px;
+  border: none; background: transparent; color: var(--muted); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.view-btn.active {
+  background: #fff; color: var(--blue-dd); box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* 報告卡片網格 (Grid Cards View) */
+.reports-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px;
+}
+.report-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  overflow: hidden; transition: all .2s ease; display: flex; flex-direction: column;
+  box-shadow: 0 2px 6px rgba(12, 58, 99, 0.02);
+}
+.report-card:hover {
+  transform: translateY(-2px); border-color: rgba(25, 104, 173, 0.4);
+  box-shadow: 0 8px 24px rgba(12, 58, 99, 0.09);
+}
+.card-banner {
+  padding: 14px 16px 10px; background: #fff; border-bottom: 1px solid var(--line-soft);
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+}
+.card-tags {
+  display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+}
+.tag {
+  font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;
+  letter-spacing: .02em; font-family: var(--mono); text-transform: uppercase;
+}
+.tag-case { background: var(--blue-soft); color: var(--blue-dd); border: 1px solid rgba(25, 104, 173, 0.2); }
+.tag-stage-d0 { background: var(--coral-soft); color: var(--coral); }
+.tag-stage-d2 { background: var(--amber-soft); color: var(--amber); }
+.tag-stage-d4 { background: #FDE8E4; color: #C53030; font-weight: 800; }
+.tag-stage-d6 { background: var(--blue-soft); color: var(--blue); }
+.tag-stage-d8 { background: var(--green-soft); color: var(--green); }
+.tag-type { background: var(--paper); color: var(--muted); border: 1px solid var(--line); }
+
+.card-body {
+  padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 12px;
+}
+.card-title {
+  font-size: 1.05rem; font-weight: 800; color: var(--blue-dd); line-height: 1.3;
+}
+.card-location {
+  font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 4px;
+}
+.card-lede {
+  font-size: 0.82rem; color: var(--ink-2); background: var(--paper);
+  padding: 10px 12px; border-radius: 8px; border-left: 3px solid var(--amber);
+  font-style: italic; line-height: 1.45;
+}
+
+/* 4 Mini KPIs */
+.mini-kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  background: var(--paper); padding: 8px; border-radius: 8px; border: 1px solid var(--line-soft);
+}
+.mini-kpi { text-align: center; }
+.mini-kpi-label { font-size: 0.65rem; color: var(--muted); font-weight: 700; }
+.mini-kpi-val { font-family: var(--mono); font-size: 0.95rem; font-weight: 800; color: var(--ink); }
+.mini-kpi-val.bad { color: var(--coral); }
+.mini-kpi-val.warn { color: var(--amber); }
+.mini-kpi-val.good { color: var(--green); }
+
+.card-actions {
+  padding: 12px 16px; background: #fff; border-top: 1px solid var(--line-soft);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+
+/* 緊湊表格視圖 (Table View) */
+.table-wrap {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  overflow-x: auto; box-shadow: 0 2px 6px rgba(12, 58, 99, 0.02);
+}
+.report-table {
+  width: 100%; border-collapse: collapse; text-align: left; font-size: 0.84rem;
+}
+.report-table th {
+  background: var(--blue-soft); color: var(--blue-dd); font-weight: 800;
+  padding: 12px 14px; border-bottom: 2px solid var(--line); white-space: nowrap;
+}
+.report-table td {
+  padding: 12px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: middle;
+}
+.report-table tr:hover td { background: var(--card-hover); }
+.mono { font-family: var(--mono); }
+
+/* 側邊抽屜 (Slide-over Detail Drawer) */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(18, 41, 61, 0.5); z-index: 2000;
+  opacity: 0; pointer-events: none; transition: opacity .25s ease;
+}
+.drawer-backdrop.active { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: -650px; bottom: 0; width: 100%; max-width: 620px;
+  background: #fff; z-index: 2001; box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+  transition: right .3s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column;
+}
+.drawer.active { right: 0; }
+.drawer-header {
+  padding: 18px 24px; border-bottom: 1px solid var(--line); display: flex;
+  align-items: center; justify-content: space-between; background: var(--blue-soft);
+}
+.drawer-title { font-size: 1.1rem; font-weight: 800; color: var(--blue-dd); }
+.drawer-close {
+  background: transparent; border: none; font-size: 1.4rem; cursor: pointer;
+  color: var(--muted); padding: 4px; line-height: 1; border-radius: 4px;
+}
+.drawer-close:hover { color: var(--ink); background: rgba(0,0,0,0.06); }
+.drawer-body {
+  padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 20px;
+}
+
+/* 互動彈跳視窗 (Modal) */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(18, 41, 61, 0.55); z-index: 2100;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease;
+}
+.modal-backdrop.active { opacity: 1; pointer-events: auto; }
+.modal-dialog {
+  background: #fff; border-radius: 14px; width: 100%; max-width: 820px;
+  max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 12px 36px rgba(0,0,0,0.2);
+  transform: translateY(15px); transition: transform .25s ease; overflow: hidden;
+}
+.modal-backdrop.active .modal-dialog { transform: translateY(0); }
+.modal-head {
+  padding: 18px 24px; border-bottom: 1px solid var(--line); display: flex;
+  align-items: center; justify-content: space-between; background: var(--blue-dd); color: #fff;
+}
+.modal-head h3 { font-size: 1.1rem; font-weight: 800; letter-spacing: .02em; }
+.modal-body {
+  padding: 24px; overflow-y: auto; flex: 1;
+}
+.modal-foot {
+  padding: 14px 24px; border-top: 1px solid var(--line); display: flex;
+  align-items: center; justify-content: flex-end; gap: 10px; background: var(--paper);
+}
+
+/* 表單元件 */
+.form-tabs {
+  display: flex; gap: 4px; border-bottom: 2px solid var(--line); margin-bottom: 20px;
+}
+.form-tab {
+  padding: 8px 16px; font-size: 0.85rem; font-weight: 700; color: var(--muted);
+  border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; background: transparent; border-top: none; border-left: none; border-right: none;
+}
+.form-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+.form-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+}
+.form-grid.col-3 { grid-template-columns: repeat(3, 1fr); }
+.form-group {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.form-group.full { grid-column: 1 / -1; }
+.form-label {
+  font-size: 0.78rem; font-weight: 700; color: var(--ink-2);
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line);
+  font-size: 0.86rem; color: var(--ink); background: #fff; outline: none; font-family: inherit;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--blue); box-shadow: 0 0 0 3px rgba(25, 104, 173, 0.12);
+}
+
+/* 相片拖拉上傳區域 (Dropzone) */
+.dropzone {
+  border: 2px dashed var(--blue); border-radius: 10px; padding: 26px;
+  background: var(--blue-soft); text-align: center; cursor: pointer; transition: all .2s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+}
+.dropzone:hover, .dropzone.dragover {
+  background: #DCEDF9; border-color: var(--blue-d);
+}
+.photo-preview-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 14px;
+}
+.photo-preview-item {
+  position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
+  background: #000; height: 100px;
+}
+.photo-preview-item img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.photo-preview-item .del-btn {
+  position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.65); color: #fff;
+  border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+/* 響應式調整 */
+@media (max-width: 1024px) {
+  .cockpit-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .cockpit-grid { grid-template-columns: 1fr; }
+  .reports-grid { grid-template-columns: 1fr; }
+  .top-search-wrap { display: none; }
+  .impact-banner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- 頂部固定導航列 -->
+<header class="topbar">
+  <div class="brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <div class="brand-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1BB1BF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <h1>太陽光電 8D 異常診斷決策管理門戶</h1>
+      <small>Solar PV Plant 8D Diagnostic Hub</small>
+    </div>
+    <div id="connStatusPill" class="conn-pill local" title="點擊設定 Supabase 連線" onclick="openSettingsModal()">
+      <span class="conn-dot"></span>
+      <span id="connStatusText">本地展示模式</span>
+    </div>
+  </div>
+
+  <div class="top-search-wrap">
+    <svg class="top-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input type="text" id="searchInput" class="top-search-input" placeholder="即時搜尋案場名稱、案號代碼、異常設備 (如 INV-13) 或根因關鍵字..." oninput="handleSearch(this.value)">
+  </div>
+
+  <div class="top-actions">
+    <button class="btn btn-secondary btn-sm" onclick="exportData('csv')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+      匯出 CSV
+    </button>
+    <button class="btn btn-outline btn-sm" onclick="openSettingsModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Supabase 設定
+    </button>
+    <button class="btn btn-primary" onclick="openNewReportModal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      新增 8D 報告
+    </button>
+  </div>
+</header>
+
+<!-- 主內容區 -->
+<main class="app-container">
+
+  <!-- 戰情室統計卡片 (Cockpit) -->
+  <section class="cockpit-grid">
+    <div class="cockpit-card">
+      <div class="card-head">
+        <span class="card-label">累計列管案場與報告</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="card-val" id="kpiTotalReports">0</div>
+      <div class="card-sub">支援每年 100+ 份報告歸檔</div>
+    </div>
+
+    <div class="cockpit-card coral">
+      <div class="card-head">
+        <span class="card-label">D0~D4 調查圍堵中</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="card-val" id="kpiActiveCases">0</div>
+      <div class="card-sub">含火載量及大比例落後案</div>
+    </div>
+
+    <div class="cockpit-card amber">
+      <div class="card-head">
+        <span class="card-label">D5~D7 對策驗證中</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="card-val" id="kpiVerifyingCases">0</div>
+      <div class="card-sub">比值需連續 7 天恢復 ≥ 0.90</div>
+    </div>
+
+    <div class="cockpit-card green">
+      <div class="card-head">
+        <span class="card-label">D8 已結案歸檔</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="card-val" id="kpiClosedCases">0</div>
+      <div class="card-sub">防再發 SOP 與橫向展開完成</div>
+    </div>
+  </section>
+
+  <!-- 財務量化橫幅 (Financial Impact Banner) -->
+  <section class="impact-banner">
+    <div class="impact-info">
+      <div class="impact-icon">⚡</div>
+      <div class="impact-text">
+        <h3>全台案場 8D 異常衝擊與發電挽回監控</h3>
+        <p>以工程實證追蹤雜草遮蔽、旁路二極體熱斑與容量銘牌誤差，藉由 AI Agent 與標準化決策守護現金流。</p>
+      </div>
+    </div>
+    <div class="impact-metrics">
+      <div class="impact-metric-item">
+        <div class="impact-metric-label">追蹤中累計年化損失</div>
+        <div class="impact-metric-num" id="totalLossNTD">NT$ 0 <small>萬</small></div>
+      </div>
+      <div class="impact-metric-item">
+        <div class="impact-metric-label">累計短少發電度數</div>
+        <div class="impact-metric-num" id="totalShortageKwh">0 <small>kWh</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 多維篩選與檢索列 -->
+  <section class="filter-bar">
+    <div class="filter-row">
+      <!-- 階段狀態篩選 -->
+      <div class="filter-pills" id="stageFilters">
+        <span class="filter-pill active" onclick="setFilter('stage', 'all')">全部狀態</span>
+        <span class="filter-pill" onclick="setFilter('stage', 'd0_emergency')">D0/D1 立案中</span>
+        <span class="filter-pill" onclick="setFilter('stage', 'd4_root_cause')">D4 根因確立</span>
+        <span class="filter-pill" onclick="setFilter('stage', 'd6_verification')">D6 對策驗證</span>
+        <span class="filter-pill" onclick="setFilter('stage', 'd8_closed')">D8 已結案</span>
+      </div>
+
+      <!-- 視圖切換 -->
+      <div class="view-switch">
+        <button id="viewGridBtn" class="view-btn active" onclick="switchView('grid')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          網格卡片
+        </button>
+        <button id="viewTableBtn" class="view-btn" onclick="switchView('table')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+          緊湊清單
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <div class="filter-selects">
+        <!-- 嚴重等級 -->
+        <select class="filter-select" id="filterSeverity" onchange="setFilter('severity', this.value)">
+          <option value="all">所有嚴重等級</option>
+          <option value="Level 1">Level 1 (重大安全/火載)</option>
+          <option value="Level 2">Level 2 (高損失/遮蔽)</option>
+          <option value="Level 3">Level 3 (中度異常)</option>
+        </select>
+
+        <!-- 年度篩選 (因應每年 100+ 份) -->
+        <select class="filter-select" id="filterYear" onchange="setFilter('year', this.value)">
+          <option value="all">所有年度 (全部)</option>
+          <option value="2026" selected>2026 年度</option>
+          <option value="2025">2025 年度</option>
+          <option value="2024">2024 年度</option>
+        </select>
+
+        <!-- 案場型態 -->
+        <select class="filter-select" id="filterType" onchange="setFilter('type', this.value)">
+          <option value="all">所有案場型態</option>
+          <option value="水上浮體型">水上浮體型</option>
+          <option value="地面型">地面型</option>
+          <option value="屋頂型">屋頂型</option>
+          <option value="漁電共生">漁電共生</option>
+        </select>
+      </div>
+
+      <div style="font-size: 0.78rem; color: var(--muted);" id="resultCountInfo">
+        共符合 0 筆診斷報告
+      </div>
+    </div>
+  </section>
+
+  <!-- 報告卡片網格容器 (Grid View) -->
+  <section id="reportsGrid" class="reports-grid"></section>
+
+  <!-- 緊湊表格視圖容器 (Table View - 預設隱藏) -->
+  <section id="reportsTableWrap" class="table-wrap" style="display: none;">
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>案號</th>
+          <th>電廠名稱</th>
+          <th>型態</th>
+          <th>階段狀態</th>
+          <th>嚴重等級</th>
+          <th>異常設備</th>
+          <th>相對基準</th>
+          <th>短少度數 (kWh)</th>
+          <th>年化損失</th>
+          <th>發布日</th>
+          <th>操作動作</th>
+        </tr>
+      </thead>
+      <tbody id="reportsTableBody"></tbody>
+    </table>
+  </section>
+
+</main>
+
+<!-- 側邊抽屜 (Detail Drawer) -->
+<div id="detailBackdrop" class="drawer-backdrop" onclick="closeDrawer()"></div>
+<aside id="detailDrawer" class="drawer">
+  <div class="drawer-header">
+    <div>
+      <span class="tag tag-case" id="drawerCaseNo">PV-2026-DA01</span>
+      <h3 class="drawer-title" id="drawerTitle" style="margin-top: 4px;">案場報告詳情</h3>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <!-- 動態注入詳情 -->
+  </div>
+</aside>
+
+<!-- 新增/編輯 8D 報告彈跳視窗 (New Report Modal) -->
+<div id="reportModalBackdrop" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-head">
+      <h3 id="modalTitle">新增光電案場 8D 異常診斷報告</h3>
+      <button class="drawer-close" style="color:#fff;" onclick="closeModal('reportModalBackdrop')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- 分頁標籤 -->
+      <div class="form-tabs">
+        <button class="form-tab active" onclick="switchFormTab(0)">1. 案場與基本參數</button>
+        <button class="form-tab" onclick="switchFormTab(1)">2. 8D 分析與文字結論</button>
+        <button class="form-tab" onclick="switchFormTab(2)">3. 相片與證據直傳</button>
+        <button class="form-tab" onclick="switchFormTab(3)">4. 交付網址與規格匯出</button>
+      </div>
+
+      <!-- Tab 1: 案場參數 -->
+      <div class="form-tab-content" id="tabContent0">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">案號代碼 (Case No) *</label>
+            <input type="text" id="f_case_no" class="form-input" placeholder="例如: PV-2026-DA01" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">電廠全名 *</label>
+            <input type="text" id="f_plant_name" class="form-input" placeholder="例如: 台中市大安區龜殼段 POCS 水上光電" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">案場型態</label>
+            <select id="f_plant_type" class="form-select">
+              <option value="水上浮體型">水上浮體型</option>
+              <option value="地面型">地面型</option>
+              <option value="屋頂型">屋頂型</option>
+              <option value="漁電共生">漁電共生</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">竣工實際容量 (kWp) *</label>
+            <input type="number" step="0.001" id="f_capacity_kwp" class="form-input" placeholder="例如: 1505.155">
+          </div>
+          <div class="form-group">
+            <label class="form-label">逆變器台數與型號</label>
+            <input type="text" id="f_inverter_info" class="form-input" placeholder="例如: 13 台 (SUNGROW SG110CX)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">躉購費率 (NT$/kWh)</label>
+            <input type="number" step="0.01" id="f_fit_rate" class="form-input" value="5.00">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">詳細地理坐標與地號</label>
+            <input type="text" id="f_location" class="form-input" placeholder="例如: 台中市大安區龜殼段 253-1 地號 (24.3800, 120.5750)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">當前 8D 階段</label>
+            <select id="f_stage" class="form-select">
+              <option value="d0_emergency">D0 立案與緊急反應</option>
+              <option value="d2_analysis">D2 量化描述與對帳</option>
+              <option value="d4_root_cause" selected>D4 根本原因確立</option>
+              <option value="d6_verification">D6 對策執行與效果驗證</option>
+              <option value="d8_closed">D8 結案歸檔與防再發</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">嚴重度等級</label>
+            <select id="f_severity" class="form-select">
+              <option value="Level 1 (嚴重設備損壞與火載風險)">Level 1 (嚴重設備損壞與火載風險)</option>
+              <option value="Level 2 (重大發電異常與火載量隱患)" selected>Level 2 (重大發電異常與火載量隱患)</option>
+              <option value="Level 3 (中度發電失真/通訊異常)">Level 3 (中度發電失真/通訊異常)</option>
+              <option value="Level 4 (輕微點檢提示)">Level 4 (輕微點檢提示)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: 8D 分析與文字結論 -->
+      <div class="form-tab-content" id="tabContent1" style="display:none;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">異常設備編號</label>
+            <input type="text" id="f_abnormal_device" class="form-input" placeholder="例如: INV-13">
+          </div>
+          <div class="form-group">
+            <label class="form-label">相對基準比值 (如 0.45 代表 45%)</label>
+            <input type="number" step="0.001" id="f_ratio" class="form-input" placeholder="0.450">
+          </div>
+          <div class="form-group">
+            <label class="form-label">累計短少度數 (kWh)</label>
+            <input type="number" id="f_loss_kwh" class="form-input" placeholder="24785">
+          </div>
+          <div class="form-group">
+            <label class="form-label">年化損失金額 (NT$)</label>
+            <input type="number" id="f_loss_ntd" class="form-input" placeholder="690000">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">核心一句話 (The Lede) *</label>
+            <textarea id="f_lede" class="form-textarea" rows="2" placeholder="例: 根因是雜草覆蓋模組，不是電氣故障。而且除草作業把割下的草留在模組上，讓發電更差。"></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">真正的管理缺口 (Takeaway) *</label>
+            <textarea id="f_takeaway" class="form-textarea" rows="2" placeholder="例: 真正的管理缺口不是沒有除草，是割完沒有清模組面，屬於驗收條件缺失。"></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">優先處置問題與對策</label>
+            <input type="text" id="f_priority_issue" class="form-input" placeholder="例如: 清除模組表面草屑並修訂割草驗收清運 SOP">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: 相片與證據直傳 (Supabase Storage) -->
+      <div class="form-tab-content" id="tabContent2" style="display:none;">
+        <div class="dropzone" id="photoDropzone" onclick="document.getElementById('photoFileInput').click()">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-weight: 800; color: var(--blue-dd);">點擊或將現場照片、熱像圖、圖紙拖拉至此處上傳</div>
+          <div style="font-size: 0.74rem; color: var(--muted);">支援 JPG, PNG, WEBP 等格式，將自動直傳至 Supabase Storage (solar-8d-evidences)</div>
+          <input type="file" id="photoFileInput" multiple accept="image/*" style="display:none;" onchange="handlePhotoUpload(this.files)">
+        </div>
+
+        <div id="uploadStatusText" style="font-size:0.78rem; font-weight:700; color:var(--blue); margin-top:8px; display:none;"></div>
+        
+        <div class="photo-preview-grid" id="photoPreviewGrid">
+          <!-- 動態縮圖預覽 -->
+        </div>
+      </div>
+
+      <!-- Tab 4: 交付網址與規格匯出 -->
+      <div class="form-tab-content" id="tabContent3" style="display:none;">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">已發布之互動診斷報告網址 (例如 GitHub Pages)</label>
+            <input type="url" id="f_report_url" class="form-input" placeholder="例如: https://davidyeh51.github.io/daan-guike-pocs-diagnostic/#summary">
+            <small style="color:var(--muted); font-size:0.74rem;">若已將平台發佈至 GitHub Pages 或其他伺服器，填入此網址即可在入口網頁直接外跳連結。</small>
+          </div>
+          <div class="form-group full" style="margin-top: 14px; background:var(--paper); padding:14px; border-radius:8px;">
+            <div style="font-weight:800; font-size:0.85rem; color:var(--blue-dd); margin-bottom:4px;">自動編譯 plant_spec.json 規格檔</div>
+            <p style="font-size:0.78rem; color:var(--ink-2); margin-bottom:8px;">填寫之文字與相片可一鍵下載為標準規範 JSON，相容於 <code>generate_solar_platform.py</code> 腳本。</p>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="downloadCurrentSpecJson()">
+              📥 匯出相容 plant_spec.json
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeModal('reportModalBackdrop')">取消</button>
+      <button class="btn btn-primary" onclick="saveReportForm()">儲存報告資料</button>
+    </div>
+  </div>
+</div>
+
+<!-- Supabase 連線設定視窗 (Settings Modal) -->
+<div id="settingsModalBackdrop" class="modal-backdrop">
+  <div class="modal-dialog" style="max-width: 540px;">
+    <div class="modal-head">
+      <h3>Supabase 資料庫與儲存連線設定</h3>
+      <button class="drawer-close" style="color:#fff;" onclick="closeModal('settingsModalBackdrop')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size: 0.82rem; color: var(--ink-2); margin-bottom: 16px;">
+        請輸入您的 Supabase 專案網址與公開 Anon 金鑰。連線成功後，所有新增的 8D 報告與拖拉上傳的現場圖片將即時同步至雲端資料庫。
+      </p>
+
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label">Supabase Project URL</label>
+        <input type="text" id="cfg_supabase_url" class="form-input" placeholder="https://xxxxxxxx.supabase.co">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label class="form-label">Supabase Public Anon Key</label>
+        <input type="password" id="cfg_supabase_key" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+      </div>
+
+      <div id="settingsTestResult" style="padding: 10px 12px; border-radius: 6px; font-size: 0.78rem; display: none; margin-bottom: 10px;"></div>
+
+      <div style="background: var(--paper); padding: 12px; border-radius: 8px; font-size: 0.76rem; color: var(--muted);">
+        💡 提示：若尚未建立資料庫，請於 Supabase SQL Editor 執行本專案的 <code>supabase/schema.sql</code> 腳本以一鍵完成所有資料表與 Storage 權限建置。
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="resetToDemoData()">載入展示資料</button>
+      <button class="btn btn-outline" onclick="testSupabaseConnection()">測試連線</button>
+      <button class="btn btn-primary" onclick="saveSupabaseSettings()">儲存並連線</button>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript 驅動核心 -->
+<script>
+// ==============================================================================
+// 1. 全域狀態與示範資料庫 (Seed Reports)
+// ==============================================================================
+const DEFAULT_SEED_REPORTS = [
+  {
+    id: "rep-001",
+    case_no: "PV-2026-DA01",
+    report_title: "台中市大安區龜殼段 POCS 水上光電｜INV-13 發電異常",
+    plant_name: "台中市大安區龜殼段 POCS 水上光電",
+    plant_type: "水上浮體型",
+    location: "台中市大安區龜殼段 253-1 地號（水上浮體型）",
+    lat: 24.3800, lng: 120.5750,
+    contract_kw: 812.0, actual_capacity_kwp: 1505.155,
+    inverter_model: "SUNGROW SG110CX", inverter_count: 13,
+    year: 2026, publish_date: "2026/09/21",
+    stage: "d4_root_cause",
+    severity_level: "Level 2 (重大發電異常與火載量隱患)",
+    abnormal_device: "INV-13",
+    ratio_to_benchmark: 0.450,
+    loss_kwh: 24785,
+    annual_loss_ntd: 690000,
+    priority_issue: "INV-13 雜草覆蓋模組與草屑未清運",
+    lede: "根因是雜草覆蓋模組，不是電氣故障。而且 9/10 的除草作業把割下的草留在模組上，讓 INV-13 比除草前更差。",
+    takeaway: "真正的管理缺口不是「沒有除草」，是「割完沒有清模組面」。前者是頻率問題，後者是驗收條件問題——而後者讓這次除草做了等於白做，甚至倒退。",
+    report_url: "https://davidyeh51.github.io/daan-guike-pocs-diagnostic/#summary",
+    cover_image: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+    evidences: [
+      { ev_code: "EV-01", step: "D0", title: "SCADA 功率異常截圖", url: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80", desc: "日射 720 W/m² 時輸出僅 31kW。" },
+      { ev_code: "EV-02", step: "D2", title: "C-002 竣工串接圖", url: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80", desc: "校算真實容量為 114.6 kWp。" },
+      { ev_code: "EV-03", step: "D4", title: "現場雜草覆蓋與草屑留置", url: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&w=800&q=80", desc: "背負式割草機割完草屑噴濺於模組表面未清洗。" }
+    ]
+  },
+  {
+    id: "rep-002",
+    case_no: "PV-2026-ZB02",
+    report_title: "彰濱工業區鹿港區二期｜INV-04 組串受藤蔓覆蓋案",
+    plant_name: "彰濱工業區鹿港區二期地面光電廠",
+    plant_type: "地面型",
+    location: "彰化縣鹿港鎮鹿工北二路 18 號周邊",
+    lat: 24.0621, lng: 120.4132,
+    contract_kw: 1980.0, actual_capacity_kwp: 2450.600,
+    inverter_model: "HUAWEI SUN2000-100KTL", inverter_count: 22,
+    year: 2026, publish_date: "2026/08/15",
+    stage: "d6_verification",
+    severity_level: "Level 2 (重大發電異常與火載量隱患)",
+    abnormal_device: "INV-04",
+    ratio_to_benchmark: 0.680,
+    loss_kwh: 18450,
+    annual_loss_ntd: 447000,
+    priority_issue: "南側圍籬蔓藤爬生侵入第一排支架下緣遮蔽",
+    lede: "藤蔓類植被攀爬至下排組件下緣，遮蔽最低組串二極體導通造成發電落後 32%。",
+    takeaway: "防護網與除草阻絕帶寬度不足 1.5 米，已施作高耐候抑草蓆與邊界修剪。",
+    report_url: "https://davidyeh51.github.io/daan-guike-pocs-diagnostic/#summary",
+    cover_image: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=800&q=80",
+    evidences: []
+  },
+  {
+    id: "rep-003",
+    case_no: "PV-2026-TX03",
+    report_title: "雲林台西滯洪池浮體廠｜INV-02 接線盒高溫熱斑處置案",
+    plant_name: "雲林台西養殖滯洪池浮體光電廠",
+    plant_type: "漁電共生",
+    location: "雲林縣台西鄉海口段 1102 地號",
+    lat: 23.7054, lng: 120.1982,
+    contract_kw: 1200.0, actual_capacity_kwp: 1480.000,
+    inverter_model: "Delta M100A", inverter_count: 15,
+    year: 2026, publish_date: "2026/07/08",
+    stage: "d8_closed",
+    severity_level: "Level 1 (嚴重設備損壞與火載風險)",
+    abnormal_device: "INV-02",
+    ratio_to_benchmark: 0.810,
+    loss_kwh: 9820,
+    annual_loss_ntd: 251000,
+    priority_issue: "組件接線盒旁路二極體擊穿短路，熱像溫差達 42°C",
+    lede: "鳥糞長期局部遮蔽誘發熱斑效應，導致二極體連續高溫過熱熔損。",
+    takeaway: "已更換 3 片受損組件並全面進行空拍熱像儀 IR 巡檢，比值恢復至 0.985 結案。",
+    report_url: "https://davidyeh51.github.io/daan-guike-pocs-diagnostic/#summary",
+    cover_image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+    evidences: []
+  },
+  {
+    id: "rep-004",
+    case_no: "PV-2026-BD04",
+    report_title: "嘉義布袋綠能生態專區｜INV-08 平台建檔容量失真校正",
+    plant_name: "嘉義布袋鹽灘地綠能生態光電專區",
+    plant_type: "地面型",
+    location: "嘉義縣布袋鎮鹽館段 88 號",
+    lat: 23.3712, lng: 120.1587,
+    contract_kw: 3200.0, actual_capacity_kwp: 3980.400,
+    inverter_model: "SUNGROW SG125HX", inverter_count: 32,
+    year: 2026, publish_date: "2026/09/02",
+    stage: "d8_closed",
+    severity_level: "Level 3 (中度發電失真/通訊異常)",
+    abnormal_device: "INV-08",
+    ratio_to_benchmark: 0.915,
+    loss_kwh: 3120,
+    annual_loss_ntd: 72000,
+    priority_issue: "SCADA 平台將 120kWp 誤植為 135kWp 造成虛報落後",
+    lede: "竣工串接圖與 SCADA 點位登錄不同步，純屬數據建置誤差，硬體電氣全數正常。",
+    takeaway: "修訂 SCADA 銘牌校核 SOP，所有新增電廠併網前需以 C-002 圖紙交叉驗算。",
+    report_url: "https://davidyeh51.github.io/daan-guike-pocs-diagnostic/#summary",
+    cover_image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80",
+    evidences: []
+  }
+];
+
+let allReports = [];
+let supabaseClient = null;
+let currentFilters = {
+  stage: 'all',
+  severity: 'all',
+  year: '2026',
+  type: 'all',
+  keyword: ''
+};
+let currentView = 'grid';
+let stagedPhotos = [];
+
+// ==============================================================================
+// 2. 初始化與 Supabase 連線機制
+// ==============================================================================
+window.addEventListener('DOMContentLoaded', async () => {
+  loadStoredSettings();
+  await initData();
+});
+
+function loadStoredSettings() {
+  const url = localStorage.getItem('SOLAR_8D_SUPABASE_URL');
+  const key = localStorage.getItem('SOLAR_8D_SUPABASE_KEY');
+  if (url && key && window.supabase) {
+    try {
+      supabaseClient = window.supabase.createClient(url, key);
+      updateConnUI(true);
+    } catch(e) {
+      console.warn("Supabase init error:", e);
+      updateConnUI(false);
+    }
+  } else {
+    updateConnUI(false);
+  }
+}
+
+function updateConnUI(isOnline) {
+  const pill = document.getElementById('connStatusPill');
+  const text = document.getElementById('connStatusText');
+  if (isOnline) {
+    pill.className = "conn-pill online";
+    text.textContent = "Supabase 雲端已連線";
+  } else {
+    pill.className = "conn-pill local";
+    text.textContent = "本地展示模式";
+  }
+}
+
+async function initData() {
+  // 若有 Supabase 連線，優先從 Supabase 讀取
+  if (supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('reports_8d')
+        .select('*, plants(*), report_evidences(*)');
+      
+      if (!error && data && data.length > 0) {
+        allReports = data.map(r => ({
+          id: r.id,
+          case_no: r.case_no,
+          report_title: r.report_title,
+          plant_name: r.plants?.name || r.report_title,
+          plant_type: r.plants?.plant_type || '地面型',
+          location: r.plants?.location || '',
+          lat: r.plants?.lat, lng: r.plants?.lng,
+          contract_kw: r.plants?.contract_kw || 0,
+          actual_capacity_kwp: r.plants?.actual_capacity_kwp || 0,
+          inverter_model: r.plants?.inverter_model || '',
+          inverter_count: r.plants?.inverter_count || 1,
+          year: r.year || 2026,
+          publish_date: r.publish_date,
+          stage: r.stage,
+          severity_level: r.severity_level,
+          abnormal_device: r.abnormal_device,
+          ratio_to_benchmark: parseFloat(r.ratio_to_benchmark) || 0,
+          loss_kwh: parseFloat(r.loss_kwh) || 0,
+          annual_loss_ntd: parseFloat(r.annual_loss_ntd) || 0,
+          priority_issue: r.priority_issue,
+          lede: r.lede,
+          takeaway: r.takeaway,
+          report_url: r.report_url || '#',
+          cover_image: r.report_evidences?.[0]?.image_url || 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+          evidences: r.report_evidences || []
+        }));
+        render();
+        return;
+      }
+    } catch(err) {
+      console.warn("Supabase fetch failed, falling back to local storage:", err);
+    }
+  }
+
+  // 本地快取備援
+  const cached = localStorage.getItem('SOLAR_8D_LOCAL_REPORTS');
+  if (cached) {
+    try {
+      allReports = JSON.parse(cached);
+    } catch(e) {
+      allReports = [...DEFAULT_SEED_REPORTS];
+    }
+  } else {
+    allReports = [...DEFAULT_SEED_REPORTS];
+    localStorage.setItem('SOLAR_8D_LOCAL_REPORTS', JSON.stringify(allReports));
+  }
+  render();
+}
+
+// ==============================================================================
+// 3. 戰情指標與報告列表渲染 (Render Engine)
+// ==============================================================================
+function render() {
+  renderCockpitMetrics();
+  renderReportsList();
+}
+
+function renderCockpitMetrics() {
+  const total = allReports.length;
+  const active = allReports.filter(r => ['d0_emergency', 'd2_analysis', 'd4_root_cause'].includes(r.stage)).length;
+  const verifying = allReports.filter(r => ['d5_containment', 'd6_verification', 'd7_prevention'].includes(r.stage)).length;
+  const closed = allReports.filter(r => r.stage === 'd8_closed').length;
+
+  const totalLoss = allReports.reduce((sum, r) => sum + (Number(r.annual_loss_ntd) || 0), 0);
+  const totalKwh = allReports.reduce((sum, r) => sum + (Number(r.loss_kwh) || 0), 0);
+
+  document.getElementById('kpiTotalReports').textContent = total;
+  document.getElementById('kpiActiveCases').textContent = active;
+  document.getElementById('kpiVerifyingCases').textContent = verifying;
+  document.getElementById('kpiClosedCases').textContent = closed;
+
+  document.getElementById('totalLossNTD').innerHTML = `NT$ ${(totalLoss / 10000).toLocaleString('zh-TW', {maximumFractionDigits: 1})} <small>萬</small>`;
+  document.getElementById('totalShortageKwh').innerHTML = `${Math.round(totalKwh).toLocaleString('zh-TW')} <small>kWh</small>`;
+}
+
+function getFilteredReports() {
+  return allReports.filter(r => {
+    // 關鍵字檢索
+    if (currentFilters.keyword) {
+      const q = currentFilters.keyword.toLowerCase();
+      const match = (
+        (r.case_no && r.case_no.toLowerCase().includes(q)) ||
+        (r.report_title && r.report_title.toLowerCase().includes(q)) ||
+        (r.plant_name && r.plant_name.toLowerCase().includes(q)) ||
+        (r.location && r.location.toLowerCase().includes(q)) ||
+        (r.abnormal_device && r.abnormal_device.toLowerCase().includes(q)) ||
+        (r.priority_issue && r.priority_issue.toLowerCase().includes(q)) ||
+        (r.lede && r.lede.toLowerCase().includes(q))
+      );
+      if (!match) return false;
+    }
+
+    // 階段狀態
+    if (currentFilters.stage !== 'all' && r.stage !== currentFilters.stage) return false;
+
+    // 嚴重等級
+    if (currentFilters.severity !== 'all') {
+      if (!r.severity_level || !r.severity_level.includes(currentFilters.severity)) return false;
+    }
+
+    // 年度篩選
+    if (currentFilters.year !== 'all') {
+      if (String(r.year) !== String(currentFilters.year)) return false;
+    }
+
+    // 型態篩選
+    if (currentFilters.type !== 'all') {
+      if (r.plant_type !== currentFilters.type) return false;
+    }
+
+    return true;
+  });
+}
+
+function renderReportsList() {
+  const filtered = getFilteredReports();
+  document.getElementById('resultCountInfo').textContent = `共符合 ${filtered.length} 筆診斷報告（總庫存 ${allReports.length} 筆）`;
+
+  const gridContainer = document.getElementById('reportsGrid');
+  const tableBody = document.getElementById('reportsTableBody');
+
+  if (filtered.length === 0) {
+    gridContainer.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 12px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <div style="font-weight: 700; font-size: 1.05rem;">未找到符合條件的 8D 報告</div>
+        <p style="font-size: 0.8rem; margin-top: 4px;">請調整搜尋關鍵字或放寬篩選條件。</p>
+      </div>
+    `;
+    tableBody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:30px; color:var(--muted);">無符合之資料</td></tr>`;
+    return;
+  }
+
+  // 渲染卡片網格
+  gridContainer.innerHTML = filtered.map(r => {
+    const stageBadge = getStageBadge(r.stage);
+    const ratioPercent = r.ratio_to_benchmark ? Math.round(r.ratio_to_benchmark * 100) : '--';
+    const ratioClass = (r.ratio_to_benchmark && r.ratio_to_benchmark < 0.6) ? 'bad' : (r.ratio_to_benchmark < 0.85 ? 'warn' : 'good');
+    const lossNtdWan = r.annual_loss_ntd ? Math.round(r.annual_loss_ntd / 10000) : 0;
+
+    return `
+      <article class="report-card">
+        <div class="card-banner">
+          <div class="card-tags">
+            <span class="tag tag-case">${escapeHtml(r.case_no)}</span>
+            <span class="tag ${stageBadge.cls}">${stageBadge.text}</span>
+            <span class="tag tag-type">${escapeHtml(r.plant_type || '光電案場')}</span>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--muted); font-family: var(--mono);">${escapeHtml(r.publish_date || '')}</span>
+        </div>
+
+        <div class="card-body">
+          <h2 class="card-title">${escapeHtml(r.report_title)}</h2>
+          <div class="card-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${escapeHtml(r.location || r.plant_name)}
+          </div>
+
+          <div class="card-lede">
+            "${escapeHtml(r.lede || r.priority_issue || '8D 異常排查中')}"
+          </div>
+
+          <div class="mini-kpi-grid">
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">異常設備</div>
+              <div class="mini-kpi-val" style="font-size:0.82rem;">${escapeHtml(r.abnormal_device || '全場')}</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">相對基準</div>
+              <div class="mini-kpi-val ${ratioClass}">${ratioPercent}%</div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">短少發電</div>
+              <div class="mini-kpi-val bad">${(r.loss_kwh || 0).toLocaleString()} <span style="font-size:0.6rem;">kWh</span></div>
+            </div>
+            <div class="mini-kpi">
+              <div class="mini-kpi-label">年化損失</div>
+              <div class="mini-kpi-val warn">${lossNtdWan} <span style="font-size:0.6rem;">萬</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn btn-outline btn-sm" onclick="openDrawer('${r.id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            快速檢視
+          </button>
+          <a href="${escapeHtml(r.report_url || '#')}" target="_blank" class="btn btn-primary btn-sm" style="margin-left:auto;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            開啟互動診斷報告
+          </a>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  // 渲染表格清單
+  tableBody.innerHTML = filtered.map(r => {
+    const stageBadge = getStageBadge(r.stage);
+    const ratioPercent = r.ratio_to_benchmark ? Math.round(r.ratio_to_benchmark * 100) : '--';
+    const lossWan = r.annual_loss_ntd ? (r.annual_loss_ntd / 10000).toFixed(1) : '0';
+
+    return `
+      <tr>
+        <td class="mono" style="font-weight:700; color:var(--blue-dd);">${escapeHtml(r.case_no)}</td>
+        <td style="font-weight:700;">${escapeHtml(r.plant_name)}</td>
+        <td><span class="tag tag-type">${escapeHtml(r.plant_type)}</span></td>
+        <td><span class="tag ${stageBadge.cls}">${stageBadge.text}</span></td>
+        <td style="font-size:0.76rem;">${escapeHtml(r.severity_level || '--')}</td>
+        <td class="mono font-bold">${escapeHtml(r.abnormal_device || '--')}</td>
+        <td class="mono" style="font-weight:800;">${ratioPercent}%</td>
+        <td class="mono" style="color:var(--coral); font-weight:700;">${(r.loss_kwh || 0).toLocaleString()}</td>
+        <td class="mono" style="color:var(--amber); font-weight:700;">NT$ ${lossWan} 萬</td>
+        <td class="mono" style="font-size:0.75rem; color:var(--muted);">${escapeHtml(r.publish_date || '')}</td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="openDrawer('${r.id}')">檢視</button>
+            <a href="${escapeHtml(r.report_url || '#')}" target="_blank" class="btn btn-primary btn-sm">報告</a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function getStageBadge(stage) {
+  switch (stage) {
+    case 'd0_emergency': return { cls: 'tag-stage-d0', text: 'D0 立案反應' };
+    case 'd2_analysis': return { cls: 'tag-stage-d2', text: 'D2 量化調查' };
+    case 'd4_root_cause': return { cls: 'tag-stage-d4', text: 'D4 根因確立' };
+    case 'd6_verification': return { cls: 'tag-stage-d6', text: 'D6 對策驗證' };
+    case 'd8_closed': return { cls: 'tag-stage-d8', text: 'D8 已結案' };
+    default: return { cls: 'tag-type', text: stage || '進行中' };
+  }
+}
+
+// ==============================================================================
+// 4. 篩選與搜尋互動
+// ==============================================================================
+function handleSearch(val) {
+  currentFilters.keyword = val.trim();
+  renderReportsList();
+}
+
+function setFilter(type, val) {
+  currentFilters[type] = val;
+
+  if (type === 'stage') {
+    const pills = document.getElementById('stageFilters').querySelectorAll('.filter-pill');
+    pills.forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  renderReportsList();
+}
+
+function switchView(view) {
+  currentView = view;
+  const gridEl = document.getElementById('reportsGrid');
+  const tableEl = document.getElementById('reportsTableWrap');
+  const gridBtn = document.getElementById('viewGridBtn');
+  const tableBtn = document.getElementById('viewTableBtn');
+
+  if (view === 'grid') {
+    gridEl.style.display = 'grid';
+    tableEl.style.display = 'none';
+    gridBtn.classList.add('active');
+    tableBtn.classList.remove('active');
+  } else {
+    gridEl.style.display = 'none';
+    tableEl.style.display = 'block';
+    gridBtn.classList.remove('active');
+    tableBtn.classList.add('active');
+  }
+}
+
+// ==============================================================================
+// 5. 側邊抽屜 (Quick View Drawer)
+// ==============================================================================
+let drawerMap = null;
+
+function openDrawer(reportId) {
+  const r = allReports.find(x => x.id === reportId);
+  if (!r) return;
+
+  document.getElementById('drawerCaseNo').textContent = r.case_no;
+  document.getElementById('drawerTitle').textContent = r.report_title;
+
+  const stageBadge = getStageBadge(r.stage);
+  const ratioPercent = r.ratio_to_benchmark ? Math.round(r.ratio_to_benchmark * 100) : '--';
+
+  const bodyEl = document.getElementById('drawerBody');
+  bodyEl.innerHTML = `
+    <div style="background:var(--paper); padding:16px; border-radius:10px; border:1px solid var(--line);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="tag ${stageBadge.cls}" style="font-size:0.75rem;">${stageBadge.text}</span>
+        <span style="font-size:0.75rem; color:var(--muted);">${escapeHtml(r.severity_level || '')}</span>
+      </div>
+      <div style="font-size:0.85rem; line-height:1.5; color:var(--ink-2); margin-bottom:12px;">
+        <strong>核心結論：</strong>${escapeHtml(r.lede || '')}
+      </div>
+      <div style="font-size:0.82rem; background:#fff; padding:10px 12px; border-radius:8px; border-left:3px solid var(--blue); color:var(--ink);">
+        <strong>管理缺口 (Takeaway)：</strong>${escapeHtml(r.takeaway || '')}
+      </div>
+    </div>
+
+    <div>
+      <h4 style="font-size:0.92rem; font-weight:800; color:var(--blue-dd); margin-bottom:10px;">📊 核心電量與損失指標</h4>
+      <div class="mini-kpi-grid" style="grid-template-columns: repeat(3, 1fr); padding:12px;">
+        <div class="mini-kpi">
+          <div class="mini-kpi-label">異常設備比值</div>
+          <div class="mini-kpi-val bad">${ratioPercent}%</div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-kpi-label">短少發電度數</div>
+          <div class="mini-kpi-val bad">${(r.loss_kwh || 0).toLocaleString()} <span style="font-size:0.6rem;">kWh</span></div>
+        </div>
+        <div class="mini-kpi">
+          <div class="mini-kpi-label">年化損失預估</div>
+          <div class="mini-kpi-val warn">NT$ ${Math.round((r.annual_loss_ntd || 0)/10000)} <span style="font-size:0.6rem;">萬</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h4 style="font-size:0.92rem; font-weight:800; color:var(--blue-dd); margin-bottom:10px;">📍 案場地理資訊</h4>
+      <p style="font-size:0.8rem; color:var(--ink-2); margin-bottom:8px;">${escapeHtml(r.location || '')}</p>
+      <div id="drawerMiniMap" style="width:100%; height:180px; border-radius:8px; border:1px solid var(--line);"></div>
+    </div>
+
+    <div>
+      <h4 style="font-size:0.92rem; font-weight:800; color:var(--blue-dd); margin-bottom:10px;">📸 現場相片與證據庫 (${(r.evidences || []).length} 張)</h4>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+        ${(r.evidences && r.evidences.length > 0) ? r.evidences.map(ev => `
+          <div style="border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--paper);">
+            <img src="${escapeHtml(ev.image_url || ev.url)}" style="width:100%; height:120px; object-fit:cover; display:block;" onerror="this.src='https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=400&q=80'">
+            <div style="padding:6px 8px;">
+              <span class="tag tag-case" style="font-size:0.65rem;">${escapeHtml(ev.ev_code || 'EV')}</span>
+              <div style="font-size:0.75rem; font-weight:700; color:var(--ink); margin-top:2px;">${escapeHtml(ev.title || '')}</div>
+              <div style="font-size:0.68rem; color:var(--muted);">${escapeHtml(ev.description || ev.desc || '')}</div>
+            </div>
+          </div>
+        `).join('') : '<p style="grid-column:1/-1; font-size:0.8rem; color:var(--muted);">尚未上傳現場證據照片</p>'}
+      </div>
+    </div>
+
+    <div style="margin-top:auto; padding-top:16px; border-top:1px solid var(--line); display:flex; gap:10px;">
+      <a href="${escapeHtml(r.report_url || '#')}" target="_blank" class="btn btn-primary" style="flex:1;">
+        🌐 開啟完整互動報告
+      </a>
+      <button class="btn btn-secondary" onclick="exportSingleSpec('${r.id}')">
+        📥 匯出規格 JSON
+      </button>
+    </div>
+  `;
+
+  document.getElementById('detailBackdrop').classList.add('active');
+  document.getElementById('detailDrawer').classList.add('active');
+
+  // 初始化 Mini 地圖
+  setTimeout(() => {
+    if (drawerMap) {
+      drawerMap.remove();
+      drawerMap = null;
+    }
+    const lat = r.lat || 24.3800;
+    const lng = r.lng || 120.5750;
+    drawerMap = L.map('drawerMiniMap').setView([lat, lng], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(drawerMap);
+    L.marker([lat, lng]).addTo(drawerMap).bindPopup(`<b>${escapeHtml(r.plant_name)}</b><br>${escapeHtml(r.case_no)}`).openPopup();
+  }, 100);
+}
+
+function closeDrawer() {
+  document.getElementById('detailBackdrop').classList.remove('active');
+  document.getElementById('detailDrawer').classList.remove('active');
+  if (drawerMap) {
+    drawerMap.remove();
+    drawerMap = null;
+  }
+}
+
+// ==============================================================================
+// 6. 新增/編輯 8D 報告與相片直傳 (Wizard & Supabase Storage)
+// ==============================================================================
+function openNewReportModal() {
+  stagedPhotos = [];
+  renderPhotoPreviews();
+  switchFormTab(0);
+  document.getElementById('modalTitle').textContent = "新增光電案場 8D 異常診斷報告";
+  
+  // 產生預設案號
+  const year = new Date().getFullYear();
+  const count = allReports.length + 1;
+  document.getElementById('f_case_no').value = `PV-${year}-CS${count.toString().padStart(2, '0')}`;
+  document.getElementById('f_fit_rate').value = "5.00";
+  document.getElementById('f_stage').value = "d4_root_cause";
+  document.getElementById('f_severity').value = "Level 2 (重大發電異常與火載量隱患)";
+
+  openModal('reportModalBackdrop');
+}
+
+function switchFormTab(idx) {
+  const tabs = document.querySelectorAll('.form-tab');
+  tabs.forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  for (let i = 0; i < 4; i++) {
+    const content = document.getElementById(`tabContent${i}`);
+    if (content) content.style.display = (i === idx) ? 'block' : 'none';
+  }
+}
+
+async function handlePhotoUpload(files) {
+  if (!files || files.length === 0) return;
+  const statusEl = document.getElementById('uploadStatusText');
+  statusEl.style.display = 'block';
+  statusEl.textContent = `正在處理 ${files.length} 張相片...`;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const evNum = (stagedPhotos.length + 1).toString().padStart(2, '0');
+    const evCode = `EV-${evNum}`;
+
+    // 若有 Supabase 連線且有 Storage bucket
+    if (supabaseClient) {
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `reports/${fileName}`;
+
+        statusEl.textContent = `正在直傳 ${file.name} 至 Supabase Storage...`;
+        const { data, error } = await supabaseClient.storage
+          .from('solar-8d-evidences')
+          .upload(filePath, file);
+
+        if (!error) {
+          const { data: { publicUrl } } = supabaseClient.storage
+            .from('solar-8d-evidences')
+            .getPublicUrl(filePath);
+
+          stagedPhotos.push({
+            ev_code: evCode,
+            title: file.name,
+            image_url: publicUrl,
+            storage_path: filePath,
+            desc: "現場直傳相片"
+          });
+          continue;
+        } else {
+          console.warn("Storage upload error, using local ObjectURL:", error);
+        }
+      } catch (err) {
+        console.warn("Storage upload exception:", err);
+      }
+    }
+
+    // 本地預覽備援
+    const objectUrl = URL.createObjectURL(file);
+    stagedPhotos.push({
+      ev_code: evCode,
+      title: file.name,
+      image_url: objectUrl,
+      desc: "本地待上傳相片"
+    });
+  }
+
+  statusEl.textContent = `已成功載入 ${stagedPhotos.length} 張相片`;
+  setTimeout(() => { statusEl.style.display = 'none'; }, 2000);
+  renderPhotoPreviews();
+}
+
+function renderPhotoPreviews() {
+  const container = document.getElementById('photoPreviewGrid');
+  container.innerHTML = stagedPhotos.map((p, idx) => `
+    <div class="photo-preview-item">
+      <img src="${escapeHtml(p.image_url)}">
+      <button type="button" class="del-btn" onclick="removeStagedPhoto(${idx})">&times;</button>
+      <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); color:#fff; font-size:0.65rem; padding:2px 4px; font-family:var(--mono);">
+        ${escapeHtml(p.ev_code)}
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeStagedPhoto(idx) {
+  stagedPhotos.splice(idx, 1);
+  renderPhotoPreviews();
+}
+
+async function saveReportForm() {
+  const caseNo = document.getElementById('f_case_no').value.trim();
+  const plantName = document.getElementById('f_plant_name').value.trim();
+  if (!caseNo || !plantName) {
+    alert("請務必填寫案號 (Case No) 與電廠全名！");
+    switchFormTab(0);
+    return;
+  }
+
+  const newReport = {
+    id: "rep-" + Date.now(),
+    case_no: caseNo,
+    plant_name: plantName,
+    report_title: `${plantName}｜8D 異常診斷報告`,
+    plant_type: document.getElementById('f_plant_type').value,
+    capacity_kwp: parseFloat(document.getElementById('f_capacity_kwp').value) || 1000,
+    inverter_model: document.getElementById('f_inverter_info').value || '100kW 級逆變器',
+    fit_rate: parseFloat(document.getElementById('f_fit_rate').value) || 5.0,
+    location: document.getElementById('f_location').value || plantName,
+    year: new Date().getFullYear(),
+    publish_date: new Date().toLocaleDateString('zh-TW', {year:'numeric', month:'2-digit', day:'2-digit'}).replace(/\//g, '/'),
+    stage: document.getElementById('f_stage').value,
+    severity_level: document.getElementById('f_severity').value,
+    abnormal_device: document.getElementById('f_abnormal_device').value || 'INV-01',
+    ratio_to_benchmark: parseFloat(document.getElementById('f_ratio').value) || 0.65,
+    loss_kwh: parseFloat(document.getElementById('f_loss_kwh').value) || 10000,
+    annual_loss_ntd: parseFloat(document.getElementById('f_loss_ntd').value) || 250000,
+    priority_issue: document.getElementById('f_priority_issue').value || '現場巡檢與清潔處置',
+    lede: document.getElementById('f_lede').value || '8D 異常診斷與根因排查確立。',
+    takeaway: document.getElementById('f_takeaway').value || '建立標準化維運巡檢規範與驗收清單。',
+    report_url: document.getElementById('f_report_url').value || 'https://davidyeh51.github.io/daan-guike-pocs-diagnostic/#summary',
+    cover_image: stagedPhotos[0]?.image_url || 'https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80',
+    evidences: [...stagedPhotos]
+  };
+
+  // 若有 Supabase 則同步至資料庫
+  if (supabaseClient) {
+    try {
+      // 1. 插入或更新 plants
+      const { data: plantData, error: pErr } = await supabaseClient
+        .from('plants')
+        .upsert({
+          plant_code: caseNo.replace(/[^A-Za-z0-9]/g, '').slice(-6) || 'PL01',
+          name: newReport.plant_name,
+          plant_type: newReport.plant_type,
+          location: newReport.location,
+          actual_capacity_kwp: newReport.capacity_kwp,
+          fit_rate: newReport.fit_rate
+        })
+        .select()
+        .single();
+
+      if (!pErr && plantData) {
+        // 2. 插入 reports_8d
+        const { data: repData, error: rErr } = await supabaseClient
+          .from('reports_8d')
+          .insert({
+            plant_id: plantData.id,
+            case_no: newReport.case_no,
+            report_title: newReport.report_title,
+            year: newReport.year,
+            stage: newReport.stage,
+            severity_level: newReport.severity_level,
+            abnormal_device: newReport.abnormal_device,
+            ratio_to_benchmark: newReport.ratio_to_benchmark,
+            loss_kwh: newReport.loss_kwh,
+            annual_loss_ntd: newReport.annual_loss_ntd,
+            priority_issue: newReport.priority_issue,
+            lede: newReport.lede,
+            takeaway: newReport.takeaway,
+            report_url: newReport.report_url
+          })
+          .select()
+          .single();
+
+        // 3. 插入相片 evidences
+        if (!rErr && repData && stagedPhotos.length > 0) {
+          const evRows = stagedPhotos.map(p => ({
+            report_id: repData.id,
+            ev_code: p.ev_code,
+            title: p.title,
+            image_url: p.image_url,
+            storage_path: p.storage_path,
+            description: p.desc
+          }));
+          await supabaseClient.from('report_evidences').insert(evRows);
+        }
+      }
+    } catch(err) {
+      console.warn("Supabase insert error, saved locally:", err);
+    }
+  }
+
+  // 同步存入本機列表
+  allReports.unshift(newReport);
+  localStorage.setItem('SOLAR_8D_LOCAL_REPORTS', JSON.stringify(allReports));
+
+  closeModal('reportModalBackdrop');
+  render();
+  alert(`報告 ${newReport.case_no} 已成功儲存！`);
+}
+
+// ==============================================================================
+// 7. Supabase 連線設定與測試
+// ==============================================================================
+function openSettingsModal() {
+  document.getElementById('cfg_supabase_url').value = localStorage.getItem('SOLAR_8D_SUPABASE_URL') || '';
+  document.getElementById('cfg_supabase_key').value = localStorage.getItem('SOLAR_8D_SUPABASE_KEY') || '';
+  document.getElementById('settingsTestResult').style.display = 'none';
+  openModal('settingsModalBackdrop');
+}
+
+async function testSupabaseConnection() {
+  const url = document.getElementById('cfg_supabase_url').value.trim();
+  const key = document.getElementById('cfg_supabase_key').value.trim();
+  const resEl = document.getElementById('settingsTestResult');
+
+  if (!url || !key) {
+    resEl.style.display = 'block';
+    resEl.style.background = 'var(--coral-soft)';
+    resEl.style.color = 'var(--coral)';
+    resEl.textContent = '❌ 請完整輸入 Supabase Project URL 與 Public Anon Key！';
+    return;
+  }
+
+  try {
+    const testClient = window.supabase.createClient(url, key);
+    const { data, error } = await testClient.from('reports_8d').select('count', { count: 'exact', head: true });
+    
+    resEl.style.display = 'block';
+    if (!error) {
+      resEl.style.background = 'var(--green-soft)';
+      resEl.style.color = 'var(--green)';
+      resEl.textContent = '✅ 連線成功！已成功握手 Supabase PostgreSQL 資料庫。';
+    } else {
+      resEl.style.background = 'var(--amber-soft)';
+      resEl.style.color = 'var(--amber)';
+      resEl.textContent = `⚠️ 連線有回應，但查詢失敗：${error.message}（請確認是否已執行 schema.sql）`;
+    }
+  } catch(e) {
+    resEl.style.display = 'block';
+    resEl.style.background = 'var(--coral-soft)';
+    resEl.style.color = 'var(--coral)';
+    resEl.textContent = `❌ 連線發生錯誤：${e.message}`;
+  }
+}
+
+async function saveSupabaseSettings() {
+  const url = document.getElementById('cfg_supabase_url').value.trim();
+  const key = document.getElementById('cfg_supabase_key').value.trim();
+  
+  if (url && key) {
+    localStorage.setItem('SOLAR_8D_SUPABASE_URL', url);
+    localStorage.setItem('SOLAR_8D_SUPABASE_KEY', key);
+    supabaseClient = window.supabase.createClient(url, key);
+    updateConnUI(true);
+    closeModal('settingsModalBackdrop');
+    await initData();
+    alert("Supabase 連線設定已儲存！");
+  } else {
+    localStorage.removeItem('SOLAR_8D_SUPABASE_URL');
+    localStorage.removeItem('SOLAR_8D_SUPABASE_KEY');
+    supabaseClient = null;
+    updateConnUI(false);
+    closeModal('settingsModalBackdrop');
+  }
+}
+
+function resetToDemoData() {
+  if (confirm("確定要重設為預設的 4 個示範案場資料嗎？（包含台中大安龜殼段 POCS）")) {
+    allReports = [...DEFAULT_SEED_REPORTS];
+    localStorage.setItem('SOLAR_8D_LOCAL_REPORTS', JSON.stringify(allReports));
+    closeModal('settingsModalBackdrop');
+    render();
+  }
+}
+
+// ==============================================================================
+// 8. 規格 JSON 匯出與 CSV 下載
+// ==============================================================================
+function exportSingleSpec(reportId) {
+  const r = allReports.find(x => x.id === reportId);
+  if (!r) return;
+
+  const spec = {
+    meta: {
+      case_no: r.case_no,
+      plant_id: r.case_no.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      plant_name: r.plant_name,
+      plant_location: r.location,
+      report_code: r.case_no,
+      publish_date: r.publish_date,
+      data_period: "最近 90 天",
+      report_version: "v1.0",
+      actual_capacity_kwp: r.actual_capacity_kwp || 1000,
+      inverter_count: r.inverter_count || 10,
+      severity_level: r.severity_level,
+      fit_rate: r.fit_rate || 5.0,
+      lede: r.lede,
+      takeaway: r.takeaway,
+      coordinates: { lat: r.lat || 24.3800, lng: r.lng || 120.5750 }
+    },
+    summary: {
+      kpis: [
+        { label: `${r.abnormal_device || '異常機'} 相對基準`, val: String(Math.round((r.ratio_to_benchmark||0)*100)), unit: "%", type: "bad" },
+        { label: "損失電量", val: (r.loss_kwh||0).toLocaleString(), unit: "kWh", type: "bad" },
+        { label: "年化損失金額", val: String(Math.round((r.annual_loss_ntd||0)/10000)), unit: "萬元", type: "warn" }
+      ]
+    },
+    evidences: r.evidences || []
+  };
+
+  downloadJsonFile(spec, `${r.case_no}_spec.json`);
+}
+
+function downloadCurrentSpecJson() {
+  const caseNo = document.getElementById('f_case_no').value || 'NEW_CASE';
+  const spec = {
+    meta: {
+      case_no: caseNo,
+      plant_name: document.getElementById('f_plant_name').value || '光電案場',
+      plant_location: document.getElementById('f_location').value || '',
+      actual_capacity_kwp: parseFloat(document.getElementById('f_capacity_kwp').value) || 0,
+      fit_rate: parseFloat(document.getElementById('f_fit_rate').value) || 5.0,
+      severity_level: document.getElementById('f_severity').value,
+      lede: document.getElementById('f_lede').value,
+      takeaway: document.getElementById('f_takeaway').value
+    },
+    evidences: stagedPhotos
+  };
+  downloadJsonFile(spec, `${caseNo}_spec.json`);
+}
+
+function downloadJsonFile(obj, filename) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function exportData(type) {
+  if (type === 'csv') {
+    let csv = "\uFEFF案號,案場名稱,型態,階段,嚴重等級,異常設備,相對基準,短少度數(kWh),年化損失(NT$),發布日,報告網址\n";
+    allReports.forEach(r => {
+      csv += `"${r.case_no}","${r.plant_name}","${r.plant_type}","${r.stage}","${r.severity_level}","${r.abnormal_device}","${r.ratio_to_benchmark}","${r.loss_kwh}","${r.annual_loss_ntd}","${r.publish_date}","${r.report_url}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Solar_8D_Reports_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
+
+// 輔助函式
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+
+</body>
+</html>
