@@ -847,6 +847,32 @@ body {
 // ==============================================================================
 const DEFAULT_SEED_REPORTS = [
   {
+    id: "rep-006",
+    case_no: "PV-2026-HF01",
+    report_title: "屏東麟洛禾豐養豬場屋頂光伏 452.6kWp｜INV-7/6 慢性斷串與 8月豪雨 INV-8 急性進水案",
+    plant_name: "屏東麟洛禾豐養豬場屋頂型光電電廠",
+    plant_type: "畜舍屋頂型",
+    location: "屏東縣麟洛鄉民族路埔圳巷 3 號",
+    lat: 22.6515, lng: 120.5285,
+    contract_kw: 400.0, actual_capacity_kwp: 452.625,
+    inverter_model: "Delta 組串型變流器 (3-MPPT)", inverter_count: 8,
+    year: 2026, publish_date: "2026/09/23",
+    stage: "d4_root_cause",
+    severity_level: "Level 1 (嚴重設備損壞與火載風險)",
+    abnormal_device: "INV-7, INV-6, INV-8",
+    ratio_to_benchmark: 0.553,
+    loss_kwh: 77191,
+    annual_loss_ntd: 447522,
+    priority_issue: "INV-7/6 長期組串斷路未併入 (少40%)，8月逾2,000mm豪雨後 INV-8/5 急性進水重挫 (-25%)",
+    lede: "全場 6-8 月平均 PR 僅 51.5%。INV-7/6 長期組串斷路佔損失 53.3%；且 8 月破紀錄豪雨後，9 月初 INV-8 暴跌 -24.8%、INV-5 暴跌 -19.2%，確診為接線盒滲水與絕緣擊穿。",
+    takeaway: "鎖定 INV-7、INV-6、INV-8、INV-5 實施 A+ 精準整改，年化增發 7.7 萬~15.0 萬度，年化增收 NT$ 44.8 萬~86.8 萬元，回本期僅 1.8 年，7.25 年累計淨增益逾 350 萬元！",
+    report_url: "https://davidyeh51.github.io/linluo-hefeng-solar-diagnostic/",
+    cover_image: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+    evidences: [
+      { ev_code: "EV-01", step: "D0", title: "UNSW P2P 時序圖", url: "https://davidyeh51.github.io/linluo-hefeng-solar-diagnostic/", desc: "INV-7 比值僅 0.553，INV-8 9月驟降 -24.8%。" }
+    ]
+  },
+  {
     id: "rep-001",
     case_no: "PV-2026-DA01",
     report_title: "台中市大安區龜殼段 POCS 水上光電｜INV-13 發電異常",
