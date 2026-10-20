@@ -847,6 +847,35 @@ body {
 // ==============================================================================
 const DEFAULT_SEED_REPORTS = [
   {
+    id: "rep-007",
+    case_no: "PV-2026-KH01",
+    report_title: "高雄小港遠東鋼鐵一~三期 1,481.8kWp｜8D 性能異常診斷暨效益改善決策報告",
+    plant_name: "高雄遠東鋼鐵一~三期屋頂型光電電廠",
+    plant_type: "屋頂型",
+    location: "812 高雄市小港區店鎮里嘉興街 8 號",
+    lat: 22.5601, lng: 120.3392,
+    contract_kw: 1400.0, actual_capacity_kwp: 1481.800,
+    inverter_model: "組串型變流器 (32~33kW 級 45台)", inverter_count: 45,
+    year: 2026, publish_date: "2026/10/20",
+    stage: "d5_permanent_actions",
+    severity_level: "Level 2 (重大發電異常與火載量隱患)",
+    abnormal_device: "INV026, INV014, INV030 (共 31 台落後)",
+    ratio_to_benchmark: 0.762,
+    loss_kwh: 192864,
+    annual_loss_ntd: 867887,
+    priority_issue: "小港鋼粉重度落塵覆蓋、冬季低仰角氣樓遮陰、INV014組串斷路與INV030跳脫",
+    lede: "全場 45 台變流器年度發電量僅 156 萬度 (平均 DY 2.89)，相比標竿機台 INV037 (DY 3.241) 全年短少 192,864 度電 (年損 NT$ 86.8 萬元)。診斷確診為重工業鋼粉落塵覆蓋、太子樓冬季低仰角遮蔽、INV014 組串斷路與 INV030 跳脫 16 天。整改預算 3,803,328 元，4.38 年回本，20 年累計淨增值 1,302 萬元！",
+    takeaway: "實施五大精準修繕工項：直流斷路修復、風道與通訊檢修、超高壓物理除垢自潔鍍膜、遮陰跳線重組與即時 P2P 邊緣告警，確保日等價時數自 2.89 飛躍至 3.241，全面保障 20 年資產收益！",
+    report_url: "https://davidyeh51.github.io/solar-8d-portal/高雄遠東鋼鐵_診斷報告.html",
+    cover_image: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+    evidences: [
+      { ev_code: "EV-01", step: "D2", title: "45台變流器日等價時數 (DY) 診斷排名", url: "https://davidyeh51.github.io/solar-8d-portal/高雄遠東鋼鐵_診斷報告.html#slide-3", desc: "標竿 INV037 達 3.241，INV026 僅 2.470，全場短少 192,864 度電。" },
+      { ev_code: "EV-02", step: "D4", title: "UNSW-Solar 夏冬比值落差分析", url: "https://davidyeh51.github.io/solar-8d-portal/高雄遠東鋼鐵_診斷報告.html#slide-5", desc: "20 台變流器夏冬比值落差逾 35%，冬季太子樓低仰角陰影與乾季鋼粉落塵共振。" },
+      { ev_code: "EV-03", step: "D4", title: "INV014 步階突降時序圖", url: "https://davidyeh51.github.io/solar-8d-portal/高雄遠東鋼鐵_診斷報告.html#slide-6", desc: "2026年4月發電量驟降 20%，特徵完全符合單一組串斷路／直流熔絲熔斷。" },
+      { ev_code: "EV-04", step: "D5", title: "五大修繕工程預算清冊 (NT$ 3,803,328)", url: "https://davidyeh51.github.io/solar-8d-portal/高雄遠東鋼鐵_診斷報告.html#slide-7", desc: "涵蓋斷路修復、風道檢修、奈米自潔鍍膜、跳線重組與智慧邊緣告警。" }
+    ]
+  },
+  {
     id: "rep-005",
     case_no: "PV-2026-DY01",
     report_title: "長榮國際儲運大園場 1.96MWp｜化學性漏電改善暨跳機排查",
