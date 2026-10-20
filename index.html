@@ -847,6 +847,34 @@ body {
 // ==============================================================================
 const DEFAULT_SEED_REPORTS = [
   {
+    id: "rep-008",
+    case_no: "PV-2026-KS01",
+    report_title: "高雄岡山五甲尾滯洪池 4,999.2kWp｜8D 性能異常診斷暨效益改善決策報告",
+    plant_name: "高雄岡山五甲尾滯洪池水面型光電電廠",
+    plant_type: "水上浮體型",
+    location: "高雄市岡山區嘉興里五甲尾滯洪池 (土庫/五甲尾排水系統)",
+    lat: 22.8265, lng: 120.2936,
+    contract_kw: 4900.0, actual_capacity_kwp: 4999.20,
+    inverter_model: "組串式大功率變流器集中升壓",
+    inverter_count: 50,
+    severity_level: "Level 2 (中重度光學落塵衰退與感測器故障)",
+    stage: "D5 對策選定",
+    publish_date: "2026/10/20",
+    annual_loss_ntd_w: 198.1,
+    shortage_kwh: 405889,
+    fit_rate: 4.88,
+    lede: "UNSW 遙測特徵確診：直流工作電壓（676V~686V）與逆變器轉換效率（97.33%）高度健全，但光生電流比（I_dc/G）自 8 月 6.48 降至 10 月 5.49 A/(W/m²)，證實汛期後組件表面積塵水垢造成光學衰退；同步揭露日射計斷線 192 筆與夏季溫度修正 PR 崩潰為負值 (-135.6%) 之感測器破產危機。全年短少 40.6 萬度，年化短少營收 NT$ 198.1 萬元。",
+    takeaway: "光電板表面積塵不會讓逆變器跳脫，卻在水面浮體環境默默吞噬 11%~15% 發電量！若放任環境感測器斷線與溫度 PR 負值失真，運維團隊將在無感知狀態下年損近兩百萬元。透過無人清洗船、環境站光電隔離與心跳自動告警，可全面挽回發電損失並守護資產現金流！",
+    report_url: "https://davidyeh51.github.io/gangshan-wujiawei-diagnostic/",
+    cover_image: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+    evidences: [
+      { ev_code: "EV-01", step: "D2/D4", title: "12個月發電月報與PR趨勢", url: "https://davidyeh51.github.io/gangshan-wujiawei-diagnostic/", desc: "全年發電 634.4 萬度，夏季溫修 PR 出現負值 (-135.6%)，8月暴雨防汛僅發電 42.3 萬度。" },
+      { ev_code: "EV-02", step: "D4", title: "UNSW 光生電流比衰退曲線", url: "https://davidyeh51.github.io/gangshan-wujiawei-diagnostic/", desc: "直流電壓 680V 正常，但 I/G 從 6.51 跌至 5.49 A/(W/m²)，單調衰退 15.6%，確診落塵水垢光學衰退。" },
+      { ev_code: "EV-03", step: "D0/D3", title: "日射計通訊中斷 192 筆記錄", url: "https://davidyeh51.github.io/gangshan-wujiawei-diagnostic/", desc: "10/03-10/04 連續全天空值 (NaN)，導致監控計算 PR 誤判為 0% 或 102.8%。" },
+      { ev_code: "EV-04", step: "D5/D8", title: "無人水面清洗船與20年DCF財務增益", url: "https://davidyeh51.github.io/gangshan-wujiawei-diagnostic/", desc: "無人遙控清洗船深層除垢，回本期僅 3.4 個月，20年累計折現淨增益達 +NT$ 2,154 萬元。" }
+    ]
+  },
+  {
     id: "rep-007",
     case_no: "PV-2026-KH01",
     report_title: "高雄小港遠東鋼鐵一~三期 1,481.8kWp｜8D 性能異常診斷暨效益改善決策報告",
