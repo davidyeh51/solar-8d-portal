@@ -848,6 +848,35 @@ body {
 const DEFAULT_SEED_REPORTS = [
   {
     id: "rep-008",
+    case_no: "PV-2026-SKP01",
+    report_title: "台南麻豆世堃塑膠 582kWp 屋頂光伏｜UNSW 性能診斷暨 8D 異常決策報告",
+    plant_name: "台南世堃塑膠麻豆廠屋頂型光電電廠",
+    plant_type: "屋頂型",
+    location: "721 台南市麻豆區（自發自用屋頂型）",
+    lat: 23.1812, lng: 120.2520,
+    contract_kw: 500.0, actual_capacity_kwp: 582.060,
+    inverter_model: "組串型變流器 (自發自用防逆流調控)", inverter_count: 5,
+    year: 2026, publish_date: "2026/10/21",
+    stage: "d4_root_cause",
+    severity_level: "Level 1 (高額棄光短少與資產閒置)",
+    abnormal_device: "全廠防逆流零注入控制調度",
+    ratio_to_benchmark: 0.443,
+    loss_kwh: 362118,
+    annual_loss_ntd: 1629532,
+    priority_issue: "晴空PR 83.3%電氣體質優異，但受制於防逆流限制，近92天棄光率達55.7% (11.1萬度)，13個月累計棄光36.2萬度 (損失NT$ 163萬)",
+    lede: "電氣健康度極高 (晴空全載 PR 83.3%，尖峰出力 548.5 kW 達 94.2%)。然而受制於廠區製程用電型態與自發自用防逆流 (Zero-Export) 零注入限制，近 92 天有高達 55.7% (11.1 萬度) 潔淨綠電遭強制抑制棄光，13 個月累計短少 36.2 萬度 (損失達 NT$ 163 萬元)。根本解法在於導入表後儲能 (BESS) 轉移尖離峰與推動綠電轉供 (CPPA)。",
+    takeaway: "「設備沒壞，而是綠電被防逆流鎖死在屋頂！」硬體運轉健全無組串故障，建議立案評估 200kW/500kWh 表後儲能削峰填谷，年化可回收 NT$ 125~155 萬元電費效益，4.8 年回本，20 年創造淨值逾千萬元！",
+    report_url: "https://davidyeh51.github.io/madou-shinkun-diagnostic/",
+    cover_image: "https://images.unsplash.com/photo-1508873696983-2df5293cb395?auto=format&fit=crop&w=800&q=80",
+    evidences: [
+      { ev_code: "EV-01", step: "D2", title: "13 個月發電量與棄光短少歷程圖", url: "https://davidyeh51.github.io/madou-shinkun-diagnostic/#slide-3", desc: "累計實際發電 46.8 萬度，基準 80% PR 應發 83.0 萬度，累計棄光 36.2 萬度 (NT$ 163 萬元)。" },
+      { ev_code: "EV-02", step: "D2", title: "92 天逐日運轉狀態堆疊分類", url: "https://davidyeh51.github.io/madou-shinkun-diagnostic/#slide-3", desc: "全載日僅 29 天，嚴重限電與歸零達 39 天，週末 26 天發電幾近歸零。" },
+      { ev_code: "EV-03", step: "D4", title: "典型日 5 分鐘高頻即時電氣曲線", url: "https://davidyeh51.github.io/madou-shinkun-diagnostic/#slide-5", desc: "日射 >900W/m² 時控制比率被下達 0%，直流工作點由 660V 推升至 Voc ~800V，證實主動降載。" },
+      { ev_code: "EV-04", step: "D5", title: "200kW/500kWh 表後儲能 BESS 評選", url: "https://davidyeh51.github.io/madou-shinkun-diagnostic/#slide-7", desc: "中午吸收棄光於台電尖峰放電，4.8 年回本，IRR 14.8%，年化回收 135 萬元。" }
+    ]
+  },
+  {
+    id: "rep-008",
     case_no: "PV-2026-KS01",
     report_title: "高雄岡山五甲尾滯洪池 4,999.2kWp｜8D 性能異常診斷暨效益改善決策報告",
     plant_name: "高雄岡山五甲尾滯洪池水面型光電電廠",

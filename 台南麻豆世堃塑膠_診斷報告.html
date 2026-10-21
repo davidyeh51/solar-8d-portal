@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">台南麻豆世堃塑膠 582kWp 屋頂光伏｜UNSW 性能診斷暨 8D 異常決策平台</title>
+<meta name="description" content="台南麻豆世堃塑膠廠 582.06kWp 屋頂型太陽光電案場 UNSW 性能診斷與 8D 異常決策平台：晴空 PR 83.3% 電氣體質健全，92天高達 55.7% (11.1萬度) 潔淨電力因防逆流零注入遭強制抑制棄光，年化損失逾 163 萬元。提出表後儲能 (BESS) 轉移尖離峰與綠電轉供 (CPPA) 活化資產方案。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 fill=%27%230C3A63%27 rx=%2712%27/%3E%3Cpath d=%27M12 48 L28 20 L38 34 L52 14%27 stroke=%27%231BB1BF%27 stroke-width=%275%27 fill=%27none%27 stroke-linecap=%27round%27/%3E%3Ccircle cx=%2752%27 cy=%2714%27 r=%275%27 fill=%27%23E09A2B%27/%3E%3C/svg%3E">
+
+<!-- Google Fonts, ECharts & Leaflet -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+:root {
+  --blue-dd: #0C3A63;
+  --blue: #1968AD;
+  --blue-d: #12518A;
+  --blue-soft: #E8F1F9;
+  --teal: #1BB1BF;
+  --teal-d: #12818C;
+  --teal-soft: #E2F5F7;
+  --ink: #12293D;
+  --ink-2: #3E5466;
+  --muted: #5B7285;
+  --line: #D9E3EC;
+  --line-soft: #EEF3F8;
+  --paper: #F4F7FA;
+  --card: #FFFFFF;
+  --amber: #E09A2B;
+  --amber-soft: #FCF2DE;
+  --coral: #D95F45;
+  --coral-soft: #FBEAE5;
+  --green: #2E7D32;
+  --green-soft: #E8F5E9;
+  --purple: #6B46C1;
+  --purple-soft: #F3E8FF;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Top Navigation Bar */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 54px;
+  display: flex; align-items: center; gap: 8px; padding: 0 18px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--blue);
+  box-shadow: 0 2px 10px rgba(12, 58, 99, 0.08);
+}
+.topbar .brand {
+  display: flex; align-items: center; gap: 9px; margin-right: 10px;
+  white-space: nowrap; text-decoration: none;
+}
+.topbar .brand .tx {
+  font-weight: 800; font-size: .88rem; letter-spacing: .02em;
+  color: var(--ink); line-height: 1.15;
+}
+.topbar .brand .tx small {
+  display: block; font-weight: 700; font-size: .64rem;
+  letter-spacing: .08em; color: var(--blue);
+}
+.topnav {
+  display: flex; gap: 3px; flex: 1; min-width: 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+.topnav::-webkit-scrollbar { display: none; }
+.navtab {
+  padding: 5px 9px; font-size: .76rem; font-weight: 700; border-radius: 6px;
+  color: var(--muted); border: 1px solid transparent; cursor: pointer;
+  white-space: nowrap; transition: all .15s ease; background: transparent;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.navtab:hover { color: var(--blue); background: var(--blue-soft); }
+.navtab.active {
+  color: var(--blue-dd); background: var(--blue-soft);
+  border-color: rgba(25, 104, 173, 0.25);
+}
+.topbar-actions {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+}
+.btn-toggle-view {
+  padding: 4px 10px; font-size: .74rem; font-weight: 700; border-radius: 6px;
+  cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 5px; transition: all .15s ease;
+}
+.btn-toggle-view:hover { background: var(--blue-soft); color: var(--blue-dd); border-color: var(--blue); }
+.mode-toggle-btn {
+  padding: 4px 10px; font-size: .74rem; font-weight: 800; border-radius: 20px;
+  cursor: pointer; border: 1px solid rgba(217, 95, 69, 0.4);
+  background: var(--coral-soft); color: var(--coral);
+  display: inline-flex; align-items: center; gap: 5px; transition: all .15s ease;
+}
+.mode-toggle-btn.owner {
+  background: var(--teal-soft); color: var(--teal-d); border-color: rgba(27, 177, 191, 0.4);
+}
+.btn-action-sm {
+  padding: 4px 9px; font-size: .74rem; font-weight: 700; border-radius: 6px;
+  cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 4px; transition: all .15s ease;
+}
+.btn-action-sm:hover { background: var(--paper); border-color: var(--blue); color: var(--blue); }
+.btn-action-sm.highlight { background: var(--amber-soft); border-color: var(--amber); color: #B45309; }
+
+/* Deck Mode vs Doc Mode Containers */
+main.deck-container {
+  padding-top: 66px; padding-bottom: 74px; max-width: 1320px;
+  margin: 0 auto; min-height: 100vh;
+}
+.slide { display: none; opacity: 0; transition: opacity .2s ease-in-out; }
+.slide.active { display: block; opacity: 1; animation: fadeIn .2s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* When in Document View Mode */
+body.doc-view-mode main.deck-container {
+  max-width: 1240px; padding-bottom: 40px;
+}
+body.doc-view-mode .slide {
+  display: block !important; opacity: 1 !important; margin-bottom: 34px;
+}
+body.doc-view-mode .deck-controls,
+body.doc-view-mode .deck-progress-track {
+  display: none !important;
+}
+
+/* Cover Header */
+.cover-hero {
+  background: linear-gradient(135deg, var(--blue-dd) 0%, #154e7d 100%);
+  color: #fff; border-radius: 12px; padding: 28px 32px; margin-bottom: 22px;
+  box-shadow: 0 10px 25px rgba(12, 58, 99, 0.12); position: relative; overflow: hidden;
+}
+.cover-hero h1 { font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.01em; }
+.cover-hero p.lede { font-size: .95rem; opacity: 0.92; max-width: 960px; line-height: 1.6; font-weight: 500; }
+.factgrid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0 0; border-radius: 8px; overflow: hidden;
+}
+.factgrid div { background: rgba(12, 58, 99, 0.65); backdrop-filter: blur(4px); padding: 9px 13px; }
+.factgrid dt { font-size: 10.5px; letter-spacing: .06em; opacity: 0.8; font-weight: 700; text-transform: uppercase; }
+.factgrid dd { margin: 2px 0 0; font-size: 13.5px; font-weight: 700; font-family: var(--mono); color: #fff; }
+
+/* Cards & Layout */
+.section-head { margin-bottom: 16px; }
+.section-head .part-tag {
+  display: inline-block; font-size: .72rem; font-weight: 800; color: var(--blue);
+  background: var(--blue-soft); padding: 3px 9px; border-radius: 4px;
+  margin-bottom: 5px; letter-spacing: .05em; font-family: var(--mono);
+}
+.section-head h2 { font-size: 1.45rem; font-weight: 800; color: var(--blue-dd); line-height: 1.25; }
+.section-head p.sec-purpose { font-size: .85rem; color: var(--muted); margin-top: 3px; font-style: italic; }
+
+.box-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 22px; box-shadow: 0 2px 6px rgba(12, 58, 99, 0.03); margin-bottom: 20px;
+}
+.box-card h3 {
+  font-size: 1.05rem; font-weight: 800; color: var(--blue-dd); margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px; margin-bottom: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; margin-bottom: 20px; }
+
+/* KPIs */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.kpi-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 16px 18px; box-shadow: 0 2px 5px rgba(18, 41, 61, 0.03);
+  position: relative; overflow: hidden;
+}
+.kpi-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--blue); }
+.kpi-card.bad::before { background: var(--coral); }
+.kpi-card.warn::before { background: var(--amber); }
+.kpi-card.good::before { background: var(--green); }
+.kpi-label { font-size: .74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.kpi-num { font-size: 1.65rem; font-weight: 900; color: var(--ink); font-family: var(--mono); line-height: 1.2; }
+.kpi-card.bad .kpi-num { color: var(--coral); }
+.kpi-card.warn .kpi-num { color: var(--amber); }
+.kpi-card.good .kpi-num { color: var(--green); }
+.kpi-num small { font-size: .85rem; font-weight: 700; margin-left: 3px; color: var(--muted); }
+.kpi-sub { font-size: .72rem; color: var(--muted); margin-top: 5px; }
+
+/* Tables */
+.table-wrap { width: 100%; overflow-x: auto; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 16px; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: .82rem; text-align: left; }
+table.data-table caption { caption-side: top; text-align: left; font-size: .75rem; color: var(--muted); padding: 8px 10px; font-weight: 700; }
+table.data-table th {
+  background: var(--blue-soft); color: var(--blue-dd); font-weight: 800; padding: 9px 12px;
+  border-bottom: 2px solid rgba(25, 104, 173, 0.25); white-space: nowrap; font-size: .78rem;
+}
+table.data-table td {
+  padding: 8px 12px; border-bottom: 1px solid var(--line); color: var(--ink); vertical-align: middle;
+}
+table.data-table tr:nth-child(even) { background: #FAFBFD; }
+table.data-table tr:hover { background: #F1F6FA; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-size: .8rem; font-variant-numeric: tabular-nums; }
+tr.row-bad td { background: var(--coral-soft) !important; }
+tr.row-warn td { background: var(--amber-soft) !important; }
+
+/* Badges */
+.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; font-family: var(--mono); }
+.badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(46, 125, 50, 0.3); }
+.badge-amber { background: var(--amber-soft); color: #B45309; border: 1px solid rgba(224, 154, 43, 0.3); }
+.badge-orange { background: #FFF7ED; color: #C2410C; border: 1px solid rgba(194, 65, 12, 0.3); }
+.badge-coral { background: var(--coral-soft); color: var(--coral); border: 1px solid rgba(217, 95, 69, 0.3); }
+.badge-blue { background: var(--blue-soft); color: var(--blue-dd); border: 1px solid rgba(25, 104, 173, 0.3); }
+
+/* Tags & Statements */
+.sev { display: inline-block; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 3px; font-family: var(--mono); white-space: nowrap; }
+.sev.P1 { background: var(--coral); color: #fff; }
+.sev.P2 { background: var(--amber); color: #fff; }
+.sev.P3 { background: var(--blue); color: #fff; }
+.sev.P4 { background: var(--green); color: #fff; }
+
+.stmt { display: flex; gap: 10px; align-items: flex-start; border-left: 3px solid var(--line); padding: 10px 0 10px 14px; margin: 0 0 14px; background: #FAFBFD; border-radius: 0 6px 6px 0; }
+.stmt.fact { border-left-color: var(--blue); }
+.stmt.inference { border-left-color: var(--amber); }
+.stmt.unverified { border-left-color: var(--coral); }
+.tag { flex: none; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 2px 7px; border-radius: 3px; margin-top: 2px; white-space: nowrap; }
+.stmt.fact .tag { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(25, 104, 173, 0.3); }
+.stmt.inference .tag { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(224, 154, 43, 0.3); }
+.stmt.unverified .tag { background: var(--coral-soft); color: var(--coral); border: 1px solid rgba(217, 95, 69, 0.3); }
+.stmt p { margin: 0; font-size: .84rem; }
+
+/* Callouts */
+.callout { border: 1px solid var(--line); border-left: 4px solid var(--blue); background: #FAFBFD; padding: 14px 18px; margin: 0 0 18px; border-radius: 0 8px 8px 0; }
+.callout.danger { border-left-color: var(--coral); background: var(--coral-soft); border-color: rgba(217, 95, 69, 0.3); }
+.callout.warn { border-left-color: var(--amber); background: var(--amber-soft); border-color: rgba(224, 154, 43, 0.3); }
+.callout.good { border-left-color: var(--green); background: var(--green-soft); border-color: rgba(46, 125, 50, 0.3); }
+.callout h4 { font-size: .92rem; font-weight: 800; margin: 0 0 5px; }
+.callout.danger h4 { color: var(--coral); }
+.callout.warn h4 { color: #B45309; }
+.callout.good h4 { color: var(--green); }
+
+/* Deck Controls */
+.deck-controls {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 56px; z-index: 999;
+  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line); display: flex; align-items: center;
+  justify-content: space-between; padding: 0 24px; box-shadow: 0 -2px 10px rgba(12, 58, 99, 0.05);
+}
+.deck-btn {
+  padding: 6px 14px; border-radius: 6px; font-weight: 700; font-size: .8rem;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid var(--line); background: #fff; color: var(--ink);
+  transition: all .15s ease;
+}
+.deck-btn:hover { background: var(--blue-soft); color: var(--blue-dd); border-color: var(--blue); }
+.deck-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.deck-btn.primary:hover { background: var(--blue-d); }
+.deck-counter {
+  font-size: .82rem; font-weight: 800; color: var(--muted); font-family: var(--mono);
+}
+.deck-progress-track {
+  position: fixed; bottom: 56px; left: 0; right: 0; height: 3px; background: #e2e8f0; z-index: 1001;
+}
+.deck-progress-bar { height: 100%; width: 8.33%; background: var(--blue); transition: width .2s ease; }
+
+/* Modal Lightbox */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 2000; background: rgba(12, 41, 67, 0.88);
+  backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: #fff; border-radius: 12px; max-width: 1180px; width: 100%;
+  max-height: 92vh; overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3); position: relative;
+}
+.modal-header {
+  padding: 16px 22px; border-bottom: 1px solid var(--line); display: flex;
+  align-items: center; justify-content: space-between; background: var(--paper);
+}
+.modal-header h4 { font-size: 1rem; font-weight: 800; color: var(--blue-dd); }
+.modal-close {
+  background: transparent; border: 0; font-size: 1.5rem; line-height: 1;
+  color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 4px;
+}
+.modal-close:hover { color: var(--coral); background: var(--coral-soft); }
+.modal-body { padding: 20px 22px; overflow-y: auto; flex: 1; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .cover-hero { padding: 20px 18px; }
+  .factgrid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="#home" class="brand" onclick="goToSlide(0)">
+    <svg width="28" height="28" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="10" fill="#0C3A63"/><path d="M14 46 L28 22 L38 34 L50 16" stroke="#1BB1BF" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="16" r="5" fill="#E09A2B"/></svg>
+    <div class="tx">
+      <span>世堃塑膠麻豆廠 582kWp</span>
+      <small>進金生能源服務 6692 ｜ UNSW 8D 異常診斷平台</small>
+    </div>
+  </a>
+
+  <nav class="topnav">
+    <button class="navtab active" onclick="goToSlide(0)">封面 Cover</button>
+    <button class="navtab" onclick="goToSlide(1)">摘要 Summary</button>
+    <button class="navtab" onclick="goToSlide(2)">D0~D1 立案分工</button>
+    <button class="navtab" onclick="goToSlide(3)">D2 量化描述</button>
+    <button class="navtab" onclick="goToSlide(4)">D3 暫時圍堵</button>
+    <button class="navtab" onclick="goToSlide(5)">D4 根因實證</button>
+    <button class="navtab" onclick="goToSlide(6)">D4 推論排除</button>
+    <button class="navtab" onclick="goToSlide(7)">D5 永久對策</button>
+    <button class="navtab" onclick="goToSlide(8)">D6 效果驗證</button>
+    <button class="navtab" onclick="goToSlide(9)">D7 防止再發</button>
+    <button class="navtab" onclick="goToSlide(10)">D8 結案估值</button>
+    <button class="navtab" onclick="goToSlide(11)">附錄&資料要求</button>
+  </nav>
+
+  <div class="topbar-actions">
+    <button class="mode-toggle-btn" id="modeToggleBtn" onclick="toggleReportMode()">
+      <span id="modeIcon">🔄</span>
+      <span id="modeBtnText">模式：內部維運版</span>
+    </button>
+    <button class="btn-toggle-view" id="viewModeBtn" onclick="toggleViewMode()">
+      <span>📄 完整報告模式</span>
+    </button>
+    <button class="btn-action-sm highlight" onclick="openReqModal()">
+      <span>📋 下一步資料要求</span>
+    </button>
+    <button class="btn-action-sm" onclick="openRawDataModal()">
+      <span>📊 數據對帳</span>
+    </button>
+  </div>
+</header>
+
+<div class="deck-progress-track">
+  <div class="deck-progress-bar" id="progressBar"></div>
+</div>
+
+<main class="deck-container">
+
+  <!-- ==================== SLIDE 0: COVER ==================== -->
+  <section class="slide active" id="slide-0">
+    <div class="cover-hero">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+        <div>
+          <div style="font-size:.74rem; font-weight:800; letter-spacing:.08em; opacity:0.85; margin-bottom:4px; font-family:var(--mono);">
+            8D DIAGNOSTIC & ASSET REMEDIATION REPORT ｜ 案號：PV-2026-SKP01
+          </div>
+          <h1>台南市麻豆區世堃塑膠廠屋頂光伏｜發電性能診斷暨防逆流資產活化決策平台</h1>
+          <p class="lede">
+            <strong>核心診斷結論（The Lede）：</strong>電氣健康度極高（晴空全載 PR 達 83.3%，尖峰發電 548.5 kW）。然而受制於廠區製程用電型態與自發自用防逆流（Zero-Export）零注入限制，近 92 天有高達 <strong>55.7%（11.1 萬度）</strong> 的潔淨綠電遭強制抑制棄光，13 個月累計棄光達 <strong>36.2 萬度</strong>（損失折合台幣 <strong>163.0 萬元</strong>）。根本解法在於導入表後儲能（BESS）與申請綠電轉供（CPPA），徹底釋放屋頂黃金資產！
+          </p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:.74rem; opacity:0.8;">報告版本 / 基準日</div>
+          <div style="font-size:1.1rem; font-weight:800; font-family:var(--mono);">v1.0 ｜ 2026/10/21</div>
+          <div style="font-size:.72rem; color:var(--teal); font-weight:700; margin-top:2px;" id="heroModeLabel">內部維運版・對策分析中</div>
+        </div>
+      </div>
+
+      <dl class="factgrid">
+        <div><dt>案號</dt><dd>PV-2026-SKP01</dd></div>
+        <div><dt>案場名稱</dt><dd>世堃塑膠麻豆廠</dd></div>
+        <div><dt>裝置容量</dt><dd>582.06 kWp</dd></div>
+        <div><dt>售電模式</dt><dd>自發自用 (售電價 0 元)</dd></div>
+        <div><dt>併聯日期</dt><dd>2025-07-18</dd></div>
+        <div><dt>分析資料規模</dt><dd>92天 26,496筆 + 13月歷程</dd></div>
+        <div><dt>晴空基準 PR</dt><dd>83.3% (體質優異)</dd></div>
+      </dl>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>📌 8D 紀律問題解決架構 (Disciplines Mapping)</span>
+          <span class="sev P3">SOP 體系</span>
+        </h3>
+        <p style="font-size:.84rem; color:var(--muted); line-height:1.55;">
+          本決策平台融合澳洲新南威爾斯大學（UNSW-Solar）演算法與國際工業標準 8D 解決架構，穿透 26,496 筆 5 分鐘級 SCADA 電氣遙測日誌：
+        </p>
+        <ul style="padding-left:18px; font-size:.82rem; color:var(--ink-2); line-height:1.65; margin-top:8px;">
+          <li><strong>D0~D1 (立案與分工)</strong>：安全與急停機判斷，直流高壓電弧防護，明確四方 RACI 職能權責。</li>
+          <li><strong>D2~D3 (量化與圍堵)</strong>：5W2H 結構量化，13 個月發電缺口 36.2 萬度，防逆流死區與裕度圍堵校正。</li>
+          <li><strong>D4 (根本原因剖析)</strong>：UNSW 5分鐘電氣實證，工作點由 660V MPP 沿 I-V 曲線推升至 800V Voc，排除 6 項設備假說。</li>
+          <li><strong>D5~D6 (永久對策比選)</strong>：表後儲能 (BESS 200kW/500kWh) 4.5年回本方案 ✕ 製程排程負載重整 ✕ 綠電轉供 CPPA。</li>
+          <li><strong>D7~D8 (防再發與估值)</strong>：SCADA 棄光低載自動告警規則，20 年 DCF 模型累積創造 NT$ 2,050 萬元淨現值。</li>
+        </ul>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>💡 核心管理洞察 (Key Executive Insight)</span>
+          <span class="sev P2">管理關鍵</span>
+        </h3>
+        <div class="callout warn" style="margin-bottom:12px;">
+          <h4>這份報告最該帶走的一句話</h4>
+          <p style="font-size:.84rem; color:#78350F; line-height:1.55;">
+            <strong>「電廠設備沒壞，而是綠電被防逆流鎖死在屋頂！」</strong><br>
+            晴空無限制條件下，全場發電 PR 達 <strong>83.3%</strong>、最高出力 <strong>548.5 kW</strong>（達銘牌 94.2%），直流電流達 877A，設備與組串性能極佳。高達 <strong>55.7% 棄光率</strong>係源於工廠週末休工、夜間生產與日間低載，導致防逆流控制器主動將發電壓抑至 0 kW。只要導入儲能或負載調配，每年可立即多收回 <strong>NT$ 120~150 萬元</strong> 電費價值！
+          </p>
+        </div>
+        <div style="font-size:.8rem; color:var(--muted); line-height:1.5;">
+          <strong>🎯 決策建議優先度：</strong>
+          <br>1. 立即啟動「下一步深層診斷資料清單」調取（電單、15分需量曲線、單線圖、防逆流日誌）。
+          <br>2. 廠務排程盤點：將塑膠成型前烘料、原料抽真空與高耗能排程移至 10:00~14:00。
+          <br>3. 評估 200kW / 500kWh~800kWh 表後儲能統包方案（進金生能源一條龍規劃）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 1: SUMMARY ==================== -->
+  <section class="slide" id="slide-1">
+    <div class="section-head">
+      <span class="part-tag">EXECUTIVE SUMMARY</span>
+      <h2>摘要：核心指標與優先行動矩陣</h2>
+      <p class="sec-purpose">全場發電體質與防逆流壓抑棄光損失全景綜覽</p>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi-card good">
+        <div class="kpi-label">晴空全載真實 PR</div>
+        <div class="kpi-num">83.3<small>%</small></div>
+        <div class="kpi-sub">晴空日等價時數 4.29 h/day，最高出力 548.5 kW (94.2%)</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-label">92 天棄光損失度數</div>
+        <div class="kpi-num">111,324<small>kWh</small></div>
+        <div class="kpi-sub">棄光率高達 55.7%（59 天受限，應發 19.98 萬度，實發 9.17 萬度）</div>
+      </div>
+      <div class="kpi-card bad">
+        <div class="kpi-label">13 個月累計短少度數</div>
+        <div class="kpi-num">362,118<small>kWh</small></div>
+        <div class="kpi-sub">歷程累計棄光率 43.6%（基準 80% PR 應發 83.0 萬度）</div>
+      </div>
+      <div class="kpi-card warn">
+        <div class="kpi-label">13 個月累計電費損失</div>
+        <div class="kpi-num">NT$ 163.0<small>萬元</small></div>
+        <div class="kpi-sub">以台電高壓工業電價 NT$ 4.5/kWh 換算棄光折損</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>🚨 問題排查與優先處置矩陣 (Priority Matrix)</span>
+          <span class="sev P1">等級判定</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>等級</th>
+              <th>異常項目</th>
+              <th>現況與影響</th>
+              <th>推薦處置對策</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-bad">
+              <td><span class="sev P1">P1</span></td>
+              <td><strong>週末及節假日全天發電歸零</strong></td>
+              <td>週六週日共 26 天發電僅 4,576 kWh（日均僅 175 kWh，PR &lt; 5%），日照 5~6 度全數丟棄。</td>
+              <td>規劃表後儲能 (BESS) 吸收週六日發電，或申請綠電轉供 CPPA 轉售。</td>
+            </tr>
+            <tr class="row-warn">
+              <td><span class="sev P2">P2</span></td>
+              <td><strong>平日製程低載時段劇烈降載</strong></td>
+              <td>工作日亦有 33 天平均控制比率 &lt; 80%，工廠生產間隙防逆流頻繁壓制逆變器。</td>
+              <td>塑膠廠高耗能烘料/抽料負載移轉至 10:00~14:00，微調防逆流裕度。</td>
+            </tr>
+            <tr>
+              <td><span class="sev P3">P3</span></td>
+              <td><strong>SCADA 缺乏分台與 MPPT 數據</strong></td>
+              <td>目前僅有 SKP01 全廠匯總資料，無法執行 UNSW 逐台 P2P 與每串 MPPT 故障比對。</td>
+              <td>向業主/控制器廠商索取逐台 Inverter 5分鐘電氣日誌與電氣單線圖。</td>
+            </tr>
+            <tr>
+              <td><span class="sev P4">P4</span></td>
+              <td><strong>硬體設備電氣性能維持頂級</strong></td>
+              <td>全載時 DC 660V 吻合最佳 MPP 點，效率轉換極佳，無組串老化與熱斑隱患。</td>
+              <td>維持進金生能源季度標準運維，持續監控絕緣與清洗狀況。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>🧭 投資人資產賦能路徑</span>
+          <span class="sev P3">價值釋放</span>
+        </h3>
+        <div class="stmt fact">
+          <span class="tag">事實</span>
+          <p>世堃塑膠麻豆廠為<strong>自發自用屋頂型電廠</strong>，依台電規範設置防逆流繼電保護，確保在任何負載條件下發電均不得反向饋入台電電網。</p>
+        </div>
+        <div class="stmt inference">
+          <span class="tag">推論</span>
+          <p>電廠 13 個月發電 46.8 萬度，代表工廠日間已成功節省了 46.8 萬度的台電高額電費；但同時亦白白浪費了 <strong>36.2 萬度</strong> 的高價值自產潔淨電能！</p>
+        </div>
+        <div class="stmt unverified">
+          <span class="tag">行動</span>
+          <p>若補齊 <strong>200kW / 500kWh 儲能系統</strong>，不但可將棄光率壓降至 5% 以下，還能參與台電電力交易平台（SReg / E-dReg）或實施尖離峰套利，推升專案 IRR 達 <strong>+14.8%</strong>！</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 2: D0~D1 ==================== -->
+  <section class="slide" id="slide-2">
+    <div class="section-head">
+      <span class="part-tag">D0 & D1: RESPONSE & TEAM</span>
+      <h2>D0 立案反應 ＆ D1 跨職能團隊分工</h2>
+      <p class="sec-purpose">現場電氣安全評估、直流防弧查核與四方權責定義</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>⚡ D0: 緊急安全與停機判定</span>
+          <span class="sev P4">安全受控</span>
+        </h3>
+        <div class="callout good" style="margin-bottom:12px;">
+          <h4>判定結論：無硬體失火/電弧風險，系統運轉安全，無需緊急切斷開關</h4>
+          <p style="font-size:.82rem; line-height:1.55;">
+            1. 經檢視 5 分鐘高頻資料，直流電壓最高為 840V，未超過 1000V/1500V 系統耐壓上限。<br>
+            2. 當發電被壓制時，直流電壓自然上升至開路電壓 Voc (~800V)，直流電流平滑降至 0~1.6A，此為逆變器微處理器依防逆流訊號偏移工作點之正常調變，<strong>無短路跳火或絕緣擊穿現象</strong>。<br>
+            3. 發電妥善率（Availability）在多數正常工作月份達 98~99.9%，硬體並無故障罷工。
+          </p>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>安全查核項目</th><th>量測/判定狀態</th><th>安全標準門檻</th><th>結果</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>直流工作電壓 (Vdc)</td><td>558V ~ 840V</td><td>&lt; 1000 Vdc</td><td><span class="badge badge-green">合格</span></td></tr>
+            <tr><td>開路對地絕緣阻抗 (Riso)</td><td>正常無跳脫</td><td>&ge; 1.0 M&Omega;</td><td><span class="badge badge-green">合格</span></td></tr>
+            <tr><td>直流電弧偵測 (AFCI)</td><td>無電弧告警紀錄</td><td>UL 1699B 標準</td><td><span class="badge badge-green">合格</span></td></tr>
+            <tr><td>防逆流保護作動</td><td>正常通訊調載</td><td>零逆流無反饋</td><td><span class="badge badge-green">受控</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>👥 D1: RACI 跨職能權責分工矩陣</span>
+          <span class="sev P3">組織分工</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>職責角色</th>
+              <th>擔當單位 / 人員</th>
+              <th>主要責任範疇 (RACI)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Accountable (A)</strong></td>
+              <td>進金生能源服務｜數據分析團隊</td>
+              <td>主導 UNSW 性能演算法診斷、棄光電量貨幣化評估、儲能 BESS 規劃與 8D 決策報告編制。</td>
+            </tr>
+            <tr>
+              <td><strong>Responsible (R)</strong></td>
+              <td>進金生能源服務｜南區維運工程組</td>
+              <td>現場防逆流控制器設定確認、高低壓盤面紅外線測溫、組串抽檢與年度定檢作業執行。</td>
+            </tr>
+            <tr>
+              <td><strong>Consulted (C)</strong></td>
+              <td>監控系統廠商 / 變流器原廠技術組</td>
+              <td>提供逐台 Inverter 5分鐘 SCADA 通訊封包、防逆流控制器死區調校與 API 對接支援。</td>
+            </tr>
+            <tr>
+              <td><strong>Informed (I)</strong></td>
+              <td>世堃塑膠麻豆廠｜廠務主管與業主窗口</td>
+              <td>提供廠區台電高壓電費單、生產製程班表、參與儲能投資或負載排程優化決策。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 3: D2 ==================== -->
+  <section class="slide" id="slide-3">
+    <div class="section-head">
+      <span class="part-tag">D2: PROBLEM DESCRIPTION</span>
+      <h2>D2 問題描述：量化 5W2H 與發電損失趨勢</h2>
+      <p class="sec-purpose">13 個月歷程對比與 92 天每日發電分類堆疊剖析</p>
+    </div>
+
+    <div class="box-card">
+      <h3>
+        <span>📊 13 個月發電量、理論產能與棄光短少趨勢圖 (2025/10 ~ 2026/10)</span>
+        <span class="badge badge-blue">歷史大數據</span>
+      </h3>
+      <div id="monthlyChart" style="height:350px; width:100%;"></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>📈 92 天逐日發電狀況與運轉狀態分類</span>
+          <span class="badge badge-amber">高頻日分析</span>
+        </h3>
+        <div id="dailyStatusChart" style="height:320px; width:100%;"></div>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>📋 5W2H 結構化量化分析表</span>
+          <span class="sev P2">問題量化</span>
+        </h3>
+        <table class="data-table">
+          <tbody>
+            <tr><th style="width:100px;">Who 影響對象</th><td>世堃塑膠麻豆廠（業主）與電廠綠能資產投資效益。</td></tr>
+            <tr><th>What 核心問題</th><td>電廠遭受嚴重防逆流棄光壓抑，無法全額釋放綠電產能。</td></tr>
+            <tr><th>Where 發生地點</th><td>台南市麻豆區世堃塑膠廠屋頂（裝置容量 582.06 kWp）。</td></tr>
+            <tr><th>When 發生時序</th><td>併聯以來全年存在，尤其週末 100% 抑制，8月份平日亦嚴重限電。</td></tr>
+            <tr><th>Why 產生原因</th><td>廠區用電排程波動，自發自用系統在廠區低載時強制降載以防逆流。</td></tr>
+            <tr><th>How 影響模式</th><td>防逆流控制器發出功率限制指令，逆變器主動偏移 MPP 工作點至 Voc。</td></tr>
+            <tr><th>How Much 損失規模</th><td><strong>92天損失 111,324 kWh (55.7%)；13個月損失 362,118 kWh (NT$ 163 萬元)。</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 4: D3 ==================== -->
+  <section class="slide" id="slide-4">
+    <div class="section-head">
+      <span class="part-tag">D3: CONTAINMENT ACTIONS</span>
+      <h2>D3 暫時圍堵措施：止血行動與參數微調</h2>
+      <p class="sec-purpose">在重大資本支出（儲能/轉供）前之即時防護與減損 SOP</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>🛡️ 立即止血對策清單 (Immediate Containment)</span>
+          <span class="sev P2">執行中</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>行動項目</th><th>具體工法與作法</th><th>負責人</th><th>預期效益</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>防逆流死區最佳化</strong></td>
+              <td>檢查控制器採樣速率與功率裕度（Margin），將過度保守之 20kW 裕度縮減至符合台電檢驗之 5kW，釋放 5~10% 發電裕度。</td>
+              <td>維運組 / 廠商</td>
+              <td>每日挽回 30~50 kWh</td>
+            </tr>
+            <tr>
+              <td><strong>週末基礎底載盤點</strong></td>
+              <td>協調廠務清查廠內週末運轉設備（如排風機、冷卻循環、除濕機），避免非必要全廠斷電。</td>
+              <td>大衛 / 廠務組</td>
+              <td>每週末釋放 50~100 kWh</td>
+            </tr>
+            <tr>
+              <td><strong>自動每日棄光簡報</strong></td>
+              <td>建立 SCADA 每日自動核算「棄光度數與損失金額」推播，讓管理層即時掌握受損規模。</td>
+              <td>數據分析組</td>
+              <td>提升決策透明度</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>🗺️ 案場地理與空間環境</span>
+          <span class="sev P3">空間特徵</span>
+        </h3>
+        <div id="plantMap" style="height:260px; border-radius:8px; margin-bottom:10px; border:1px solid var(--line);"></div>
+        <p style="font-size:.78rem; color:var(--muted); line-height:1.5;">
+          📍 <strong>廠址坐標</strong>：台南市麻豆區（23.18°N, 120.25°E）｜嘉南平原日照充足，年均日射量達 4.2~4.5 kWh/m²/day，為極具發電潛力之優質光伏場址。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 5: D4 ROOT CAUSE ==================== -->
+  <section class="slide" id="slide-5">
+    <div class="section-head">
+      <span class="part-tag">D4: ROOT CAUSE ANALYSIS</span>
+      <h2>D4 根本原因實證：UNSW 高頻時序電氣穿透</h2>
+      <p class="sec-purpose">從 5 分鐘級日射量、功率、電壓與控制比率印證物理機制</p>
+    </div>
+
+    <div class="box-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <h3 style="margin-bottom:0;">
+          <span>⚡ 典型日 5 分鐘高頻電氣曲線互動切換 (Interactive Profile Viewer)</span>
+        </h3>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:.8rem; font-weight:700; color:var(--ink-2);">選擇分析日期：</label>
+          <select id="profileDateSelect" onchange="updateProfileChart()" style="padding:5px 10px; border-radius:6px; border:1px solid var(--line); font-size:.8rem; font-family:var(--mono);">
+            <option value="2026-07-29">2026-07-29（週三・100%全載健康日・發電 2,953 kWh）</option>
+            <option value="2026-08-02">2026-08-02（週日・週末防逆流歸零日・發電 23.8 kWh）</option>
+            <option value="2026-08-25">2026-08-25（週二・平日製程低載限電日・發電 10.9 kWh）</option>
+            <option value="2026-10-01">2026-10-01（週四・秋季全載健康日・發電 2,685 kWh）</option>
+          </select>
+        </div>
+      </div>
+      <div id="profileChart" style="height:360px; width:100%;"></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>🔬 關鍵物理實證 EV-01：電壓偏移推升機制</span>
+          <span class="sev P1">物理鐵證</span>
+        </h3>
+        <p style="font-size:.84rem; color:var(--ink-2); line-height:1.6;">
+          <strong>當防逆流控制器動作時之微觀物理歷程：</strong>
+          <br>1. <strong>正常全載狀態（如 7/29 正午）</strong>：日照 950 W/m²，控制比率 100%，DC 電壓緊貼 MPP 工作點（約 <strong>635V ~ 660V</strong>），DC 電流高達 <strong>760A ~ 822A</strong>，AC 功率達 <strong>484 kW</strong>。
+          <br>2. <strong>防逆流壓抑狀態（如 8/02 正午）</strong>：日照同樣高達 960+ W/m²，但控制比率被下達為 <strong>0%</strong>。逆變器切斷 AC 注入，組串電流降至 <strong>1.9A ~ 0A</strong>，此時直流側電壓直接攀升至組串開路電壓 <strong>Voc &approx; 775V ~ 830V</strong>！
+          <br>3. <strong>結論</strong>：證實系統完全受控於調載演算法，太陽能板光生載流子無法釋放而轉為內部熱重組，無任何組串硬體斷線！
+        </p>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>📊 運轉模式物理狀態對比</span>
+          <span class="sev P3">參數對照</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>電氣參數</th><th>正常全載時段</th><th>防逆流壓抑時段</th><th>物理意涵</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>日射量 (POA)</td><td>700 ~ 1,000 W/m²</td><td>700 ~ 1,000 W/m²</td><td>日照資源充沛，完全具備發電能力</td></tr>
+            <tr><td>電力控制比率</td><td><strong>100.0 %</strong></td><td><strong>0.0 % ~ 0.4 %</strong></td><td>控制器強制限制逆變器輸出</td></tr>
+            <tr><td>直流電壓 (Vdc)</td><td><strong>635V ~ 660V</strong></td><td><strong>770V ~ 830V</strong></td><td>工作點由 Vmpp 偏移至開路電壓 Voc</td></tr>
+            <tr><td>直流電流 (Idc)</td><td><strong>500A ~ 877A</strong></td><td><strong>0A ~ 2.0A</strong></td><td>逆變器阻斷電流，組串無載運轉</td></tr>
+            <tr><td>交流發電功率</td><td><strong>350kW ~ 548kW</strong></td><td><strong>0.0kW ~ 2.5kW</strong></td><td>綠電產出被直接歸零</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 6: D4 HYPOTHESIS ==================== -->
+  <section class="slide" id="slide-6">
+    <div class="section-head">
+      <span class="part-tag">D4: HYPOTHESIS ELIMINATION</span>
+      <h2>D4 推論排除：6 項工程假說嚴謹檢定</h2>
+      <p class="sec-purpose">以 UNSW 遙測數據徹底排除設備故障，收斂確診防逆流主因</p>
+    </div>
+
+    <div class="box-card">
+      <h3>
+        <span>📑 工程假說排除矩陣 (Hypothesis Elimination Matrix)</span>
+        <span class="sev P2">科學排查</span>
+      </h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>假說編號</th>
+            <th>假設故障原因</th>
+            <th>檢驗數據與方法</th>
+            <th>判定結果</th>
+            <th>實證排除理由</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HY-01</strong></td>
+            <td>建築物/女兒牆/固定遮蔽</td>
+            <td>檢視晴空全載日發電曲線是否出現固定時段不對稱凹陷。</td>
+            <td><span class="badge badge-green">完全排除</span></td>
+            <td>全載日（如 7/29, 9/04, 10/01）全天呈現標準對稱鍾型曲線，全載 PR 達 83.3%，無規律遮蔽。</td>
+          </tr>
+          <tr>
+            <td><strong>HY-02</strong></td>
+            <td>組件嚴重積塵/鳥糞污染</td>
+            <td>全載日峰值發電功率與理論 DC 容量比對。</td>
+            <td><span class="badge badge-green">完全排除</span></td>
+            <td>全載日最高出力達 548.5 kW，達到直流銘牌容量 582kWp 之 94.2%，透光率良好無重度積垢。</td>
+          </tr>
+          <tr>
+            <td><strong>HY-03</strong></td>
+            <td>逆變器容量不足/削峰截割</td>
+            <td>檢查正午高日照區間 AC 功率是否出現水平截斷（Clipping）。</td>
+            <td><span class="badge badge-green">完全排除</span></td>
+            <td>AC 功率平滑跟隨日照變化，正午無削峰平頭現象，逆變器配比合宜。</td>
+          </tr>
+          <tr>
+            <td><strong>HY-04</strong></td>
+            <td>直流組串斷路/熔絲熔斷</td>
+            <td>比對全載時總直流電流與理論串數計算值。</td>
+            <td><span class="badge badge-green">完全排除</span></td>
+            <td>全載最大電流達 877.6A，工作電壓穩定於 660V，若有大規模斷線電流絕無法達標。</td>
+          </tr>
+          <tr>
+            <td><strong>HY-05</strong></td>
+            <td>台電電網過壓保護跳脫</td>
+            <td>檢查交流即時功率是否突降為 0 後經過 5 分鐘重新併網。</td>
+            <td><span class="badge badge-green">完全排除</span></td>
+            <td>受限時段功率與控制比率係長時間持續壓在低點，非電網保護器瞬間保護重啟。</td>
+          </tr>
+          <tr class="row-bad">
+            <td><strong>HY-06</strong></td>
+            <td><strong>防逆流控制器配合負載降載</strong></td>
+            <td>電力控制比率與 AC 發電功率之同步聯動時序分析。</td>
+            <td><span class="badge badge-coral">確診真因</span></td>
+            <td><strong>電力控制比率與 AC 功率相關係數達 0.803，當比率為 0% 時發電強制歸零，完全吻合防逆流特徵！</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 7: D5 ==================== -->
+  <section class="slide" id="slide-7">
+    <div class="section-head">
+      <span class="part-tag">D5: PERMANENT SOLUTIONS</span>
+      <h2>D5 永久對策比選：四大多軌改善方案評估</h2>
+      <p class="sec-purpose">技術可行性、資本支出、回收期與執行難度綜合評比</p>
+    </div>
+
+    <div class="box-card">
+      <h3>
+        <span>⚖️ 永久改善對策評選矩陣 (Solution Selection Matrix)</span>
+        <span class="sev P1">方案比選</span>
+      </h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>方案</th>
+            <th>對策工法內容</th>
+            <th>技術可行性</th>
+            <th>預估 Capex</th>
+            <th>年化回收效益</th>
+            <th>回本年限 (Payback)</th>
+            <th>綜合評定</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-bad">
+            <td><strong>方案一 (首選)<br>表後儲能系統 (BESS)</strong></td>
+            <td>建置 <strong>200kW / 500kWh~800kWh</strong> 儲能貨櫃，中午吸收棄光電能，於 16:00~22:00 台電尖峰放電。</td>
+            <td>高（成熟工法）</td>
+            <td>約 NT$ 600~750 萬</td>
+            <td><strong>NT$ 125~155 萬/年</strong><br>(電費節省+尖離峰套利)</td>
+            <td><strong>4.5 ~ 5.2 年</strong></td>
+            <td><span class="badge badge-green">最優首選 (推薦)</span></td>
+          </tr>
+          <tr>
+            <td><strong>方案二<br>製程負載排程優化</strong></td>
+            <td>調配塑膠廠高耗能製程（如除濕乾燥機、原物料抽吸、冰水機預冷）移至 10:00~14:00 發電高峰運轉。</td>
+            <td>中（需配合產線）</td>
+            <td>NT$ 0 元<br>(純管理調配)</td>
+            <td><strong>NT$ 25~40 萬/年</strong><br>(回收 15~25% 棄光)</td>
+            <td><strong>立即見效</strong></td>
+            <td><span class="badge badge-blue">同步立即執行</span></td>
+          </tr>
+          <tr>
+            <td><strong>方案三<br>申請綠電轉供 (CPPA)</strong></td>
+            <td>洽詢台電變更併網合約，將週末與非工作日多餘綠電以轉供合約轉售予鄰近 RE100 企業用戶。</td>
+            <td>中（法規與行政）</td>
+            <td>約 NT$ 30~50 萬<br>(保護盤面改造)</td>
+            <td><strong>NT$ 40~60 萬/年</strong><br>(以 NT$4.8/度售出)</td>
+            <td><strong>0.8 ~ 1.2 年</strong></td>
+            <td><span class="badge badge-amber">次選評估中</span></td>
+          </tr>
+          <tr>
+            <td><strong>方案四<br>AI 預測型 EMS 微電網</strong></td>
+            <td>導入進金生能源智慧能源管理系統，對接日前天氣預報與產線排班，動態調控設備用電。</td>
+            <td>高（軟體部署）</td>
+            <td>約 NT$ 20~30 萬</td>
+            <td><strong>NT$ 15~25 萬/年</strong></td>
+            <td><strong>1.5 ~ 2.0 年</strong></td>
+            <td><span class="badge badge-blue">建議搭配儲能</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 8: D6 ==================== -->
+  <section class="slide" id="slide-8">
+    <div class="section-head">
+      <span class="part-tag">D6: IMPLEMENTATION & VERIFICATION</span>
+      <h2>D6 執行計畫與效果驗證：里程碑與量化標準</h2>
+      <p class="sec-purpose">分階段工程推動路線圖與發電恢復驗收準則</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>📅 分階段推動實施時程 (Phased Roadmap)</span>
+          <span class="sev P3">推進計畫</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>階段</th><th>期程</th><th>核心工作項目</th><th>預期里程碑</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Phase 1</strong></td>
+              <td>M1 (首月)</td>
+              <td>取得 15 分鐘廠區需量與單線圖，完成防逆流死區最佳化微調。</td>
+              <td>止血：降載率降低 5%</td>
+            </tr>
+            <tr>
+              <td><strong>Phase 2</strong></td>
+              <td>M2 ~ M3</td>
+              <td>製程高耗能負載移轉實施，完成表後儲能（BESS）統包可研規劃與台電送件。</td>
+              <td>日間自用率提升 15%</td>
+            </tr>
+            <tr>
+              <td><strong>Phase 3</strong></td>
+              <td>M4 ~ M6</td>
+              <td>儲能設備採購、基礎工程施作、消防查驗與台電併網試運轉。</td>
+              <td>BESS 上線運轉</td>
+            </tr>
+            <tr>
+              <td><strong>Phase 4</strong></td>
+              <td>M7+</td>
+              <td>SCADA 聯動動態調度，執行連續 90 天發電與電費節省驗收。</td>
+              <td>棄光率降至 &lt; 5%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>🎯 效果驗證量化標準 (Verification Criteria)</span>
+          <span class="sev P2">驗收門檻</span>
+        </h3>
+        <div class="callout good" style="margin-bottom:12px;">
+          <h4>結案驗收指標（連續 60 天考核）</h4>
+          <ul style="padding-left:18px; font-size:.82rem; line-height:1.6; margin-top:5px;">
+            <li><strong>全場有效 PR</strong>：自現行平均 48.6% 大幅拉升並穩定維持在 <strong>&ge; 80.0%</strong>。</li>
+            <li><strong>棄光損失率</strong>：由目前的 55.7% 壓降至 <strong>&le; 5.0%</strong>。</li>
+            <li><strong>年化發電回收度數</strong>：每年新增回收 <strong>&ge; 250,000 kWh</strong> 潔淨綠電。</li>
+            <li><strong>電費與財務回報</strong>：每年為世堃塑膠新增節省或創造 <strong>&ge; NT$ 110 萬元</strong> 收益。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 9: D7 ==================== -->
+  <section class="slide" id="slide-9">
+    <div class="section-head">
+      <span class="part-tag">D7: SYSTEMIC PREVENTION</span>
+      <h2>D7 防止再發與制度化：維運 SOP 與自動告警</h2>
+      <p class="sec-purpose">將防逆流健康管理納入進金生能源 O&M 數位標準規程</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>⚙️ SCADA 智能棄光自動告警規則</span>
+          <span class="sev P3">自動化監控</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>告警條件 (Trigger)</th><th>邏輯規則</th><th>通報對象與處置 SOP</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>高日照異常降載</strong></td>
+              <td>日照 &gt; 600 W/m² 且 電力控制比率 &lt; 30% 持續超過 2 小時。</td>
+              <td>LINE / Email 自動發送「製程低載棄光通報」予廠務與維運工程師。</td>
+            </tr>
+            <tr>
+              <td><strong>防逆流控制器離線</strong></td>
+              <td>SCADA 控制信號逾時中斷 &gt; 15 分鐘。</td>
+              <td>系統自動切換至安全預設發電比率，維運派工排查通訊線路。</td>
+            </tr>
+            <tr>
+              <td><strong>週末非預期斷電</strong></td>
+              <td>週六/日交流發電 = 0 且廠內總負載 = 0 連續 24 小時。</td>
+              <td>查核是否全廠主斷路器跳脫，確認下週復工送電排程。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>📋 O&M 維運規程修訂 (SOP Standardization)</span>
+          <span class="sev P4">體系落地</span>
+        </h3>
+        <div class="stmt fact">
+          <span class="tag">規程修訂</span>
+          <p><strong>新增《自發自用防逆流光伏電站季度運能檢覈表》</strong>：每季出具「棄光度數分析」、「防逆流限制時段分佈」與「電費節省核算單」，不再僅以傳統 PR 考核自發自用案場。</p>
+        </div>
+        <div class="stmt fact">
+          <span class="tag">跨部門聯動</span>
+          <p><strong>建立「光伏發電－塑膠廠務排班月度對帳機制」</strong>：於每月例會比對次月大修與減產排程，提前透過儲能或排程消化綠電產能。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 10: D8 ==================== -->
+  <section class="slide" id="slide-10">
+    <div class="section-head">
+      <span class="part-tag">D8: FINANCIAL VALUATION</span>
+      <h2>D8 結案估值：20 年財務 DCF 模型與資產活化增益</h2>
+      <p class="sec-purpose">評估改善對策之 20 年淨現金流推升與專案 IRR 回報</p>
+    </div>
+
+    <div class="box-card">
+      <h3>
+        <span>💰 20 年累計淨現金流對比圖 (維持現況棄光 vs 導入儲能 BESS 改善)</span>
+        <span class="badge badge-green">資產賦能</span>
+      </h3>
+      <div id="dcfChart" style="height:350px; width:100%;"></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>📊 20 年財務模型關鍵參數 (Financial Metrics)</span>
+          <span class="sev P1">財務結論</span>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr><th>財務指標</th><th>現況維持棄光</th><th>導入 200kW/500kWh 儲能</th><th>改善增益差額</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>初期投資 Capex</td><td>NT$ 0</td><td>NT$ 650 萬元</td><td>- NT$ 650 萬元</td></tr>
+            <tr><td>年均活化綠電</td><td>約 0 度/年</td><td><strong>約 250,000 度/年</strong></td><td>+ 250,000 度/年</td></tr>
+            <tr><td>年均新增電費效益</td><td>NT$ 0</td><td><strong>NT$ 135 萬元/年</strong></td><td>+ NT$ 135 萬元/年</td></tr>
+            <tr><td>投資回本年限 (Payback)</td><td>無</td><td><strong>4.8 年</strong></td><td>極具投資吸引力</td></tr>
+            <tr><td><strong>20 年累計淨現值 (NPV@5%)</strong></td><td>基準 0</td><td><strong>NT$ 1,020 萬元</strong></td><td><strong>+ NT$ 1,020 萬元</strong></td></tr>
+            <tr><td><strong>專案內部報酬率 (IRR)</strong></td><td>基準</td><td><strong>14.8 %</strong></td><td><strong>推升 +14.8%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>🌱 ESG 減碳與企業永續價值</span>
+          <span class="sev P4">綠能永續</span>
+        </h3>
+        <ul style="padding-left:18px; font-size:.84rem; color:var(--ink-2); line-height:1.7;">
+          <li><strong>碳排減量貢獻</strong>：每年多釋放 25 萬度潔淨電能，每年可額外減少二氧化碳排放 <strong>123.5 公噸 CO₂e</strong>（依最新電力排碳係數 0.494 kg CO₂e/kWh）。</li>
+          <li><strong>20 年累計減碳</strong>：累計減少碳排達 <strong>2,470 公噸 CO₂e</strong>，助力世堃塑膠達成客戶綠色供應鏈評鑑與 ESG 永續要求。</li>
+          <li><strong>二級市場資產溢價</strong>：消除「高棄光缺陷」，電廠估值提升 15~20%，具備優異之再融資與資產證券化條件。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SLIDE 11: APPENDIX & REQUIREMENTS ==================== -->
+  <section class="slide" id="slide-11">
+    <div class="section-head">
+      <span class="part-tag">APPENDIX & REQUIREMENTS</span>
+      <h2>附錄：下一步深層分析資料需求清單 ＆ 安全規程</h2>
+      <p class="sec-purpose">針對下一步精準診斷向業主/廠商索取之數據規格與高壓安全作業手冊</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="box-card">
+        <h3>
+          <span>📋 針對下一步分析：需要再提供之資料清單 (Data Request Checklist)</span>
+          <span class="sev P1">索取清單</span>
+        </h3>
+        <p style="font-size:.82rem; color:var(--muted); margin-bottom:10px;">
+          目前僅具備全廠 SKP01 匯總數據。為進一步執行 <strong>UNSW P2P 同儕比對、MPPT 相位分析、各串斷路排查與儲能精確容量配置</strong>，請業主與維運廠商協助提供下列 5 大資料：
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr><th>編號</th><th>資料項目</th><th>必要規格要求</th><th>用途與分析產出</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>01</strong></td>
+              <td><strong>SCADA 逐台變流器資料</strong></td>
+              <td>逐台 Inverter（INV-01 ~ INV-0N）的 5 分鐘或 1 分鐘量測（含 AC 功率、電壓、電流、累積發電量、即時警報碼）。</td>
+              <td>執行 UNSW P2P 同儕比對，找出是否有特定機台落後或跳脫。</td>
+            </tr>
+            <tr>
+              <td><strong>02</strong></td>
+              <td><strong>直流側每路 MPPT 數據</strong></td>
+              <td>各台變流器每路 MPPT 的 DC 電壓 (Vdc1, Vdc2...) 與 DC 電流 (Idc1, Idc2...) 時間序列。</td>
+              <td>執行 UNSW 51/52 演算法，抓出單串保險絲熔斷、接觸不良或遮蔽。</td>
+            </tr>
+            <tr>
+              <td><strong>03</strong></td>
+              <td><strong>電氣單線圖與組串配置圖</strong></td>
+              <td>竣工電氣單線圖 (SLD)、組件排布圖 (String Layout)、模組廠牌型號瓦數、每串片數與串並聯設計。</td>
+              <td>校驗每台變流器真實容量 (kWp)，消除 SCADA 登錄誤差。</td>
+            </tr>
+            <tr>
+              <td><strong>04</strong></td>
+              <td><strong>廠區台電 15 分鐘需量數據</strong></td>
+              <td>廠區台電高壓總電表 15 分鐘需量負載曲線 (Load Profile) 與近 12 個月台電電費單。</td>
+              <td>精準模擬負載與發電重疊度，最佳化儲能 (BESS) kW/kWh 規格。</td>
+            </tr>
+            <tr>
+              <td><strong>05</strong></td>
+              <td><strong>防逆流控制器設定參數</strong></td>
+              <td>控制器廠牌型號、採樣比流器 (CT) 規格、通訊架構、死區 (Deadband) 與安全裕度設定值。</td>
+              <td>評估微調死區的可行性，改善平日突波調節造成的頻繁深降載。</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px; text-align:right;">
+          <button class="btn-action-sm highlight" onclick="copyDataRequirementsText()">📋 一鍵複製資料需求文字（寄送給業主）</button>
+        </div>
+      </div>
+
+      <div class="box-card">
+        <h3>
+          <span>⚡ 高壓直流 (1000V DC) 作業安全強制規範 (LOTO)</span>
+          <span class="sev P1">工安規範</span>
+        </h3>
+        <div class="callout danger" style="margin-bottom:0;">
+          <h4>現場查修與維護強制準則</h4>
+          <ul style="padding-left:18px; font-size:.8rem; line-height:1.6; margin-top:6px;">
+            <li><strong>無法完全斷電特性</strong>：只要有陽光照射，光伏組件即處於帶電狀態，串列開路電壓高達 <strong>800V ~ 1000V DC</strong>。</li>
+            <li><strong>嚴禁帶載插拔 MC4 或保險絲</strong>：直流電無過零點（Zero-Crossing），有載拔插會產生高達數千度之高溫<strong>直流電弧 (DC Arc Flash)</strong>，極易引發人員嚴重燒燙傷與火災。必須遵循：<strong>關閉逆變器 AC/DC 開關 &rarr; 鉤表量測確認 0 A &rarr; 始得斷開接頭</strong>。</li>
+            <li><strong>防護裝備 PPE</strong>：現場作業必須配戴 1000V 等級絕緣手套、護目防護面罩、穿著防電弧工作服與絕緣安全鞋。</li>
+            <li><strong>上鎖掛牌 (LOTO)</strong>：開箱作業前確實執行 Lockout / Tagout，防止他人誤合開關送電。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Bottom Fixed Deck Controls -->
+<footer class="deck-controls">
+  <button class="deck-btn" id="btnPrev" onclick="prevSlide()">
+    <span>⬅️ 上一頁 (Prev)</span>
+  </button>
+  <div class="deck-counter" id="slideCounter">Slide 1 / 12</div>
+  <button class="deck-btn primary" id="btnNext" onclick="nextSlide()">
+    <span>下一頁 (Next) ➡️</span>
+  </button>
+</footer>
+
+<!-- Raw Data Provenance Modal -->
+<div class="modal-overlay" id="rawDataModal">
+  <div class="modal-content" style="max-width:1180px;">
+    <div class="modal-header">
+      <h4>📊 世堃塑膠麻豆廠 92 天逐日電氣日誌與 13 個月歷程對帳檢視器</h4>
+      <button class="modal-close" onclick="closeRawDataModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="rawSearchInput" placeholder="搜尋日期、星期或狀態..." oninput="filterRawTable()" style="padding:6px 12px; border:1px solid var(--line); border-radius:6px; font-size:.8rem; width:220px;">
+          <select id="rawStatusFilter" onchange="filterRawTable()" style="padding:6px 10px; border:1px solid var(--line); border-radius:6px; font-size:.8rem;">
+            <option value="ALL">全部狀態</option>
+            <option value="正常全載">正常全載 (&gt;=90%)</option>
+            <option value="部分降載">部分降載 (50-90%)</option>
+            <option value="嚴重限電">嚴重限電 (15-50%)</option>
+            <option value="週末/停工歸零">週末/停工歸零 (&lt;15%)</option>
+          </select>
+          <button class="btn-action-sm" onclick="exportRawCsv()">📥 匯出 CSV 檔</button>
+          <button class="btn-action-sm" onclick="copyRawTable()">📋 複製表格數據</button>
+        </div>
+        <div style="font-size:.75rem; color:var(--muted);">
+          數據來源：SCADA 匯流排 26,496 筆 5分鐘紀錄 &amp; 13個月月報
+        </div>
+      </div>
+      <div class="table-wrap" style="max-height:480px; overflow-y:auto;">
+        <table class="data-table" id="rawDataTable">
+          <thead>
+            <tr>
+              <th>日期 Date</th>
+              <th>星期</th>
+              <th class="num">實際發電 (kWh)</th>
+              <th class="num">80%PR應發 (kWh)</th>
+              <th class="num">損失度數 (kWh)</th>
+              <th class="num">日射量 (kWh/m²)</th>
+              <th class="num">等價時數 Ey</th>
+              <th class="num">實測 PR(%)</th>
+              <th class="num">平均控制比率</th>
+              <th class="num">AC峰值 (kW)</th>
+              <th class="num">DC峰值 (V)</th>
+              <th>運轉判定</th>
+            </tr>
+          </thead>
+          <tbody id="rawDataTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Data Requirements Modal -->
+<div class="modal-overlay" id="reqModal">
+  <div class="modal-content" style="max-width:960px;">
+    <div class="modal-header">
+      <h4>📋 下一步深層診斷資料需求規格書 (Data Request Document)</h4>
+      <button class="modal-close" onclick="closeReqModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.85rem; color:var(--ink-2); line-height:1.6; margin-bottom:14px;">
+        為利於進金生能源服務進行下一階段<strong>「UNSW P2P 同儕比對、MPPT 組串斷路排查、以及表後儲能 (BESS) 削峰填谷最佳化容量配置」</strong>，請案場業主與監控廠商協助提供下列五項關鍵資料：
+      </p>
+      <div style="background:var(--paper); padding:16px; border-radius:8px; border:1px solid var(--line); font-family:var(--mono); font-size:.8rem; line-height:1.7; white-space:pre-wrap;" id="reqTextContent">
+【進金生能源服務 6692｜世堃塑膠麻豆廠光伏電站下一步資料索取清單】
+
+案場代碼：SKP01
+案場名稱：世堃塑膠麻豆廠屋頂型太陽能電站 (582.06 kWp)
+
+1. SCADA 逐台變流器電氣日誌 (Per-Inverter Telemetry)：
+   - 需求區間：近 3~6 個月 (建議包含 2026/07 ~ 2026/10)
+   - 採樣頻率：1 分鐘或 5 分鐘
+   - 欄位需求：INV-01 ~ INV-0N 逐台之交流功率 (kW)、交流電壓 (V)、交流電流 (A)、當日發電量 (kWh)、歷史累計發電量 (kWh)、告警代碼 (Fault/Alarm Code)。
+
+2. 直流側每路 MPPT 遙測數據 (DC-Side MPPT Telemetry)：
+   - 各變流器每路 MPPT 之直流電壓 (Vdc1, Vdc2...) 與直流電流 (Idc1, Idc2...)。
+   - 用途：執行 UNSW 演算法判定是否有單串保險絲熔斷或局部遮蔽。
+
+3. 案場電氣圖說與設備規格 (As-Built Drawings)：
+   - 竣工電氣單線圖 (Single Line Diagram, SLD)。
+   - 屋頂組串排布圖 (String Layout) 與組件規格書（廠牌、型號、單片瓦數、每串串聯片數、MPPT 並聯串數）。
+   - 變流器廠牌型號與各台容量配置清冊。
+
+4. 廠區台電用電資料 (Factory Load Profile)：
+   - 廠區台電高壓電表 15 分鐘需量數據 (含尖峰、半尖峰、離峰需量與用電曲線)。
+   - 近 12 個月台電電費單明細（確認經常契約容量、超約紀錄、功率因數、各時段電費單價）。
+
+5. 防逆流控制器 (Zero-Export Controller) 參數紀錄：
+   - 防逆流控制器型號、通訊協議與架構。
+   - 目前設定之防逆流安全裕度 (Margin kW)、調載死區 (Deadband) 與響應時間 (Response Time)。
+      </div>
+      <div style="margin-top:14px; display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn-action-sm highlight" onclick="copyDataRequirementsText()">📋 一鍵複製整段清單文字</button>
+        <button class="btn-action-sm" onclick="closeReqModal()">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Embedded Data ---
+const monthlyData = [{"month": "2025-10", "actual_kwh": 44859.0, "expected_kwh": 63359.5, "lost_kwh": 18500.4, "irradiance": 136.07, "pr": 56.6, "pr_temp": 64.2, "ra": 74.3, "availability": 99.9, "ey": 77.07}, {"month": "2025-11", "actual_kwh": 29440.2, "expected_kwh": 49550.5, "lost_kwh": 20110.3, "irradiance": 106.41, "pr": 47.5, "pr_temp": 54.1, "ra": 63.7, "availability": 80.1, "ey": 50.58}, {"month": "2025-12", "actual_kwh": 38191.8, "expected_kwh": 51784.2, "lost_kwh": 13592.4, "irradiance": 111.21, "pr": 59.0, "pr_temp": 62.5, "ra": 78.6, "availability": 83.9, "ey": 65.61}, {"month": "2026-01", "actual_kwh": 23249.3, "expected_kwh": 54721.9, "lost_kwh": 31472.5, "irradiance": 117.52, "pr": 34.0, "pr_temp": 37.5, "ra": 48.2, "availability": 52.9, "ey": 39.94}, {"month": "2026-02", "actual_kwh": 27386.9, "expected_kwh": 57940.4, "lost_kwh": 30553.4, "irradiance": 124.43, "pr": 37.8, "pr_temp": 41.7, "ra": 47.7, "availability": 63.4, "ey": 47.05}, {"month": "2026-03", "actual_kwh": 50984.6, "expected_kwh": 76659.1, "lost_kwh": 25674.5, "irradiance": 164.63, "pr": 53.2, "pr_temp": 61.2, "ra": 74.3, "availability": 94.4, "ey": 87.59}, {"month": "2026-04", "actual_kwh": 47327.7, "expected_kwh": 65886.1, "lost_kwh": 18558.5, "irradiance": 141.49, "pr": 57.5, "pr_temp": 64.0, "ra": 75.7, "availability": 98.2, "ey": 81.31}, {"month": "2026-05", "actual_kwh": 46792.4, "expected_kwh": 89342.3, "lost_kwh": 42549.9, "irradiance": 191.87, "pr": 41.9, "pr_temp": 47.7, "ra": 57.9, "availability": 97.8, "ey": 80.39}, {"month": "2026-06", "actual_kwh": 29664.1, "expected_kwh": 63610.6, "lost_kwh": 33946.5, "irradiance": 136.61, "pr": 37.3, "pr_temp": 45.6, "ra": 58.7, "availability": 98.7, "ey": 50.96}, {"month": "2026-07", "actual_kwh": 49309.5, "expected_kwh": 81095.8, "lost_kwh": 31786.2, "irradiance": 174.16, "pr": 48.6, "pr_temp": 48.3, "ra": 59.9, "availability": 85.6, "ey": 84.72}, {"month": "2026-08", "actual_kwh": 17936.4, "expected_kwh": 55728.5, "lost_kwh": 37792.1, "irradiance": 119.68, "pr": 25.7, "pr_temp": 26.5, "ra": 32.3, "availability": 69.4, "ey": 30.82}, {"month": "2026-09", "actual_kwh": 30545.8, "expected_kwh": 70743.3, "lost_kwh": 40197.4, "irradiance": 151.92, "pr": 34.5, "pr_temp": 43.3, "ra": 50.6, "availability": 69.5, "ey": 52.48}, {"month": "2026-10", "actual_kwh": 32160.0, "expected_kwh": 49544.1, "lost_kwh": 17384.2, "irradiance": 106.4, "pr": 51.9, "pr_temp": 58.8, "ra": 67.5, "availability": 92.0, "ey": 55.25}];
+const dailyData = [{"date": "2026-07-21", "weekday": "Tuesday", "actual_kwh": 13.3, "expected_kwh": 3092.8, "lost_kwh": 3079.5, "irr_sum": 6.64, "irr_max": 1093.0, "ey": 0.02, "pr": 0.3, "ctrl_mean": 24.1, "ac_max": 14.2, "dc_max": 15.9, "v_max": 818.7, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-07-22", "weekday": "Wednesday", "actual_kwh": 12.1, "expected_kwh": 3184.9, "lost_kwh": 3172.8, "irr_sum": 6.84, "irr_max": 1041.9, "ey": 0.02, "pr": 0.3, "ctrl_mean": 10.3, "ac_max": 10.6, "dc_max": 11.9, "v_max": 809.7, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-07-23", "weekday": "Thursday", "actual_kwh": 11.0, "expected_kwh": 2965.2, "lost_kwh": 2954.1, "irr_sum": 6.37, "irr_max": 1127.2, "ey": 0.02, "pr": 0.3, "ctrl_mean": 6.6, "ac_max": 6.0, "dc_max": 7.2, "v_max": 822.7, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-07-24", "weekday": "Friday", "actual_kwh": 15.9, "expected_kwh": 1856.2, "lost_kwh": 1840.2, "irr_sum": 3.99, "irr_max": 1085.7, "ey": 0.03, "pr": 0.7, "ctrl_mean": 21.7, "ac_max": 8.6, "dc_max": 10.4, "v_max": 819.9, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-07-25", "weekday": "Saturday", "actual_kwh": 4.4, "expected_kwh": 870.6, "lost_kwh": 866.3, "irr_sum": 1.87, "irr_max": 1002.2, "ey": 0.01, "pr": 0.4, "ctrl_mean": 45.4, "ac_max": 3.7, "dc_max": 4.8, "v_max": 828.1, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-07-26", "weekday": "Sunday", "actual_kwh": 5.0, "expected_kwh": 1336.3, "lost_kwh": 1331.3, "irr_sum": 2.87, "irr_max": 959.0, "ey": 0.01, "pr": 0.3, "ctrl_mean": 22.7, "ac_max": 4.7, "dc_max": 5.2, "v_max": 823.3, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-07-27", "weekday": "Monday", "actual_kwh": 1658.3, "expected_kwh": 2005.9, "lost_kwh": 347.6, "irr_sum": 4.31, "irr_max": 1236.3, "ey": 2.85, "pr": 66.1, "ctrl_mean": 56.1, "ac_max": 548.5, "dc_max": 563.9, "v_max": 809.6, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-07-28", "weekday": "Tuesday", "actual_kwh": 2605.0, "expected_kwh": 2407.7, "lost_kwh": 0.0, "irr_sum": 5.17, "irr_max": 973.4, "ey": 4.48, "pr": 86.6, "ctrl_mean": 100.0, "ac_max": 467.5, "dc_max": 475.1, "v_max": 709.6, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-07-29", "weekday": "Wednesday", "actual_kwh": 2953.8, "expected_kwh": 2761.5, "lost_kwh": 0.0, "irr_sum": 5.93, "irr_max": 1053.6, "ey": 5.07, "pr": 85.6, "ctrl_mean": 100.0, "ac_max": 499.1, "dc_max": 537.9, "v_max": 699.7, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-07-30", "weekday": "Thursday", "actual_kwh": 2389.0, "expected_kwh": 2152.8, "lost_kwh": 0.0, "irr_sum": 4.62, "irr_max": 947.0, "ey": 4.1, "pr": 88.8, "ctrl_mean": 100.0, "ac_max": 457.3, "dc_max": 465.6, "v_max": 697.0, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-07-31", "weekday": "Friday", "actual_kwh": 2576.4, "expected_kwh": 2376.4, "lost_kwh": 0.0, "irr_sum": 5.1, "irr_max": 1041.5, "ey": 4.43, "pr": 86.7, "ctrl_mean": 100.0, "ac_max": 492.2, "dc_max": 507.0, "v_max": 700.1, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-08-01", "weekday": "Saturday", "actual_kwh": 46.1, "expected_kwh": 1706.8, "lost_kwh": 1660.7, "irr_sum": 3.67, "irr_max": 876.9, "ey": 0.08, "pr": 2.2, "ctrl_mean": 29.8, "ac_max": 29.5, "dc_max": 32.4, "v_max": 810.7, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-02", "weekday": "Sunday", "actual_kwh": 23.8, "expected_kwh": 2889.9, "lost_kwh": 2866.1, "irr_sum": 6.21, "irr_max": 977.3, "ey": 0.04, "pr": 0.7, "ctrl_mean": 7.6, "ac_max": 14.9, "dc_max": 16.5, "v_max": 819.5, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-03", "weekday": "Monday", "actual_kwh": 12.0, "expected_kwh": 3073.0, "lost_kwh": 3061.0, "irr_sum": 6.6, "irr_max": 1026.8, "ey": 0.02, "pr": 0.3, "ctrl_mean": 11.2, "ac_max": 9.2, "dc_max": 10.0, "v_max": 825.4, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-04", "weekday": "Tuesday", "actual_kwh": 13.8, "expected_kwh": 2734.6, "lost_kwh": 2720.8, "irr_sum": 5.87, "irr_max": 1029.8, "ey": 0.02, "pr": 0.4, "ctrl_mean": 7.9, "ac_max": 11.6, "dc_max": 12.7, "v_max": 813.1, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-05", "weekday": "Wednesday", "actual_kwh": 17.7, "expected_kwh": 3217.6, "lost_kwh": 3199.9, "irr_sum": 6.91, "irr_max": 1040.8, "ey": 0.03, "pr": 0.4, "ctrl_mean": 14.4, "ac_max": 9.1, "dc_max": 11.0, "v_max": 821.7, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-06", "weekday": "Thursday", "actual_kwh": 14.8, "expected_kwh": 2675.4, "lost_kwh": 2660.6, "irr_sum": 5.75, "irr_max": 1063.5, "ey": 0.03, "pr": 0.4, "ctrl_mean": 31.0, "ac_max": 9.7, "dc_max": 11.5, "v_max": 815.9, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-07", "weekday": "Friday", "actual_kwh": 12.2, "expected_kwh": 2718.0, "lost_kwh": 2705.8, "irr_sum": 5.84, "irr_max": 1046.3, "ey": 0.02, "pr": 0.4, "ctrl_mean": 16.7, "ac_max": 8.4, "dc_max": 9.9, "v_max": 832.8, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-08", "weekday": "Saturday", "actual_kwh": 6.0, "expected_kwh": 2996.5, "lost_kwh": 2990.4, "irr_sum": 6.44, "irr_max": 970.2, "ey": 0.01, "pr": 0.2, "ctrl_mean": 0.2, "ac_max": 4.3, "dc_max": 5.6, "v_max": 819.1, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-09", "weekday": "Sunday", "actual_kwh": 11.8, "expected_kwh": 1160.6, "lost_kwh": 1148.8, "irr_sum": 2.49, "irr_max": 671.5, "ey": 0.02, "pr": 0.8, "ctrl_mean": 3.2, "ac_max": 6.2, "dc_max": 8.0, "v_max": 815.6, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-10", "weekday": "Monday", "actual_kwh": 1930.8, "expected_kwh": 1905.5, "lost_kwh": 0.0, "irr_sum": 4.09, "irr_max": 982.9, "ey": 3.32, "pr": 81.1, "ctrl_mean": 68.3, "ac_max": 384.0, "dc_max": 382.7, "v_max": 822.6, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-11", "weekday": "Tuesday", "actual_kwh": 2390.9, "expected_kwh": 2235.5, "lost_kwh": 0.0, "irr_sum": 4.8, "irr_max": 1057.0, "ey": 4.11, "pr": 85.6, "ctrl_mean": 100.0, "ac_max": 524.2, "dc_max": 535.2, "v_max": 705.0, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-08-12", "weekday": "Wednesday", "actual_kwh": 1885.1, "expected_kwh": 1720.7, "lost_kwh": 0.0, "irr_sum": 3.7, "irr_max": 924.9, "ey": 3.24, "pr": 87.6, "ctrl_mean": 100.0, "ac_max": 453.1, "dc_max": 470.5, "v_max": 704.1, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-08-13", "weekday": "Thursday", "actual_kwh": 1689.5, "expected_kwh": 2636.8, "lost_kwh": 947.3, "irr_sum": 5.66, "irr_max": 1037.7, "ey": 2.9, "pr": 51.3, "ctrl_mean": 75.8, "ac_max": 440.2, "dc_max": 423.5, "v_max": 839.1, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-14", "weekday": "Friday", "actual_kwh": 2010.0, "expected_kwh": 1823.3, "lost_kwh": 0.0, "irr_sum": 3.92, "irr_max": 968.5, "ey": 3.45, "pr": 88.2, "ctrl_mean": 100.0, "ac_max": 460.2, "dc_max": 472.5, "v_max": 706.7, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-08-15", "weekday": "Saturday", "actual_kwh": 602.6, "expected_kwh": 1095.0, "lost_kwh": 492.4, "irr_sum": 2.35, "irr_max": 707.3, "ey": 1.04, "pr": 44.0, "ctrl_mean": 64.2, "ac_max": 329.3, "dc_max": 331.0, "v_max": 832.5, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-16", "weekday": "Sunday", "actual_kwh": 253.0, "expected_kwh": 2391.6, "lost_kwh": 2138.7, "irr_sum": 5.14, "irr_max": 1167.6, "ey": 0.43, "pr": 8.5, "ctrl_mean": 50.1, "ac_max": 25.6, "dc_max": 27.5, "v_max": 838.0, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-17", "weekday": "Monday", "actual_kwh": 1928.4, "expected_kwh": 2402.6, "lost_kwh": 474.2, "irr_sum": 5.16, "irr_max": 1064.3, "ey": 3.31, "pr": 64.2, "ctrl_mean": 80.0, "ac_max": 483.0, "dc_max": 489.0, "v_max": 820.9, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-18", "weekday": "Tuesday", "actual_kwh": 2800.3, "expected_kwh": 2702.5, "lost_kwh": 0.0, "irr_sum": 5.8, "irr_max": 1076.7, "ey": 4.81, "pr": 82.9, "ctrl_mean": 99.7, "ac_max": 503.7, "dc_max": 514.9, "v_max": 717.4, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-08-19", "weekday": "Wednesday", "actual_kwh": 346.5, "expected_kwh": 2179.5, "lost_kwh": 1833.0, "irr_sum": 4.68, "irr_max": 1059.2, "ey": 0.6, "pr": 12.7, "ctrl_mean": 34.9, "ac_max": 158.7, "dc_max": 149.5, "v_max": 816.3, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-20", "weekday": "Thursday", "actual_kwh": 4.0, "expected_kwh": 954.0, "lost_kwh": 950.0, "irr_sum": 2.05, "irr_max": 639.8, "ey": 0.01, "pr": 0.3, "ctrl_mean": 20.7, "ac_max": 4.9, "dc_max": 6.1, "v_max": 840.3, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-21", "weekday": "Friday", "actual_kwh": 18.4, "expected_kwh": 759.7, "lost_kwh": 741.2, "irr_sum": 1.63, "irr_max": 388.9, "ey": 0.03, "pr": 1.9, "ctrl_mean": 38.2, "ac_max": 10.1, "dc_max": 12.1, "v_max": 838.7, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-22", "weekday": "Saturday", "actual_kwh": 8.0, "expected_kwh": 167.9, "lost_kwh": 159.9, "irr_sum": 0.36, "irr_max": 93.9, "ey": 0.01, "pr": 0.0, "ctrl_mean": 20.0, "ac_max": 4.3, "dc_max": 5.6, "v_max": 804.3, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-23", "weekday": "Sunday", "actual_kwh": 5.8, "expected_kwh": 258.2, "lost_kwh": 252.3, "irr_sum": 0.55, "irr_max": 240.8, "ey": 0.01, "pr": 1.8, "ctrl_mean": 10.4, "ac_max": 5.8, "dc_max": 7.0, "v_max": 827.9, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-24", "weekday": "Monday", "actual_kwh": 9.2, "expected_kwh": 486.8, "lost_kwh": 477.6, "irr_sum": 1.05, "irr_max": 265.5, "ey": 0.02, "pr": 1.5, "ctrl_mean": 12.7, "ac_max": 6.2, "dc_max": 7.6, "v_max": 834.8, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-08-25", "weekday": "Tuesday", "actual_kwh": 35.5, "expected_kwh": 384.4, "lost_kwh": 348.9, "irr_sum": 0.83, "irr_max": 203.1, "ey": 0.06, "pr": 7.4, "ctrl_mean": 30.4, "ac_max": 16.4, "dc_max": 16.8, "v_max": 827.4, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-26", "weekday": "Wednesday", "actual_kwh": 294.5, "expected_kwh": 1880.9, "lost_kwh": 1586.4, "irr_sum": 4.04, "irr_max": 985.9, "ey": 0.51, "pr": 12.5, "ctrl_mean": 53.2, "ac_max": 63.5, "dc_max": 69.2, "v_max": 825.3, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-27", "weekday": "Thursday", "actual_kwh": 208.4, "expected_kwh": 2073.7, "lost_kwh": 1865.2, "irr_sum": 4.45, "irr_max": 1010.5, "ey": 0.36, "pr": 8.0, "ctrl_mean": 51.2, "ac_max": 107.5, "dc_max": 104.9, "v_max": 816.1, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-28", "weekday": "Friday", "actual_kwh": 142.5, "expected_kwh": 1457.0, "lost_kwh": 1314.5, "irr_sum": 3.13, "irr_max": 761.0, "ey": 0.24, "pr": 7.8, "ctrl_mean": 51.0, "ac_max": 24.0, "dc_max": 25.4, "v_max": 813.4, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-08-29", "weekday": "Saturday", "actual_kwh": 63.9, "expected_kwh": 690.8, "lost_kwh": 626.9, "irr_sum": 1.48, "irr_max": 338.5, "ey": 0.11, "pr": 7.4, "ctrl_mean": 43.9, "ac_max": 18.6, "dc_max": 20.3, "v_max": 823.8, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-30", "weekday": "Sunday", "actual_kwh": 124.3, "expected_kwh": 1441.9, "lost_kwh": 1317.5, "irr_sum": 3.1, "irr_max": 803.5, "ey": 0.21, "pr": 6.9, "ctrl_mean": 43.5, "ac_max": 23.4, "dc_max": 25.2, "v_max": 829.7, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-08-31", "weekday": "Monday", "actual_kwh": 1026.4, "expected_kwh": 921.2, "lost_kwh": 0.0, "irr_sum": 1.98, "irr_max": 527.7, "ey": 1.76, "pr": 89.1, "ctrl_mean": 91.7, "ac_max": 292.4, "dc_max": 296.5, "v_max": 824.0, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-01", "weekday": "Tuesday", "actual_kwh": 946.7, "expected_kwh": 784.1, "lost_kwh": 0.0, "irr_sum": 1.68, "irr_max": 425.2, "ey": 1.63, "pr": 96.6, "ctrl_mean": 100.0, "ac_max": 242.9, "dc_max": 249.6, "v_max": 714.8, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-02", "weekday": "Wednesday", "actual_kwh": 1633.9, "expected_kwh": 1494.7, "lost_kwh": 0.0, "irr_sum": 3.21, "irr_max": 1073.8, "ey": 2.81, "pr": 87.5, "ctrl_mean": 100.0, "ac_max": 515.8, "dc_max": 536.0, "v_max": 710.7, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-03", "weekday": "Thursday", "actual_kwh": 935.6, "expected_kwh": 817.8, "lost_kwh": 0.0, "irr_sum": 1.76, "irr_max": 682.4, "ey": 1.61, "pr": 91.5, "ctrl_mean": 100.0, "ac_max": 352.9, "dc_max": 368.8, "v_max": 709.2, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-04", "weekday": "Friday", "actual_kwh": 2795.8, "expected_kwh": 2674.6, "lost_kwh": 0.0, "irr_sum": 5.74, "irr_max": 1027.0, "ey": 4.8, "pr": 83.6, "ctrl_mean": 100.0, "ac_max": 475.6, "dc_max": 483.1, "v_max": 708.9, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-05", "weekday": "Saturday", "actual_kwh": 505.0, "expected_kwh": 2042.9, "lost_kwh": 1537.9, "irr_sum": 4.39, "irr_max": 1024.1, "ey": 0.87, "pr": 19.8, "ctrl_mean": 64.2, "ac_max": 171.0, "dc_max": 180.2, "v_max": 822.9, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-06", "weekday": "Sunday", "actual_kwh": 262.4, "expected_kwh": 3122.1, "lost_kwh": 2859.7, "irr_sum": 6.7, "irr_max": 950.1, "ey": 0.45, "pr": 6.7, "ctrl_mean": 52.2, "ac_max": 30.0, "dc_max": 31.5, "v_max": 824.6, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-07", "weekday": "Monday", "actual_kwh": 2552.2, "expected_kwh": 2927.2, "lost_kwh": 375.0, "irr_sum": 6.29, "irr_max": 1011.6, "ey": 4.38, "pr": 69.8, "ctrl_mean": 82.4, "ac_max": 449.7, "dc_max": 467.2, "v_max": 814.5, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-08", "weekday": "Tuesday", "actual_kwh": 2877.5, "expected_kwh": 2766.5, "lost_kwh": 0.0, "irr_sum": 5.94, "irr_max": 1007.8, "ey": 4.94, "pr": 83.2, "ctrl_mean": 100.0, "ac_max": 479.6, "dc_max": 494.4, "v_max": 712.4, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-09", "weekday": "Wednesday", "actual_kwh": 2062.9, "expected_kwh": 1931.3, "lost_kwh": 0.0, "irr_sum": 4.15, "irr_max": 1100.9, "ey": 3.54, "pr": 85.5, "ctrl_mean": 100.0, "ac_max": 501.6, "dc_max": 532.8, "v_max": 710.0, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-10", "weekday": "Thursday", "actual_kwh": 683.3, "expected_kwh": 3091.0, "lost_kwh": 2407.7, "irr_sum": 6.64, "irr_max": 921.2, "ey": 1.17, "pr": 17.7, "ctrl_mean": 63.1, "ac_max": 205.0, "dc_max": 208.1, "v_max": 800.4, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-11", "weekday": "Friday", "actual_kwh": 39.6, "expected_kwh": 1147.2, "lost_kwh": 1107.5, "irr_sum": 2.46, "irr_max": 660.8, "ey": 0.07, "pr": 2.8, "ctrl_mean": 51.2, "ac_max": 26.0, "dc_max": 28.1, "v_max": 828.3, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-12", "weekday": "Saturday", "actual_kwh": 5.0, "expected_kwh": 2891.6, "lost_kwh": 2886.6, "irr_sum": 6.21, "irr_max": 940.3, "ey": 0.01, "pr": 0.1, "ctrl_mean": 23.4, "ac_max": 7.6, "dc_max": 10.1, "v_max": 824.2, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-13", "weekday": "Sunday", "actual_kwh": 8.3, "expected_kwh": 2747.3, "lost_kwh": 2739.0, "irr_sum": 5.9, "irr_max": 1005.7, "ey": 0.01, "pr": 0.2, "ctrl_mean": 22.2, "ac_max": 5.2, "dc_max": 6.5, "v_max": 817.9, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-14", "weekday": "Monday", "actual_kwh": 14.0, "expected_kwh": 2178.3, "lost_kwh": 2164.3, "irr_sum": 4.68, "irr_max": 979.5, "ey": 0.02, "pr": 0.5, "ctrl_mean": 47.0, "ac_max": 12.8, "dc_max": 13.8, "v_max": 824.7, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-15", "weekday": "Tuesday", "actual_kwh": 46.8, "expected_kwh": 2481.0, "lost_kwh": 2434.2, "irr_sum": 5.33, "irr_max": 985.4, "ey": 0.08, "pr": 1.5, "ctrl_mean": 47.0, "ac_max": 54.8, "dc_max": 41.3, "v_max": 821.2, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-16", "weekday": "Wednesday", "actual_kwh": 12.7, "expected_kwh": 2636.3, "lost_kwh": 2623.6, "irr_sum": 5.66, "irr_max": 947.3, "ey": 0.02, "pr": 0.4, "ctrl_mean": 47.6, "ac_max": 10.3, "dc_max": 10.7, "v_max": 814.4, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-17", "weekday": "Thursday", "actual_kwh": 13.3, "expected_kwh": 2959.5, "lost_kwh": 2946.2, "irr_sum": 6.36, "irr_max": 936.7, "ey": 0.02, "pr": 0.4, "ctrl_mean": 48.7, "ac_max": 11.5, "dc_max": 11.9, "v_max": 816.4, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-18", "weekday": "Friday", "actual_kwh": 17.5, "expected_kwh": 2903.0, "lost_kwh": 2885.5, "irr_sum": 6.23, "irr_max": 910.7, "ey": 0.03, "pr": 0.5, "ctrl_mean": 24.1, "ac_max": 9.7, "dc_max": 11.9, "v_max": 811.5, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-19", "weekday": "Saturday", "actual_kwh": 8.7, "expected_kwh": 2441.2, "lost_kwh": 2432.6, "irr_sum": 5.24, "irr_max": 917.3, "ey": 0.01, "pr": 0.3, "ctrl_mean": 0.0, "ac_max": 5.2, "dc_max": 6.1, "v_max": 821.7, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-09-20", "weekday": "Sunday", "actual_kwh": 8.3, "expected_kwh": 2613.1, "lost_kwh": 2604.8, "irr_sum": 5.61, "irr_max": 943.3, "ey": 0.01, "pr": 0.3, "ctrl_mean": 13.1, "ac_max": 8.8, "dc_max": 9.5, "v_max": 822.4, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-09-21", "weekday": "Monday", "actual_kwh": 1493.3, "expected_kwh": 1683.5, "lost_kwh": 190.2, "irr_sum": 3.62, "irr_max": 1010.6, "ey": 2.57, "pr": 71.0, "ctrl_mean": 74.1, "ac_max": 324.3, "dc_max": 340.7, "v_max": 812.6, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-22", "weekday": "Tuesday", "actual_kwh": 1958.2, "expected_kwh": 1865.0, "lost_kwh": 0.0, "irr_sum": 4.01, "irr_max": 892.5, "ey": 3.36, "pr": 84.0, "ctrl_mean": 100.0, "ac_max": 433.6, "dc_max": 437.9, "v_max": 696.7, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-23", "weekday": "Wednesday", "actual_kwh": 1900.5, "expected_kwh": 1752.0, "lost_kwh": 0.0, "irr_sum": 3.76, "irr_max": 862.5, "ey": 3.27, "pr": 86.8, "ctrl_mean": 100.0, "ac_max": 423.6, "dc_max": 437.7, "v_max": 697.6, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-24", "weekday": "Thursday", "actual_kwh": 2518.9, "expected_kwh": 2385.7, "lost_kwh": 0.0, "irr_sum": 5.12, "irr_max": 901.0, "ey": 4.33, "pr": 84.5, "ctrl_mean": 100.0, "ac_max": 434.6, "dc_max": 440.3, "v_max": 698.3, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-09-25", "weekday": "Friday", "actual_kwh": 2463.3, "expected_kwh": 2670.9, "lost_kwh": 207.6, "irr_sum": 5.74, "irr_max": 894.3, "ey": 4.23, "pr": 73.8, "ctrl_mean": 71.7, "ac_max": 420.6, "dc_max": 429.4, "v_max": 803.8, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-26", "weekday": "Saturday", "actual_kwh": 3.6, "expected_kwh": 2738.4, "lost_kwh": 2734.8, "irr_sum": 5.88, "irr_max": 920.5, "ey": 0.01, "pr": 0.1, "ctrl_mean": 7.9, "ac_max": 3.5, "dc_max": 4.4, "v_max": 824.3, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-09-27", "weekday": "Sunday", "actual_kwh": 4.0, "expected_kwh": 2882.8, "lost_kwh": 2878.8, "irr_sum": 6.19, "irr_max": 995.2, "ey": 0.01, "pr": 0.1, "ctrl_mean": 0.0, "ac_max": 3.2, "dc_max": 4.5, "v_max": 826.3, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-09-28", "weekday": "Monday", "actual_kwh": 5.3, "expected_kwh": 2742.2, "lost_kwh": 2736.9, "irr_sum": 5.89, "irr_max": 971.4, "ey": 0.01, "pr": 0.2, "ctrl_mean": 25.0, "ac_max": 5.5, "dc_max": 7.6, "v_max": 825.8, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-09-29", "weekday": "Tuesday", "actual_kwh": 2020.2, "expected_kwh": 2702.4, "lost_kwh": 682.2, "irr_sum": 5.8, "irr_max": 973.1, "ey": 3.47, "pr": 59.8, "ctrl_mean": 80.7, "ac_max": 416.0, "dc_max": 422.8, "v_max": 827.9, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-09-30", "weekday": "Wednesday", "actual_kwh": 2748.8, "expected_kwh": 2679.6, "lost_kwh": 0.0, "irr_sum": 5.75, "irr_max": 1008.5, "ey": 4.72, "pr": 82.1, "ctrl_mean": 99.6, "ac_max": 477.5, "dc_max": 485.4, "v_max": 698.5, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-01", "weekday": "Thursday", "actual_kwh": 2685.0, "expected_kwh": 2598.0, "lost_kwh": 0.0, "irr_sum": 5.58, "irr_max": 975.1, "ey": 4.61, "pr": 82.7, "ctrl_mean": 100.0, "ac_max": 448.1, "dc_max": 457.5, "v_max": 804.6, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-02", "weekday": "Friday", "actual_kwh": 2569.9, "expected_kwh": 2471.7, "lost_kwh": 0.0, "irr_sum": 5.31, "irr_max": 880.4, "ey": 4.42, "pr": 83.2, "ctrl_mean": 100.0, "ac_max": 418.3, "dc_max": 426.3, "v_max": 703.2, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-03", "weekday": "Saturday", "actual_kwh": 593.7, "expected_kwh": 2522.7, "lost_kwh": 1929.0, "irr_sum": 5.42, "irr_max": 977.5, "ey": 1.02, "pr": 18.8, "ctrl_mean": 64.4, "ac_max": 186.4, "dc_max": 187.0, "v_max": 810.0, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-04", "weekday": "Sunday", "actual_kwh": 1310.9, "expected_kwh": 2487.9, "lost_kwh": 1176.9, "irr_sum": 5.34, "irr_max": 972.6, "ey": 2.25, "pr": 42.2, "ctrl_mean": 71.7, "ac_max": 414.6, "dc_max": 420.3, "v_max": 818.2, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-05", "weekday": "Monday", "actual_kwh": 1381.0, "expected_kwh": 1697.9, "lost_kwh": 316.9, "irr_sum": 3.65, "irr_max": 866.1, "ey": 2.37, "pr": 65.1, "ctrl_mean": 84.7, "ac_max": 361.3, "dc_max": 363.0, "v_max": 825.4, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-06", "weekday": "Tuesday", "actual_kwh": 2439.0, "expected_kwh": 2370.2, "lost_kwh": 0.0, "irr_sum": 5.09, "irr_max": 954.0, "ey": 4.19, "pr": 82.3, "ctrl_mean": 100.0, "ac_max": 441.0, "dc_max": 448.8, "v_max": 712.9, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-07", "weekday": "Wednesday", "actual_kwh": 2658.9, "expected_kwh": 2626.7, "lost_kwh": 0.0, "irr_sum": 5.64, "irr_max": 943.8, "ey": 4.57, "pr": 81.0, "ctrl_mean": 100.0, "ac_max": 417.6, "dc_max": 421.4, "v_max": 709.3, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-08", "weekday": "Thursday", "actual_kwh": 2402.0, "expected_kwh": 2336.8, "lost_kwh": 0.0, "irr_sum": 5.02, "irr_max": 942.9, "ey": 4.13, "pr": 82.2, "ctrl_mean": 100.0, "ac_max": 440.3, "dc_max": 447.3, "v_max": 704.3, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-09", "weekday": "Friday", "actual_kwh": 503.3, "expected_kwh": 2662.0, "lost_kwh": 2158.7, "irr_sum": 5.72, "irr_max": 868.0, "ey": 0.86, "pr": 15.1, "ctrl_mean": 64.7, "ac_max": 167.4, "dc_max": 173.8, "v_max": 808.6, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-10", "weekday": "Saturday", "actual_kwh": 29.0, "expected_kwh": 2639.8, "lost_kwh": 2610.9, "irr_sum": 5.67, "irr_max": 838.1, "ey": 0.05, "pr": 0.9, "ctrl_mean": 26.7, "ac_max": 21.4, "dc_max": 22.5, "v_max": 817.3, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-10-11", "weekday": "Sunday", "actual_kwh": 6.7, "expected_kwh": 2314.4, "lost_kwh": 2307.7, "irr_sum": 4.97, "irr_max": 880.7, "ey": 0.01, "pr": 0.2, "ctrl_mean": 0.0, "ac_max": 5.9, "dc_max": 6.9, "v_max": 817.6, "status": "週末/停工歸零", "badge": "badge-coral"}, {"date": "2026-10-12", "weekday": "Monday", "actual_kwh": 115.5, "expected_kwh": 2632.8, "lost_kwh": 2517.3, "irr_sum": 5.65, "irr_max": 868.8, "ey": 0.2, "pr": 3.5, "ctrl_mean": 31.9, "ac_max": 60.1, "dc_max": 59.2, "v_max": 813.6, "status": "嚴重限電", "badge": "badge-orange"}, {"date": "2026-10-13", "weekday": "Tuesday", "actual_kwh": 2156.7, "expected_kwh": 2105.6, "lost_kwh": 0.0, "irr_sum": 4.52, "irr_max": 876.6, "ey": 3.71, "pr": 81.9, "ctrl_mean": 100.0, "ac_max": 402.1, "dc_max": 407.8, "v_max": 714.2, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-14", "weekday": "Wednesday", "actual_kwh": 2152.4, "expected_kwh": 2288.4, "lost_kwh": 135.9, "irr_sum": 4.91, "irr_max": 868.0, "ey": 3.7, "pr": 75.2, "ctrl_mean": 97.1, "ac_max": 390.4, "dc_max": 399.0, "v_max": 750.4, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-15", "weekday": "Thursday", "actual_kwh": 2471.7, "expected_kwh": 2497.3, "lost_kwh": 25.7, "irr_sum": 5.36, "irr_max": 812.0, "ey": 4.25, "pr": 79.2, "ctrl_mean": 100.0, "ac_max": 372.3, "dc_max": 379.8, "v_max": 711.4, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-16", "weekday": "Friday", "actual_kwh": 2534.6, "expected_kwh": 2560.8, "lost_kwh": 26.2, "irr_sum": 5.5, "irr_max": 819.0, "ey": 4.35, "pr": 79.2, "ctrl_mean": 100.0, "ac_max": 373.0, "dc_max": 379.2, "v_max": 722.1, "status": "正常全載", "badge": "badge-green"}, {"date": "2026-10-17", "weekday": "Saturday", "actual_kwh": 435.1, "expected_kwh": 2492.5, "lost_kwh": 2057.4, "irr_sum": 5.35, "irr_max": 861.0, "ey": 0.75, "pr": 14.0, "ctrl_mean": 64.0, "ac_max": 143.4, "dc_max": 143.9, "v_max": 798.0, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-18", "weekday": "Sunday", "actual_kwh": 240.9, "expected_kwh": 2323.0, "lost_kwh": 2082.1, "irr_sum": 4.99, "irr_max": 864.8, "ey": 0.41, "pr": 8.3, "ctrl_mean": 56.4, "ac_max": 29.3, "dc_max": 32.0, "v_max": 819.4, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-19", "weekday": "Monday", "actual_kwh": 1852.5, "expected_kwh": 2176.5, "lost_kwh": 324.1, "irr_sum": 4.67, "irr_max": 875.6, "ey": 3.18, "pr": 68.1, "ctrl_mean": 86.2, "ac_max": 395.7, "dc_max": 403.9, "v_max": 825.1, "status": "部分降載", "badge": "badge-amber"}, {"date": "2026-10-20", "weekday": "Tuesday", "actual_kwh": 2445.4, "expected_kwh": 2533.8, "lost_kwh": 88.4, "irr_sum": 5.44, "irr_max": 831.1, "ey": 4.2, "pr": 77.2, "ctrl_mean": 100.0, "ac_max": 370.2, "dc_max": 376.0, "v_max": 708.0, "status": "正常全載", "badge": "badge-green"}];
+const profilesData = {"2026-07-29": {"times": ["05:30", "05:35", "05:40", "05:45", "05:50", "05:55", "06:00", "06:05", "06:10", "06:15", "06:20", "06:25", "06:30", "06:35", "06:40", "06:45", "06:50", "06:55", "07:00", "07:05", "07:10", "07:15", "07:20", "07:25", "07:30", "07:35", "07:40", "07:45", "07:50", "07:55", "08:00", "08:05", "08:10", "08:15", "08:20", "08:25", "08:30", "08:35", "08:40", "08:45", "08:50", "08:55", "09:00", "09:05", "09:10", "09:15", "09:20", "09:25", "09:30", "09:35", "09:40", "09:45", "09:50", "09:55", "10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30", "10:35", "10:40", "10:45", "10:50", "10:55", "11:00", "11:05", "11:10", "11:15", "11:20", "11:25", "11:30", "11:35", "11:40", "11:45", "11:50", "11:55", "12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30", "12:35", "12:40", "12:45", "12:50", "12:55", "13:00", "13:05", "13:10", "13:15", "13:20", "13:25", "13:30", "13:35", "13:40", "13:45", "13:50", "13:55", "14:00", "14:05", "14:10", "14:15", "14:20", "14:25", "14:30", "14:35", "14:40", "14:45", "14:50", "14:55", "15:00", "15:05", "15:10", "15:15", "15:20", "15:25", "15:30", "15:35", "15:40", "15:45", "15:50", "15:55", "16:00", "16:05", "16:10", "16:15", "16:20", "16:25", "16:30", "16:35", "16:40", "16:45", "16:50", "16:55", "17:00", "17:05", "17:10", "17:15", "17:20", "17:25", "17:30", "17:35", "17:40", "17:45", "17:50", "17:55", "18:00", "18:05", "18:10", "18:15", "18:20", "18:25", "18:30"], "ac_power": [0.7, 1.4, 3.0, 5.3, 7.7, 10.9, 14.0, 18.1, 21.6, 25.8, 31.3, 44.2, 55.5, 68.2, 74.4, 63.6, 34.0, 28.3, 28.5, 29.2, 30.7, 33.1, 46.0, 76.5, 88.4, 149.3, 192.7, 213.7, 223.9, 233.2, 247.8, 252.2, 263.6, 281.9, 273.5, 307.5, 297.9, 313.0, 330.3, 335.1, 317.4, 228.7, 145.7, 240.6, 265.5, 252.3, 338.7, 300.1, 385.6, 390.3, 407.5, 396.8, 260.7, 240.8, 301.6, 430.6, 446.5, 453.6, 436.8, 400.3, 394.2, 446.8, 465.2, 456.5, 468.2, 499.1, 393.7, 230.1, 191.3, 484.1, 468.2, 288.5, 276.5, 327.0, 402.2, 470.3, 402.1, 354.9, 482.9, 411.5, 398.9, 365.2, 392.2, 263.6, 292.3, 395.3, 414.9, 373.7, 344.0, 365.7, 318.4, 300.4, 307.6, 246.4, 309.3, 270.0, 212.5, 231.7, 285.4, 266.5, 284.8, 277.9, 275.2, 282.0, 272.6, 273.4, 265.1, 263.4, 243.5, 234.3, 241.2, 227.1, 215.6, 209.0, 199.6, 191.7, 194.8, 205.2, 221.7, 235.7, 239.3, 249.4, 257.6, 273.4, 253.5, 275.0, 282.3, 188.1, 246.4, 185.4, 89.5, 123.0, 207.2, 209.6, 186.9, 161.5, 115.6, 114.4, 133.5, 125.4, 96.1, 105.9, 82.6, 85.7, 89.8, 80.9, 73.3, 66.9, 60.6, 62.9, 52.4, 45.5, 37.8, 30.5, 25.1, 18.4, 10.6], "dc_power": [1.1, 1.9, 3.7, 6.1, 8.7, 11.9, 15.6, 19.3, 23.0, 27.1, 33.0, 48.1, 57.6, 71.4, 74.9, 63.1, 33.4, 29.4, 29.5, 30.3, 31.9, 34.8, 50.3, 78.6, 95.0, 158.4, 198.5, 220.4, 227.6, 240.7, 253.7, 256.7, 270.4, 275.2, 295.6, 314.4, 322.1, 330.5, 340.6, 340.9, 316.8, 215.2, 140.1, 256.3, 237.7, 294.9, 325.2, 305.5, 389.2, 411.7, 418.7, 413.3, 238.5, 250.0, 294.9, 447.6, 453.4, 464.0, 438.6, 394.3, 350.4, 469.6, 473.6, 461.4, 481.5, 515.2, 367.0, 217.5, 213.9, 537.9, 490.9, 282.1, 279.7, 353.1, 409.9, 494.3, 397.7, 376.0, 480.0, 415.6, 405.9, 397.3, 362.5, 256.3, 334.2, 408.1, 421.4, 381.7, 349.9, 376.6, 312.8, 309.5, 310.6, 254.7, 313.8, 268.5, 213.3, 243.2, 288.3, 271.6, 290.7, 282.2, 280.9, 286.8, 277.4, 278.1, 268.9, 267.1, 246.3, 238.5, 245.0, 229.5, 218.2, 212.7, 201.8, 195.5, 198.8, 210.2, 227.9, 237.8, 244.0, 255.9, 261.0, 274.8, 256.4, 284.0, 286.6, 192.8, 249.6, 181.1, 87.9, 125.0, 219.7, 207.0, 188.0, 164.6, 111.6, 120.1, 134.2, 126.5, 97.4, 107.0, 82.4, 88.9, 90.8, 82.3, 73.3, 68.7, 62.3, 63.5, 52.8, 46.0, 38.4, 30.9, 25.5, 18.6, 10.3], "irradiance": [1.3, 2.9, 6.2, 10.7, 16.1, 21.5, 28.0, 35.2, 42.5, 50.2, 62.0, 94.7, 114.3, 143.3, 151.0, 126.0, 62.2, 54.3, 55.6, 58.1, 61.6, 67.9, 99.9, 157.8, 189.0, 316.2, 397.1, 434.9, 444.9, 472.0, 499.0, 504.7, 532.5, 530.6, 577.2, 603.8, 592.7, 613.0, 653.0, 655.2, 610.3, 441.7, 313.6, 504.7, 424.1, 604.9, 656.4, 613.5, 744.8, 803.9, 824.0, 841.9, 504.0, 524.8, 633.7, 839.8, 903.0, 922.6, 910.7, 865.7, 860.8, 946.0, 961.2, 954.2, 980.7, 1053.6, 715.6, 475.0, 377.0, 999.2, 997.2, 565.8, 552.3, 652.4, 816.3, 948.2, 848.6, 737.7, 937.0, 845.5, 823.7, 786.6, 772.2, 545.8, 578.1, 797.7, 842.3, 727.8, 669.6, 737.6, 640.0, 599.0, 610.4, 483.9, 599.8, 529.0, 412.1, 449.9, 553.3, 508.5, 557.5, 534.0, 530.9, 546.1, 529.7, 531.1, 512.2, 509.6, 470.9, 452.1, 463.3, 435.9, 412.4, 402.0, 382.4, 368.9, 373.6, 393.4, 426.6, 455.2, 464.3, 488.3, 509.4, 549.8, 512.2, 565.1, 583.0, 390.3, 503.1, 371.1, 179.0, 253.4, 425.7, 420.0, 378.0, 325.1, 229.6, 235.8, 272.4, 256.7, 194.9, 217.0, 167.7, 176.6, 184.5, 168.7, 152.1, 138.4, 120.9, 121.0, 98.8, 85.5, 69.0, 54.2, 43.9, 32.0, 17.0], "dc_voltage": [527.5, 578.5, 566.0, 577.3, 589.4, 619.5, 637.0, 647.5, 662.0, 666.6, 675.2, 692.6, 692.2, 698.0, 698.2, 692.1, 669.1, 664.2, 668.3, 668.6, 673.7, 677.7, 685.6, 695.8, 694.1, 699.7, 698.1, 688.9, 682.8, 684.1, 682.5, 679.9, 680.3, 679.4, 673.9, 667.7, 668.6, 669.6, 667.2, 664.7, 662.7, 660.7, 668.4, 677.4, 674.8, 674.6, 671.4, 667.5, 665.0, 660.6, 656.7, 654.7, 655.2, 666.4, 668.5, 664.2, 656.4, 650.1, 646.2, 644.2, 646.6, 646.5, 643.6, 642.4, 639.9, 635.7, 635.6, 647.7, 658.4, 656.7, 645.8, 646.8, 658.5, 661.8, 655.9, 646.8, 639.6, 643.7, 638.6, 637.7, 641.0, 645.7, 642.9, 645.5, 654.4, 647.4, 643.5, 642.7, 646.0, 646.3, 647.4, 653.1, 655.6, 661.2, 665.3, 665.0, 668.2, 672.9, 674.0, 673.7, 672.4, 672.3, 674.2, 674.4, 674.1, 675.2, 675.9, 676.3, 675.8, 677.7, 677.6, 678.0, 679.1, 680.0, 682.9, 683.4, 686.6, 689.9, 690.0, 688.2, 687.4, 687.3, 685.8, 685.1, 683.5, 683.6, 681.6, 678.6, 685.7, 678.1, 670.6, 682.2, 692.2, 687.6, 685.6, 684.6, 677.7, 681.3, 685.3, 672.2, 657.4, 665.9, 663.9, 671.1, 673.6, 672.6, 671.6, 675.5, 675.1, 677.9, 675.8, 675.1, 670.8, 663.5, 655.8, 636.6, 619.6], "dc_current": [1.8, 3.0, 5.3, 8.6, 12.5, 17.4, 23.0, 28.4, 33.8, 39.0, 46.9, 67.0, 81.9, 100.6, 107.0, 91.2, 50.7, 43.0, 42.1, 43.7, 45.7, 49.3, 71.4, 113.3, 136.0, 227.9, 287.2, 322.8, 336.3, 354.9, 375.8, 382.1, 401.5, 409.5, 442.2, 473.2, 484.7, 496.0, 513.6, 515.8, 482.2, 328.1, 212.6, 382.2, 359.8, 440.0, 490.2, 458.4, 589.8, 627.4, 641.1, 638.9, 372.6, 380.8, 445.3, 677.9, 694.6, 717.5, 680.9, 617.2, 544.4, 730.8, 740.2, 723.2, 756.3, 814.5, 584.5, 341.3, 327.8, 822.5, 760.6, 437.6, 429.8, 535.7, 628.5, 767.5, 625.1, 586.6, 756.2, 655.2, 637.1, 618.6, 569.7, 402.6, 516.0, 635.3, 657.8, 597.7, 546.0, 585.7, 488.5, 477.6, 477.7, 388.3, 475.6, 408.2, 323.1, 363.4, 431.3, 406.3, 435.6, 423.5, 419.9, 428.7, 415.0, 415.2, 401.1, 398.3, 368.2, 354.9, 364.8, 342.5, 325.1, 316.3, 299.2, 289.4, 291.8, 307.6, 333.1, 350.6, 358.8, 376.3, 385.4, 407.0, 380.7, 422.8, 428.5, 290.0, 371.1, 273.6, 135.7, 186.1, 322.0, 306.9, 279.5, 244.5, 169.3, 179.1, 199.2, 190.5, 149.9, 162.1, 126.6, 134.0, 136.4, 124.3, 112.5, 104.0, 94.8, 96.3, 81.0, 71.2, 61.0, 50.2, 41.8, 33.0, 20.1], "ctrl_ratio": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]}, "2026-08-02": {"times": ["05:30", "05:35", "05:40", "05:45", "05:50", "05:55", "06:00", "06:05", "06:10", "06:15", "06:20", "06:25", "06:30", "06:35", "06:40", "06:45", "06:50", "06:55", "07:00", "07:05", "07:10", "07:15", "07:20", "07:25", "07:30", "07:35", "07:40", "07:45", "07:50", "07:55", "08:00", "08:05", "08:10", "08:15", "08:20", "08:25", "08:30", "08:35", "08:40", "08:45", "08:50", "08:55", "09:00", "09:05", "09:10", "09:15", "09:20", "09:25", "09:30", "09:35", "09:40", "09:45", "09:50", "09:55", "10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30", "10:35", "10:40", "10:45", "10:50", "10:55", "11:00", "11:05", "11:10", "11:15", "11:20", "11:25", "11:30", "11:35", "11:40", "11:45", "11:50", "11:55", "12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30", "12:35", "12:40", "12:45", "12:50", "12:55", "13:00", "13:05", "13:10", "13:15", "13:20", "13:25", "13:30", "13:35", "13:40", "13:45", "13:50", "13:55", "14:00", "14:05", "14:10", "14:15", "14:20", "14:25", "14:30", "14:35", "14:40", "14:45", "14:50", "14:55", "15:00", "15:05", "15:10", "15:15", "15:20", "15:25", "15:30", "15:35", "15:40", "15:45", "15:50", "15:55", "16:00", "16:05", "16:10", "16:15", "16:20", "16:25", "16:30", "16:35", "16:40", "16:45", "16:50", "16:55", "17:00", "17:05", "17:10", "17:15", "17:20", "17:25", "17:30", "17:35", "17:40", "17:45", "17:50", "17:55", "18:00", "18:05", "18:10", "18:15", "18:20", "18:25", "18:30"], "ac_power": [0.0, 0.2, 2.0, 0.5, 0.1, 0.1, 0.0, 0.0, 0.1, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.0, 0.1, 0.2, 0.1, 0.0, 0.1, 0.1, 0.2, 0.0, 0.1, 0.1, 0.1, 0.1, 0.0, 0.1, 0.0, 0.1, 0.1, 0.0, 0.1, 0.1, 0.2, 0.1, 0.0, 0.1, 0.5, 0.0, 0.0, 0.0, 4.0, 0.1, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.2, 0.4, 0.0, 0.1, 1.9, 2.8, 3.0, 3.2, 3.5, 0.2, 1.4, 0.7, 0.0, 0.1, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 1.7, 2.2, 2.5, 0.4, 0.1, 0.0, 0.4, 0.1, 0.4, 0.1, 0.1, 0.0, 0.1, 0.2, 0.0, 2.5, 2.4, 2.5, 2.6, 0.7, 0.1, 0.1, 0.1, 0.1, 0.2, 0.0, 0.0, 0.4, 0.0, 0.2, 0.0, 0.1, 0.0, 0.0, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0.6, 0.0, 6.5, 11.7, 12.1, 9.8, 10.8, 10.6, 8.9, 9.6, 10.3, 10.7, 10.7, 10.5, 11.5, 12.0, 11.5, 10.9, 14.9, 13.3, 2.5, 3.4, 0.2, 0.0, 1.2, 3.6, 2.0, 3.0, 3.5, 4.8, 4.8, 1.7, 3.2, 2.2, 0.4, 0.0, 0.1, 0.4, 0.1, 0.2, 0.0, 0.1, 0.0], "dc_power": [0.0, 0.0, 3.6, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.8, 0.0, 0.0, 0.8, 3.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.6, 3.4, 4.2, 3.9, 4.5, 0.0, 2.0, 0.8, 0.0, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.1, 2.2, 3.8, 0.3, 0.0, 0.0, 0.0, 0.0, 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7, 3.9, 3.8, 3.8, 3.8, 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.8, 0.0, 8.4, 13.3, 12.1, 11.2, 11.1, 12.0, 10.3, 10.5, 11.9, 12.8, 11.2, 11.7, 12.9, 13.4, 13.1, 13.0, 16.5, 12.0, 3.7, 4.0, 0.0, 0.0, 2.0, 4.7, 3.2, 4.3, 4.6, 5.9, 5.6, 2.0, 4.8, 2.8, 0.0, 0.0, 0.0, 0.7, 0.0, 0.0, 0.0, 0.0, 1.0], "irradiance": [1.3, 4.9, 10.4, 17.6, 22.3, 27.0, 36.3, 45.2, 52.2, 60.1, 69.4, 82.3, 96.7, 108.2, 115.9, 130.9, 156.1, 159.8, 158.9, 161.4, 183.9, 210.8, 202.8, 197.1, 193.4, 199.2, 199.0, 206.9, 204.6, 206.2, 208.6, 202.4, 208.0, 190.7, 191.9, 202.6, 326.0, 455.3, 495.2, 520.5, 544.8, 586.4, 632.9, 658.7, 687.9, 711.8, 727.5, 743.3, 762.1, 808.7, 863.7, 645.7, 437.6, 657.8, 426.2, 306.8, 288.6, 382.9, 688.2, 588.2, 550.3, 855.2, 851.8, 902.0, 841.9, 910.3, 912.8, 936.2, 900.4, 947.6, 959.3, 967.5, 967.1, 966.9, 963.5, 958.0, 944.3, 949.5, 960.6, 977.3, 976.4, 970.3, 942.4, 870.1, 900.5, 624.8, 600.9, 759.5, 932.3, 941.1, 932.5, 939.2, 923.9, 933.0, 937.2, 922.5, 937.3, 903.3, 889.7, 638.8, 835.4, 878.1, 877.5, 814.3, 581.8, 541.7, 550.7, 671.3, 709.3, 703.2, 686.8, 724.6, 507.0, 504.4, 749.6, 701.3, 709.5, 655.9, 470.5, 404.3, 368.1, 372.5, 336.9, 326.5, 331.6, 507.5, 508.8, 441.9, 273.0, 372.3, 377.5, 292.4, 345.5, 348.9, 241.9, 217.8, 137.3, 100.6, 99.8, 95.1, 67.0, 65.3, 67.4, 71.0, 77.9, 60.9, 54.7, 61.3, 50.9, 39.0, 26.1, 18.5, 16.5, 13.0, 9.6, 6.4, 1.2], "dc_voltage": [657.7, 697.8, 686.5, 743.7, 753.2, 759.3, 768.8, 775.6, 779.8, 783.4, 787.4, 791.9, 796.0, 798.2, 799.0, 801.5, 805.5, 804.4, 803.0, 802.7, 806.0, 808.4, 805.4, 803.8, 803.2, 803.9, 803.7, 804.4, 803.9, 803.9, 803.8, 802.1, 802.8, 800.0, 800.7, 802.6, 816.0, 819.5, 813.8, 809.0, 804.9, 802.7, 799.3, 795.6, 792.0, 790.5, 787.6, 785.4, 784.3, 784.4, 782.0, 770.9, 769.6, 791.9, 771.4, 775.6, 782.1, 795.1, 808.1, 796.6, 788.9, 800.7, 788.6, 784.5, 778.0, 780.5, 776.9, 776.6, 775.0, 775.2, 774.7, 773.0, 772.3, 771.9, 770.8, 768.5, 767.0, 767.5, 770.0, 769.5, 767.3, 768.0, 767.7, 764.8, 772.1, 759.4, 770.0, 786.1, 786.1, 784.2, 783.5, 783.6, 785.3, 787.0, 787.9, 786.3, 787.4, 786.8, 789.3, 780.4, 800.0, 797.1, 793.3, 791.2, 784.3, 793.2, 797.8, 805.6, 803.1, 801.2, 800.9, 803.0, 793.1, 801.4, 811.8, 804.0, 802.4, 798.0, 792.1, 793.8, 798.0, 800.8, 799.3, 802.3, 802.6, 814.1, 808.3, 800.4, 788.4, 803.0, 803.4, 794.4, 803.8, 803.4, 795.6, 795.4, 784.5, 777.7, 779.8, 778.1, 767.6, 770.0, 769.9, 773.3, 775.5, 771.0, 765.4, 773.1, 767.9, 757.7, 745.8, 733.8, 733.3, 724.1, 714.1, 691.1, 585.4], "dc_current": [0.7, 0.8, 3.3, 1.3, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.1, 1.0, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.0, 1.0, 1.0, 1.1, 1.0, 1.5, 1.0, 1.1, 1.5, 4.0, 1.3, 1.3, 1.3, 1.3, 1.3, 1.3, 1.2, 1.3, 1.3, 1.3, 1.3, 1.3, 1.3, 3.3, 3.5, 4.4, 4.3, 5.1, 1.8, 3.2, 2.5, 1.9, 2.2, 2.0, 2.0, 1.9, 1.8, 1.9, 2.0, 3.8, 3.1, 4.2, 2.1, 2.0, 2.0, 2.0, 2.0, 2.5, 2.0, 1.9, 1.9, 2.0, 1.9, 2.1, 4.2, 4.2, 4.3, 4.2, 2.4, 2.0, 2.0, 2.0, 1.9, 2.0, 2.0, 2.0, 1.9, 1.9, 1.9, 1.9, 2.0, 2.0, 1.9, 2.0, 1.9, 2.0, 2.0, 1.8, 1.7, 2.2, 1.7, 9.6, 15.7, 14.3, 12.5, 13.2, 14.0, 11.5, 11.3, 13.3, 14.8, 12.9, 13.2, 15.0, 15.4, 14.7, 14.7, 18.8, 14.4, 4.4, 4.5, 1.6, 1.6, 2.9, 4.7, 3.9, 4.4, 4.8, 6.6, 5.8, 2.8, 5.0, 3.3, 1.6, 1.6, 1.5, 1.9, 1.6, 1.5, 1.3, 1.3, 1.4], "ctrl_ratio": [0.0, 0.0, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.2, 0.5, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4, 0.4, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.4, 0.4, 0.4, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.9, 2.0, 1.0, 1.5, 2.0, 1.1, 2.0, 1.6, 1.8, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.8, 0.6, 0.8, 0.0, 0.0, 0.0, 0.5, 0.4, 0.4, 0.8, 0.5, 0.8, 0.8, 0.4, 0.6, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.4]}, "2026-08-25": {"times": ["05:30", "05:35", "05:40", "05:45", "05:50", "05:55", "06:00", "06:05", "06:10", "06:15", "06:20", "06:25", "06:30", "06:35", "06:40", "06:45", "06:50", "06:55", "07:00", "07:05", "07:10", "07:15", "07:20", "07:25", "07:30", "07:35", "07:40", "07:45", "07:50", "07:55", "08:00", "08:05", "08:10", "08:15", "08:20", "08:25", "08:30", "08:35", "08:40", "08:45", "08:50", "08:55", "09:00", "09:05", "09:10", "09:15", "09:20", "09:25", "09:30", "09:35", "09:40", "09:45", "09:50", "09:55", "10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30", "10:35", "10:40", "10:45", "10:50", "10:55", "11:00", "11:05", "11:10", "11:15", "11:20", "11:25", "11:30", "11:35", "11:40", "11:45", "11:50", "11:55", "12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30", "12:35", "12:40", "12:45", "12:50", "12:55", "13:00", "13:05", "13:10", "13:15", "13:20", "13:25", "13:30", "13:35", "13:40", "13:45", "13:50", "13:55", "14:00", "14:05", "14:10", "14:15", "14:20", "14:25", "14:30", "14:35", "14:40", "14:45", "14:50", "14:55", "15:00", "15:05", "15:10", "15:15", "15:20", "15:25", "15:30", "15:35", "15:40", "15:45", "15:50", "15:55", "16:00", "16:05", "16:10", "16:15", "16:20", "16:25", "16:30", "16:35", "16:40", "16:45", "16:50", "16:55", "17:00", "17:05", "17:10", "17:15", "17:20", "17:25", "17:30", "17:35", "17:40", "17:45", "17:50", "17:55", "18:00", "18:05", "18:10", "18:15", "18:20", "18:25", "18:30"], "ac_power": [0.0, 0.0, 0.0, 0.0, 0.1, 0.4, 0.6, 0.0, 0.0, 0.0, 0.1, 0.5, 1.8, 2.2, 2.4, 3.2, 3.5, 3.4, 2.2, 2.0, 3.0, 3.7, 3.2, 3.4, 4.7, 3.8, 4.6, 3.2, 3.5, 4.6, 4.7, 5.4, 6.1, 5.0, 0.2, 0.1, 0.0, 0.0, 4.0, 10.2, 8.5, 7.2, 3.3, 4.4, 4.7, 5.6, 5.2, 11.5, 13.4, 11.5, 11.4, 5.3, 1.4, 0.5, 0.2, 0.0, 0.0, 0.1, 0.0, 0.2, 0.0, 0.2, 0.2, 5.4, 6.8, 2.5, 2.5, 2.3, 1.7, 0.8, 0.6, 0.6, 0.1, 0.0, 0.2, 0.0, 0.0, 0.2, 1.8, 8.7, 6.1, 0.1, 0.0, 0.5, 0.1, 1.0, 0.4, 0.8, 0.2, 0.2, 0.1, 3.4, 9.2, 2.3, 0.0, 0.0, 0.0, 0.0, 0.6, 0.1, 0.0, 0.1, 0.0, 0.0, 0.0, 1.8, 8.2, 3.0, 0.0, 0.0, 1.7, 3.1, 2.0, 0.1, 0.5, 0.6, 0.1, 0.1, 5.4, 3.2, 1.1, 0.5, 0.8, 0.1, 1.0, 1.8, 1.3, 0.5, 0.0, 1.4, 8.5, 16.4, 2.3, 0.6, 3.4, 3.4, 4.0, 5.2, 5.4, 5.6, 5.5, 7.2, 4.7, 7.3, 9.1, 10.0, 9.8, 9.6, 7.4, 5.4, 3.1, 1.7, 0.8, 0.2, 0.1, 0.0, 0.0], "dc_power": [0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.7, 0.0, 0.0, 0.0, 0.0, 1.0, 2.3, 2.5, 3.2, 3.8, 4.3, 4.0, 2.6, 2.5, 3.7, 4.3, 3.9, 4.4, 5.2, 4.9, 4.8, 4.6, 5.6, 5.3, 5.6, 6.3, 6.9, 4.6, 0.0, 0.0, 0.0, 0.8, 6.1, 12.8, 9.4, 8.9, 4.6, 6.1, 6.1, 6.1, 6.6, 12.7, 14.7, 12.4, 12.9, 5.5, 2.3, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7, 6.3, 8.2, 3.1, 3.2, 4.2, 2.6, 1.6, 1.7, 1.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.4, 9.9, 6.4, 0.0, 0.0, 0.3, 0.0, 1.5, 0.2, 0.8, 0.7, 0.0, 0.0, 4.4, 10.5, 1.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 10.1, 1.7, 0.0, 0.0, 2.8, 5.0, 2.3, 0.7, 0.1, 1.5, 0.0, 0.5, 7.0, 4.4, 1.6, 0.8, 1.5, 0.0, 0.8, 3.5, 1.4, 0.8, 0.0, 2.1, 12.5, 16.8, 3.2, 0.8, 4.7, 5.1, 5.2, 6.9, 6.8, 7.0, 6.8, 7.7, 5.7, 8.9, 10.1, 11.1, 11.0, 10.4, 8.0, 5.7, 3.6, 2.0, 0.9, 0.3, 0.0, 0.0, 0.0], "irradiance": [2.0, 1.8, 2.0, 2.2, 2.8, 3.6, 4.1, 5.2, 7.3, 7.4, 6.7, 6.9, 7.3, 7.7, 8.9, 9.6, 10.1, 9.7, 7.6, 7.7, 9.5, 10.6, 9.8, 10.6, 12.2, 11.8, 11.6, 12.3, 11.1, 12.6, 13.4, 14.3, 15.8, 17.7, 19.4, 22.8, 27.2, 34.4, 44.5, 55.4, 64.2, 75.2, 86.2, 91.6, 98.1, 101.8, 102.4, 109.5, 108.2, 91.0, 86.9, 94.7, 131.9, 153.7, 136.3, 113.9, 110.6, 97.3, 86.5, 84.8, 70.9, 63.7, 69.4, 57.9, 53.2, 45.6, 52.8, 64.9, 75.2, 94.1, 111.5, 127.8, 148.3, 173.2, 192.7, 202.5, 203.1, 202.1, 201.3, 195.4, 185.1, 176.6, 167.2, 160.8, 157.1, 155.1, 152.2, 150.6, 148.7, 148.6, 150.4, 148.1, 140.2, 123.5, 101.9, 89.5, 75.8, 68.0, 47.7, 42.9, 51.7, 33.0, 31.0, 25.4, 33.6, 48.6, 54.2, 54.9, 54.4, 56.3, 67.2, 72.5, 72.3, 72.2, 67.4, 60.2, 52.0, 39.4, 35.0, 33.5, 30.8, 28.9, 30.9, 32.2, 34.5, 39.7, 46.1, 52.9, 55.0, 53.4, 48.2, 46.2, 45.0, 45.5, 47.8, 48.2, 46.4, 42.2, 38.7, 34.6, 35.0, 35.6, 32.6, 27.3, 27.1, 28.3, 25.7, 21.3, 17.2, 12.7, 9.0, 6.4, 4.1, 2.8, 2.0, 1.9, 1.9], "dc_voltage": [3.6, 5.6, 8.3, 257.2, 364.1, 400.4, 557.9, 641.9, 681.5, 683.4, 686.4, 622.8, 549.7, 563.4, 563.7, 554.4, 559.7, 558.4, 548.1, 545.2, 553.5, 562.5, 561.6, 564.7, 576.3, 573.5, 571.5, 619.6, 588.4, 572.9, 580.6, 579.2, 587.1, 652.9, 744.9, 752.2, 760.0, 769.1, 770.5, 771.0, 784.0, 791.9, 800.6, 801.8, 804.2, 805.5, 804.5, 802.8, 800.9, 794.6, 792.6, 801.4, 815.4, 820.1, 815.1, 809.6, 809.5, 805.3, 801.0, 800.5, 794.2, 790.1, 792.8, 780.0, 773.1, 774.3, 781.0, 788.6, 795.0, 803.6, 809.2, 813.6, 818.4, 823.1, 826.0, 827.4, 827.0, 825.8, 824.2, 821.4, 821.2, 821.9, 820.3, 818.9, 818.4, 817.9, 817.6, 816.7, 816.4, 816.8, 817.3, 815.0, 809.7, 809.3, 803.8, 799.8, 794.0, 791.1, 775.5, 774.6, 781.0, 761.4, 759.8, 753.1, 766.3, 777.5, 771.7, 782.5, 784.4, 786.0, 791.1, 791.5, 793.0, 793.8, 791.3, 786.2, 781.9, 771.0, 754.8, 758.2, 760.2, 759.1, 761.0, 764.8, 767.0, 769.8, 778.2, 783.8, 785.5, 782.1, 753.6, 734.4, 771.7, 778.3, 775.7, 775.4, 773.7, 764.4, 760.8, 753.8, 755.0, 752.9, 753.7, 686.0, 694.8, 686.1, 650.7, 607.1, 592.8, 587.6, 571.9, 556.7, 541.6, 432.5, 395.1, 258.4, 122.2], "dc_current": [0.0, 0.0, 0.0, 0.0, 0.1, 1.0, 1.4, 0.5, 0.6, 0.6, 0.6, 1.6, 3.4, 3.5, 4.3, 5.3, 6.1, 5.5, 3.6, 3.6, 5.2, 6.0, 5.6, 6.1, 7.3, 6.9, 6.9, 6.1, 6.0, 7.6, 7.9, 8.8, 9.4, 6.4, 0.6, 0.6, 0.7, 1.2, 7.3, 14.3, 9.5, 9.0, 5.0, 5.8, 6.2, 5.8, 6.2, 13.6, 16.3, 13.5, 14.1, 5.7, 2.6, 1.7, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.6, 6.2, 8.2, 3.0, 3.1, 3.7, 2.5, 1.7, 1.7, 1.7, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 3.9, 10.0, 7.0, 1.3, 1.3, 1.6, 1.4, 2.3, 1.5, 1.9, 1.7, 1.4, 1.4, 5.2, 10.4, 2.8, 1.4, 1.3, 1.2, 1.2, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.2, 3.6, 10.6, 2.6, 1.1, 1.1, 2.9, 4.6, 2.6, 1.5, 1.2, 2.1, 1.1, 1.4, 7.1, 4.6, 2.2, 1.7, 2.1, 1.1, 1.6, 3.5, 2.1, 1.6, 1.1, 2.6, 15.1, 20.9, 4.8, 1.7, 4.5, 4.8, 5.0, 7.1, 7.2, 7.3, 7.3, 8.6, 6.0, 11.5, 13.4, 15.2, 16.4, 16.8, 13.9, 10.0, 6.4, 4.1, 2.2, 0.7, 0.0, 0.0, 0.0], "ctrl_ratio": [1.7, 1.7, 0.0, 0.0, 8.4, 30.5, 0.0, 0.0, 0.0, 0.0, 0.0, 3.8, 16.3, 23.1, 38.7, 52.0, 53.2, 59.2, 79.9, 94.2, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 0.4, 0.9, 13.8, 35.3, 52.6, 68.2, 0.0, 0.0, 0.0, 0.0, 0.4, 2.0, 2.0, 1.2, 1.2, 0.3, 0.8, 0.8, 0.8, 1.2, 1.7, 2.1, 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.9, 1.2, 0.4, 0.0, 0.4, 0.1, 0.1, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.2, 1.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.6, 1.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.2, 1.8, 0.0, 0.0, 0.0, 0.8, 0.8, 0.0, 0.4, 0.1, 0.4, 0.0, 0.3, 0.8, 0.4, 0.0, 0.0, 0.1, 0.0, 0.0, 0.8, 0.4, 0.0, 0.0, 0.5, 2.9, 2.2, 0.0, 0.4, 0.5, 0.6, 0.4, 1.2, 0.8, 0.8, 1.4, 0.4, 0.8, 2.0, 1.6, 1.9, 2.0, 12.9, 22.4, 32.4, 81.6, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]}, "2026-10-01": {"times": ["05:30", "05:35", "05:40", "05:45", "05:50", "05:55", "06:00", "06:05", "06:10", "06:15", "06:20", "06:25", "06:30", "06:35", "06:40", "06:45", "06:50", "06:55", "07:00", "07:05", "07:10", "07:15", "07:20", "07:25", "07:30", "07:35", "07:40", "07:45", "07:50", "07:55", "08:00", "08:05", "08:10", "08:15", "08:20", "08:25", "08:30", "08:35", "08:40", "08:45", "08:50", "08:55", "09:00", "09:05", "09:10", "09:15", "09:20", "09:25", "09:30", "09:35", "09:40", "09:45", "09:50", "09:55", "10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30", "10:35", "10:40", "10:45", "10:50", "10:55", "11:00", "11:05", "11:10", "11:15", "11:20", "11:25", "11:30", "11:35", "11:40", "11:45", "11:50", "11:55", "12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30", "12:35", "12:40", "12:45", "12:50", "12:55", "13:00", "13:05", "13:10", "13:15", "13:20", "13:25", "13:30", "13:35", "13:40", "13:45", "13:50", "13:55", "14:00", "14:05", "14:10", "14:15", "14:20", "14:25", "14:30", "14:35", "14:40", "14:45", "14:50", "14:55", "15:00", "15:05", "15:10", "15:15", "15:20", "15:25", "15:30", "15:35", "15:40", "15:45", "15:50", "15:55", "16:00", "16:05", "16:10", "16:15", "16:20", "16:25", "16:30", "16:35", "16:40", "16:45", "16:50", "16:55", "17:00", "17:05", "17:10", "17:15", "17:20", "17:25", "17:30", "17:35", "17:40", "17:45", "17:50", "17:55", "18:00", "18:05", "18:10", "18:15", "18:20", "18:25", "18:30"], "ac_power": [0.0, 0.0, 0.0, 0.7, 1.2, 2.6, 5.0, 7.5, 10.8, 15.8, 20.7, 26.4, 32.2, 39.1, 45.0, 51.9, 60.2, 68.5, 76.3, 84.5, 91.6, 101.1, 108.4, 121.8, 130.4, 144.1, 148.5, 164.1, 175.0, 187.7, 195.6, 213.6, 225.4, 231.4, 242.0, 244.4, 251.5, 262.7, 273.4, 273.1, 277.9, 282.1, 328.9, 331.3, 337.8, 344.9, 360.7, 166.4, 122.2, 315.0, 334.0, 347.6, 175.3, 374.1, 386.1, 397.1, 397.4, 403.7, 398.3, 399.8, 359.8, 300.7, 429.4, 332.4, 221.9, 352.6, 423.7, 445.9, 448.1, 447.4, 271.3, 204.7, 158.6, 319.2, 376.8, 188.0, 362.0, 312.9, 424.6, 416.5, 417.1, 419.6, 409.7, 412.0, 363.6, 154.4, 180.8, 376.4, 376.9, 331.8, 399.5, 394.6, 378.6, 365.3, 371.4, 357.7, 362.2, 356.5, 358.2, 353.2, 339.5, 342.8, 333.9, 332.0, 322.9, 315.9, 14.7, 261.7, 290.3, 286.4, 277.8, 271.0, 267.6, 255.6, 249.3, 239.8, 234.2, 222.0, 214.6, 204.1, 193.9, 184.9, 173.8, 164.1, 155.6, 146.8, 137.5, 129.0, 116.4, 105.8, 96.2, 88.9, 80.4, 72.4, 65.0, 57.1, 51.1, 44.8, 38.3, 33.1, 27.1, 21.6, 16.4, 11.8, 8.5, 5.3, 2.6, 1.0, 0.5, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "dc_power": [0.0, 0.0, 0.0, 0.7, 1.7, 3.5, 5.9, 8.5, 11.9, 17.1, 22.4, 28.0, 34.2, 41.0, 46.8, 54.3, 62.2, 71.0, 78.9, 87.2, 94.8, 104.3, 111.0, 125.8, 134.6, 147.8, 152.7, 168.9, 178.8, 192.3, 200.6, 219.5, 229.9, 235.8, 248.3, 247.6, 257.9, 268.6, 279.4, 275.3, 290.0, 293.6, 334.7, 338.5, 345.8, 352.5, 367.3, 145.6, 136.0, 335.4, 340.2, 338.3, 186.5, 387.0, 393.9, 405.7, 406.1, 410.9, 404.9, 407.2, 344.2, 330.5, 442.4, 342.6, 228.9, 372.9, 423.0, 454.1, 457.5, 457.1, 249.7, 214.4, 168.8, 338.4, 378.6, 199.3, 354.8, 330.3, 430.0, 425.1, 424.0, 425.6, 418.5, 419.2, 347.1, 157.9, 173.9, 395.8, 350.4, 358.2, 408.0, 401.2, 384.1, 372.2, 376.7, 365.3, 369.1, 362.4, 365.5, 359.0, 345.1, 348.1, 340.9, 336.4, 328.0, 320.7, 0.0, 288.3, 295.0, 291.0, 282.7, 275.9, 270.7, 259.9, 252.7, 243.8, 237.0, 224.4, 217.7, 207.0, 196.3, 187.0, 176.3, 166.5, 157.7, 147.9, 140.3, 129.8, 118.0, 106.7, 98.0, 89.7, 81.2, 73.7, 65.8, 57.7, 52.0, 45.2, 39.2, 33.4, 27.6, 22.1, 16.8, 12.4, 8.8, 5.6, 2.9, 1.2, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "irradiance": [0.0, 0.0, 0.0, 0.0, 1.3, 4.6, 9.2, 14.5, 22.2, 35.0, 46.5, 58.6, 72.3, 86.9, 100.5, 117.2, 134.0, 150.0, 165.6, 182.5, 197.8, 218.8, 234.5, 261.0, 276.5, 298.2, 306.7, 341.4, 361.1, 384.4, 399.0, 432.4, 455.8, 464.7, 490.8, 491.9, 508.4, 530.3, 550.4, 528.3, 498.5, 474.6, 668.9, 681.8, 692.5, 714.2, 754.0, 347.3, 281.9, 700.3, 600.5, 620.7, 325.6, 778.9, 805.5, 833.3, 843.0, 859.1, 850.3, 866.3, 737.6, 568.1, 886.7, 530.9, 367.7, 656.2, 924.6, 956.8, 975.1, 970.0, 444.6, 307.6, 296.2, 515.6, 740.1, 469.0, 818.2, 649.0, 883.8, 884.8, 885.7, 889.8, 878.6, 882.2, 786.7, 302.7, 326.2, 793.6, 798.2, 626.3, 837.0, 825.5, 794.1, 771.3, 775.3, 742.9, 752.0, 740.0, 744.1, 731.2, 702.7, 705.0, 688.8, 680.8, 659.2, 645.2, 619.2, 604.9, 594.8, 588.5, 570.7, 551.8, 540.6, 526.3, 509.6, 489.6, 476.3, 457.1, 439.7, 419.2, 404.1, 388.2, 370.6, 350.4, 336.7, 318.2, 300.9, 281.5, 259.5, 239.1, 219.9, 208.1, 190.0, 173.1, 156.8, 115.5, 54.8, 49.0, 44.7, 39.8, 32.9, 30.3, 24.9, 18.9, 13.2, 7.2, 2.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "dc_voltage": [7.6, 120.4, 361.6, 464.1, 557.7, 566.9, 571.4, 589.0, 622.7, 649.7, 661.1, 674.4, 679.4, 682.1, 687.7, 692.5, 694.1, 697.8, 694.2, 694.2, 697.6, 696.4, 697.2, 699.4, 688.6, 676.1, 677.4, 681.9, 682.2, 679.9, 678.6, 675.7, 674.4, 673.1, 670.0, 666.6, 666.2, 661.9, 657.9, 663.4, 662.2, 661.4, 655.7, 652.3, 650.3, 647.7, 644.5, 644.8, 661.5, 665.9, 656.7, 652.7, 647.6, 652.9, 646.6, 640.5, 634.8, 632.7, 630.4, 628.6, 630.1, 635.2, 630.6, 631.7, 633.4, 643.2, 637.7, 631.0, 625.5, 624.2, 626.5, 640.4, 657.2, 663.1, 651.7, 649.6, 656.0, 653.1, 646.3, 639.1, 636.2, 634.3, 634.3, 632.7, 632.0, 644.4, 661.1, 660.8, 650.0, 652.7, 651.5, 650.3, 648.7, 648.8, 650.3, 649.9, 651.2, 652.2, 652.6, 654.8, 655.9, 655.8, 657.7, 658.1, 659.4, 661.4, 804.6, 664.6, 665.1, 660.1, 657.6, 660.9, 664.3, 668.8, 661.2, 658.5, 662.9, 660.7, 657.2, 659.6, 659.0, 658.0, 655.5, 653.4, 652.9, 649.8, 637.5, 635.2, 635.0, 633.4, 624.8, 628.9, 634.8, 638.4, 652.4, 650.1, 649.9, 660.7, 656.4, 650.6, 653.3, 638.1, 620.7, 621.0, 611.8, 594.9, 577.3, 551.9, 439.1, 320.4, 128.6, 67.1, 0.0, 0.0, 0.0, 0.0, 0.0], "dc_current": [0.0, 0.0, 0.1, 1.3, 2.6, 4.8, 8.3, 12.0, 16.7, 24.5, 31.8, 39.8, 48.0, 57.8, 65.7, 76.2, 87.3, 99.3, 111.2, 123.2, 133.9, 148.6, 158.2, 179.1, 194.1, 216.1, 223.7, 247.0, 262.2, 282.9, 296.5, 325.4, 342.0, 351.2, 371.9, 373.3, 388.1, 406.8, 424.6, 417.3, 440.3, 445.7, 512.6, 520.4, 533.1, 546.2, 572.0, 231.0, 207.9, 506.5, 520.5, 521.5, 288.4, 594.8, 612.3, 636.4, 641.8, 652.8, 645.3, 650.7, 550.6, 521.3, 701.8, 542.4, 360.9, 580.3, 665.6, 720.8, 732.3, 733.6, 402.3, 337.4, 258.0, 511.8, 583.5, 308.6, 546.0, 504.2, 665.5, 665.5, 666.9, 671.9, 660.1, 663.2, 552.1, 247.5, 265.3, 600.0, 540.7, 547.8, 626.6, 618.1, 594.2, 576.6, 582.2, 564.2, 570.0, 558.7, 562.3, 551.9, 528.9, 534.2, 521.7, 515.1, 501.4, 489.0, 0.1, 442.6, 446.5, 442.8, 432.0, 420.2, 411.0, 392.3, 384.7, 371.2, 359.3, 341.9, 332.4, 315.2, 299.3, 285.7, 270.1, 256.4, 242.2, 227.3, 218.0, 202.9, 184.4, 167.6, 155.4, 140.0, 126.4, 115.5, 101.4, 90.2, 82.2, 70.1, 61.8, 54.1, 44.2, 36.5, 30.1, 22.6, 17.0, 12.6, 8.8, 5.4, 3.2, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "ctrl_ratio": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]}};
+
+// --- Slide Deck Navigation Engine ---
+const totalSlides = 12;
+let currentSlide = 0;
+let isDocView = false;
+let isOwnerMode = false;
+const slides = document.querySelectorAll('.slide');
+const navtabs = document.querySelectorAll('.navtab');
+const progressBar = document.getElementById('progressBar');
+const slideCounter = document.getElementById('slideCounter');
+
+function updateDeck() {
+  if (isDocView) return;
+  slides.forEach((s, idx) => {
+    if (idx === currentSlide) {
+      s.classList.add('active');
+    } else {
+      s.classList.remove('active');
+    }
+  });
+
+  // Update Nav tabs
+  navtabs.forEach((t, idx) => {
+    if (idx === currentSlide) {
+      t.classList.add('active');
+    } else {
+      t.classList.remove('active');
+    }
+  });
+
+  // Update counter & progress
+  slideCounter.innerText = `Slide ${currentSlide + 1} / ${totalSlides}`;
+  progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+
+  // Trigger charts/map resize
+  if (currentSlide === 3) {
+    setTimeout(() => {
+      if (window.monthlyChartInstance) window.monthlyChartInstance.resize();
+      if (window.dailyStatusChartInstance) window.dailyStatusChartInstance.resize();
+    }, 150);
+  }
+  if (currentSlide === 4 && window.plantMap) {
+    setTimeout(() => { window.plantMap.invalidateSize(); }, 150);
+  }
+  if (currentSlide === 5) {
+    setTimeout(() => { if (window.profileChartInstance) window.profileChartInstance.resize(); }, 150);
+  }
+  if (currentSlide === 10) {
+    setTimeout(() => { if (window.dcfChartInstance) window.dcfChartInstance.resize(); }, 150);
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToSlide(idx) {
+  if (isDocView) {
+    const target = document.getElementById(`slide-${idx}`);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (idx >= 0 && idx < totalSlides) {
+    currentSlide = idx;
+    updateDeck();
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++;
+    updateDeck();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    updateDeck();
+  }
+}
+
+// Keyboard Navigation
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') nextSlide();
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+  if (e.key === 'Home') goToSlide(0);
+});
+
+// View Mode Toggle (Deck vs Doc)
+function toggleViewMode() {
+  isDocView = !isDocView;
+  const btn = document.getElementById('viewModeBtn');
+  if (isDocView) {
+    document.body.classList.add('doc-view-mode');
+    btn.innerHTML = '<span>🖥️ 簡報切換模式</span>';
+    // Resize all charts
+    setTimeout(() => {
+      if (window.monthlyChartInstance) window.monthlyChartInstance.resize();
+      if (window.dailyStatusChartInstance) window.dailyStatusChartInstance.resize();
+      if (window.profileChartInstance) window.profileChartInstance.resize();
+      if (window.dcfChartInstance) window.dcfChartInstance.resize();
+      if (window.plantMap) window.plantMap.invalidateSize();
+    }, 200);
+  } else {
+    document.body.classList.remove('doc-view-mode');
+    btn.innerHTML = '<span>📄 完整報告模式</span>';
+    updateDeck();
+  }
+}
+
+// Report Mode Toggle (Internal O&M vs Investor Decision)
+function toggleReportMode() {
+  isOwnerMode = !isOwnerMode;
+  const btn = document.getElementById('modeToggleBtn');
+  const heroLabel = document.getElementById('heroModeLabel');
+  if (isOwnerMode) {
+    btn.classList.add('owner');
+    btn.innerHTML = '<span>💼 模式：投資決策版</span>';
+    if (heroLabel) heroLabel.innerText = '投資決策版・儲能資產賦能';
+  } else {
+    btn.classList.remove('owner');
+    btn.innerHTML = '<span>🔄 模式：內部維運版</span>';
+    if (heroLabel) heroLabel.innerText = '內部維運版・對策分析中';
+  }
+}
+
+// Modals
+function openRawDataModal() {
+  document.getElementById('rawDataModal').classList.add('active');
+  renderRawTable();
+}
+function closeRawDataModal() {
+  document.getElementById('rawDataModal').classList.remove('active');
+}
+function openReqModal() {
+  document.getElementById('reqModal').classList.add('active');
+}
+function closeReqModal() {
+  document.getElementById('reqModal').classList.remove('active');
+}
+
+// Render Raw Table
+function renderRawTable() {
+  const tbody = document.getElementById('rawDataTableBody');
+  if (!tbody || !dailyData.length) return;
+  
+  tbody.innerHTML = dailyData.map(r => `
+    <tr>
+      <td><strong>${r.date}</strong></td>
+      <td>${r.weekday}</td>
+      <td class="num">${r.actual_kwh.toLocaleString()}</td>
+      <td class="num">${r.expected_kwh.toLocaleString()}</td>
+      <td class="num" style="color:var(--coral); font-weight:700;">${r.lost_kwh.toLocaleString()}</td>
+      <td class="num">${r.irr_sum}</td>
+      <td class="num">${r.ey}</td>
+      <td class="num">${r.pr}%</td>
+      <td class="num">${r.ctrl_mean}%</td>
+      <td class="num">${r.ac_max}</td>
+      <td class="num">${r.v_max}</td>
+      <td><span class="badge ${r.badge}">${r.status}</span></td>
+    </tr>
+  `).join('');
+}
+
+function filterRawTable() {
+  const q = document.getElementById('rawSearchInput').value.toLowerCase();
+  const statusFilter = document.getElementById('rawStatusFilter').value;
+  const rows = document.querySelectorAll('#rawDataTableBody tr');
+  rows.forEach(tr => {
+    const text = tr.innerText.toLowerCase();
+    const matchesQ = text.includes(q);
+    const matchesStatus = (statusFilter === 'ALL') || text.includes(statusFilter);
+    tr.style.display = (matchesQ && matchesStatus) ? '' : 'none';
+  });
+}
+
+function exportRawCsv() {
+  let csv = "\uFEFF日期,星期,實際發電(kWh),80%PR應發(kWh),損失度數(kWh),日射量(kWh/m2),等價時數Ey,實測PR(%),平均控制比率(%),AC峰值(kW),DC峰值(V),運轉判定\n";
+  dailyData.forEach(r => {
+    csv += `${r.date},${r.weekday},${r.actual_kwh},${r.expected_kwh},${r.lost_kwh},${r.irr_sum},${r.ey},${r.pr},${r.ctrl_mean},${r.ac_max},${r.v_max},${r.status}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `世堃塑膠麻豆廠_92天發電對帳數據.csv`;
+  link.click();
+}
+
+function copyRawTable() {
+  let txt = "日期\t星期\t實際發電(kWh)\t80%PR應發(kWh)\t損失度數(kWh)\t日射量\tEy\tPR%\t控制比率\tAC峰值\t判定\n";
+  dailyData.forEach(r => {
+    txt += `${r.date}\t${r.weekday}\t${r.actual_kwh}\t${r.expected_kwh}\t${r.lost_kwh}\t${r.irr_sum}\t${r.ey}\t${r.pr}%\t${r.ctrl_mean}%\t${r.ac_max}\t${r.status}\n`;
+  });
+  navigator.clipboard.writeText(txt).then(() => alert("✅ 數據表格已成功複製至剪貼簿！"));
+}
+
+function copyDataRequirementsText() {
+  const txt = document.getElementById('reqTextContent').innerText;
+  navigator.clipboard.writeText(txt).then(() => alert("✅ 資料需求規格文字已複製至剪貼簿，可直接發送給業主與廠務！"));
+}
+
+// --- ECharts Initializations ---
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Monthly Chart (Slide 3)
+  const monthlyEl = document.getElementById('monthlyChart');
+  if (monthlyEl) {
+    window.monthlyChartInstance = echarts.init(monthlyEl);
+    const months = monthlyData.map(m => m.month);
+    const actual = monthlyData.map(m => m.actual_kwh);
+    const expected = monthlyData.map(m => m.expected_kwh);
+    const lost = monthlyData.map(m => m.lost_kwh);
+    const prs = monthlyData.map(m => m.pr);
+
+    window.monthlyChartInstance.setOption({
+      tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+      legend: { data: ['實際發電 (kWh)', '80%PR應發 (kWh)', '棄光損失度數 (kWh)', 'PR值 (%)'], top: 0 },
+      grid: { left: '4%', right: '4%', bottom: '8%', containLabel: true },
+      xAxis: { type: 'category', data: months, axisLabel: { rotate: 30 } },
+      yAxis: [
+        { type: 'value', name: '度數 (kWh)', axisLabel: { formatter: '{value}' } },
+        { type: 'value', name: 'PR (%)', min: 0, max: 100, axisLabel: { formatter: '{value}%' } }
+      ],
+      series: [
+        { name: '實際發電 (kWh)', type: 'bar', data: actual, itemStyle: { color: '#1968AD' } },
+        { name: '80%PR應發 (kWh)', type: 'line', data: expected, itemStyle: { color: '#1BB1BF' }, lineStyle: { type: 'dashed', width: 2 } },
+        { name: '棄光損失度數 (kWh)', type: 'bar', data: lost, itemStyle: { color: '#D95F45' } },
+        { name: 'PR值 (%)', type: 'line', yAxisIndex: 1, data: prs, itemStyle: { color: '#E09A2B' }, lineStyle: { width: 3 } }
+      ]
+    });
+  }
+
+  // 2. Daily Status Chart (Slide 3)
+  const dailyEl = document.getElementById('dailyStatusChart');
+  if (dailyEl) {
+    window.dailyStatusChartInstance = echarts.init(dailyEl);
+    window.dailyStatusChartInstance.setOption({
+      tooltip: { trigger: 'item', formatter: '{b}: {c} 天 ({d}%)' },
+      legend: { orient: 'vertical', left: 'left', top: 'middle' },
+      series: [
+        {
+          name: '運轉狀態',
+          type: 'pie',
+          radius: ['45%', '75%'],
+          center: ['65%', '50%'],
+          avoidLabelOverlap: false,
+          itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
+          label: { show: false },
+          data: [
+            { value: 29, name: '正常全載 (>=90%)', itemStyle: { color: '#2E7D32' } },
+            { value: 24, name: '部分降載 (50-90%)', itemStyle: { color: '#E09A2B' } },
+            { value: 30, name: '嚴重限電 (15-50%)', itemStyle: { color: '#C2410C' } },
+            { value: 9, name: '週末/停工歸零 (<15%)', itemStyle: { color: '#D95F45' } }
+          ]
+        }
+      ]
+    });
+  }
+
+  // 3. Profile Chart (Slide 5)
+  initProfileChart();
+
+  // 4. DCF Chart (Slide 10)
+  const dcfEl = document.getElementById('dcfChart');
+  if (dcfEl) {
+    window.dcfChartInstance = echarts.init(dcfEl);
+    const years = Array.from({ length: 20 }, (_, i) => `Y${i + 1}`);
+    // Existing baseline: 0 net incremental benefit
+    const baseline = Array(20).fill(0);
+    // BESS 200kW/500kWh: Capex -6.5M, Year 1 savings +1.35M (deg 0.8%/yr), Opex -0.15M/yr
+    let cumBess = -6.5;
+    const bessCum = [];
+    for (let y = 1; y <= 20; y++) {
+      const net = (1.35 * Math.pow(0.992, y - 1)) - 0.15;
+      cumBess += net;
+      bessCum.push(roundTo(cumBess, 2));
+    }
+
+    window.dcfChartInstance.setOption({
+      tooltip: { trigger: 'axis' },
+      legend: { data: ['現況維持棄光 (NT$ 0)', '導入 200kW/500kWh 儲能累計淨收益 (百萬NT$)'], top: 0 },
+      grid: { left: '4%', right: '4%', bottom: '8%', containLabel: true },
+      xAxis: { type: 'category', data: years },
+      yAxis: { type: 'value', name: '百萬新台幣 (Million NTD)' },
+      series: [
+        { name: '現況維持棄光 (NT$ 0)', type: 'line', data: baseline, lineStyle: { type: 'dashed', color: '#94a3b8' } },
+        {
+          name: '導入 200kW/500kWh 儲能累計淨收益 (百萬NT$)',
+          type: 'line',
+          data: bessCum,
+          itemStyle: { color: '#2E7D32' },
+          lineStyle: { width: 3 },
+          areaStyle: { color: 'rgba(46, 125, 50, 0.12)' },
+          markPoint: {
+            data: [
+              { name: '回本點 (Year 4.8)', coord: ['Y5', bessCum[4]], value: '回本 4.8年', itemStyle: { color: '#E09A2B' } },
+              { name: '20年累計淨值 (NT$ 1,580萬)', coord: ['Y20', bessCum[19]], value: '+1,580萬', itemStyle: { color: '#2E7D32' } }
+            ]
+          }
+        }
+      ]
+    });
+  }
+
+  // Leaflet Map (Slide 4)
+  const mapEl = document.getElementById('plantMap');
+  if (mapEl) {
+    window.plantMap = L.map('plantMap').setView([23.1812, 120.2520], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(window.plantMap);
+
+    const marker = L.marker([23.1812, 120.2520]).addTo(window.plantMap);
+    marker.bindPopup("<b>世堃塑膠麻豆廠 582kWp</b><br>自發自用屋頂型光伏電站<br>坐標：23.1812°N, 120.2520°E").openPopup();
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.monthlyChartInstance) window.monthlyChartInstance.resize();
+    if (window.dailyStatusChartInstance) window.dailyStatusChartInstance.resize();
+    if (window.profileChartInstance) window.profileChartInstance.resize();
+    if (window.dcfChartInstance) window.dcfChartInstance.resize();
+  });
+});
+
+function roundTo(n, digits) {
+  return Math.round(n * Math.pow(10, digits)) / Math.pow(10, digits);
+}
+
+function initProfileChart() {
+  const profileEl = document.getElementById('profileChart');
+  if (!profileEl) return;
+  window.profileChartInstance = echarts.init(profileEl);
+  updateProfileChart();
+}
+
+function updateProfileChart() {
+  if (!window.profileChartInstance) return;
+  const select = document.getElementById('profileDateSelect');
+  const dateKey = select ? select.value : '2026-07-29';
+  const prof = profilesData[dateKey];
+  if (!prof) return;
+
+  window.profileChartInstance.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: {
+      data: ['日射量 (W/m²)', 'AC 發電功率 (kW)', 'DC 工作電壓 (V)', '電力控制比率 (%)'],
+      top: 0
+    },
+    grid: { left: '4%', right: '5%', bottom: '8%', containLabel: true },
+    xAxis: { type: 'category', data: prof.times, axisLabel: { interval: 11 } },
+    yAxis: [
+      { type: 'value', name: '功率 (kW) / 日射 (W/m²)', position: 'left' },
+      { type: 'value', name: 'DC電壓 (V) / 控制比率 (%)', min: 0, max: 1000, position: 'right' }
+    ],
+    series: [
+      { name: '日射量 (W/m²)', type: 'line', data: prof.irradiance, itemStyle: { color: '#E09A2B' }, lineStyle: { width: 2, type: 'dashed' } },
+      { name: 'AC 發電功率 (kW)', type: 'line', data: prof.ac_power, itemStyle: { color: '#1968AD' }, lineStyle: { width: 3 }, areaStyle: { color: 'rgba(25, 104, 173, 0.15)' } },
+      { name: 'DC 工作電壓 (V)', yAxisIndex: 1, type: 'line', data: prof.dc_voltage, itemStyle: { color: '#D95F45' }, lineStyle: { width: 2 } },
+      { name: '電力控制比率 (%)', yAxisIndex: 1, type: 'line', data: prof.ctrl_ratio, itemStyle: { color: '#1BB1BF' }, lineStyle: { width: 2 } }
+    ]
+  }, true);
+}
+</script>
+</body>
+</html>
