@@ -847,6 +847,35 @@ body {
 // ==============================================================================
 const DEFAULT_SEED_REPORTS = [
   {
+    id: "rep-009",
+    case_no: "PV-2026-YSP01",
+    report_title: "彰化鹿港易昇塑膠 1,771.2kWp｜UNSW 性能診斷暨 8D 三角色決策報告",
+    plant_name: "彰化鹿港彰濱・易昇塑膠地面型光電電廠",
+    plant_type: "地面型",
+    location: "505 彰化縣鹿港鎮上林段 531-2 地號（鹿工南六路18號・彰濱工業區）",
+    lat: 24.067161, lng: 120.386488,
+    contract_kw: 1500.0, actual_capacity_kwp: 1771.200,
+    inverter_model: "Prime VOLT PV-125KH-U × 12台 (125kW)", inverter_count: 12,
+    year: 2026, publish_date: "2026/11/12",
+    stage: "d4_root_cause",
+    severity_level: "Level 2 (11/09 突發 -6.49% 驟降＋濱海落塵＋SCADA 審計)",
+    abnormal_device: "全廠彙總 DC/INV (11/09驟降-6.49%)｜SCADA夜間+13kW",
+    ratio_to_benchmark: 0.922,
+    loss_kwh: 58946,
+    annual_loss_ntd: 1033280,
+    priority_issue: "11/09 13:25 突發 -6.49% PR / -6.68% I/G 階梯驟降（相當約1台INV或11~12串離線），疊加 6° 低傾角濱海落塵年損 NT$ 40.7 萬，且 OSS 零告警與 SCADA 自 10/01 夜間假發電 +157.5 kWh/日",
+    lede: "92 天潔淨發電 647,208.1 kWh，10/01 後電表 (291,004.0 kWh) 與潔淨變流器 (291,331.7 kWh) 僅差 0.11%，證實核心設備體質極佳（晴空基準 PR 84.69%、效率 98.91%）。然而 11/09 13:25 突發 -6.49% 階梯驟降（年化風險 NT$ 59.9 萬），疊加 6° 近乎平鋪濱海積塵（年損 NT$ 40.7 萬），整體未處置年化風險達 248,045 度（NT$ 103.3 萬）。平台內建 Asset / Operation / Field 三角色視圖：僅投入 NT$ 5 萬整改與條件式清洗（OPEX 14.4 萬/年），17 年累積 NPV@5% 達 NT$ 809.8 萬~873.8 萬，回收期僅 0.8 個月！",
+    takeaway: "「不是沒有異常，是匯流總表與 10/01 夜間 +13kW 假發電鎖死了預警！」依 OSS 合約 clean_cycle=0 與 hv_by_us=否 明確權責，現由 Field Engineer 執行 INV-01~12 DC 鉗流檢修，補齊分機數據以完成 Stage-1 (89分) 至 D6-D8 閉環！",
+    report_url: "https://davidyeh51.github.io/yisheng-plastic-diagnostic/",
+    cover_image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+    evidences: [
+      { ev_code: "EV-01", step: "D2", title: "10/01 SCADA 重映射審計與 0.11% 電表對帳", url: "https://davidyeh51.github.io/yisheng-plastic-diagnostic/#slide-4", desc: "10/01 跳變 +152,416 kWh 與夜間 +13kW 假發電虛增 9,288 kWh；清洗後 42 天 AC 與售電表僅差 0.11%。" },
+      { ev_code: "EV-02", step: "D4", title: "11/09 13:25 突發 -6.49% PR 階梯驟降指紋", url: "https://davidyeh51.github.io/yisheng-plastic-diagnostic/#slide-5", desc: "PR 74.18%→69.87% (-6.49%)、I/G -6.68%，但 Vdc 維持 ~701V、效率 98.91%，鎖定約 1/12 容量斷串或單機離線。" },
+      { ev_code: "EV-03", step: "D4", title: "6° 濱海積塵：降雨回彈 +4.81pp 與 13 日衰減 -5.84pp", url: "https://davidyeh51.github.io/yisheng-plastic-diagnostic/#slide-7", desc: "10/22-25 降雨沖刷 PR 由 75.85% 回彈至 80.66%，隨後 13 乾燥日跌回 74.18%，年損 NT$ 40.7 萬（業主清整責任）。" },
+      { ev_code: "EV-04", step: "D5", title: "17 年剩餘躉購期 DCF 財務模型 (NPV NT$ 809.8萬)", url: "https://davidyeh51.github.io/yisheng-plastic-diagnostic/#slide-9", desc: "投入 CAPEX NT$ 5 萬 + 年清洗 OPEX NT$ 14.4 萬，首年直接淨回收 NT$ 74.8 萬，0.8 個月回本。" }
+    ]
+  },
+  {
     id: "rep-008",
     case_no: "PV-2026-SKP01",
     report_title: "台南麻豆世堃塑膠 582kWp 屋頂光伏｜UNSW 性能診斷暨 8D 異常決策報告",
