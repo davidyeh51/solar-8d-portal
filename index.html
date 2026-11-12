@@ -1242,11 +1242,19 @@ async function initData() {
     }
   }
 
-  // 本地快取備援
+  // 本地快取備援（保留使用者新增紀錄，同時自動補齊或更新 DEFAULT_SEED_REPORTS 最新案件）
   const cached = localStorage.getItem('SOLAR_8D_LOCAL_REPORTS');
   if (cached) {
     try {
-      allReports = JSON.parse(cached);
+      const parsed = JSON.parse(cached);
+      const merged = [...DEFAULT_SEED_REPORTS];
+      parsed.forEach(item => {
+        if (!DEFAULT_SEED_REPORTS.some(s => s.case_no === item.case_no)) {
+          merged.push(item);
+        }
+      });
+      allReports = merged;
+      localStorage.setItem('SOLAR_8D_LOCAL_REPORTS', JSON.stringify(allReports));
     } catch(e) {
       allReports = [...DEFAULT_SEED_REPORTS];
     }
